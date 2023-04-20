@@ -1,5 +1,8 @@
 ﻿namespace Shows.Domain.Common;
 
-public abstract class ValueObject
+/// <summary>
+/// Value object
+/// </summary>
+public abstract record ValueObject
 {
 }

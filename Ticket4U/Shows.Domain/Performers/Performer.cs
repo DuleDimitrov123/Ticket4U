@@ -1,4 +1,5 @@
-﻿using Shows.Domain.Common;
+﻿using Common;
+using Shows.Domain.Common;
 
 namespace Shows.Domain.Performers;
 
@@ -25,19 +26,41 @@ public class Performer : AggregateRoot
         Name = name;
     }
 
-    public static void Create(string name)
+    private Performer(string name, IList<PerformerInfo> performerInfos)
+        : this(name)
+    {
+        PerformerInfos = performerInfos;
+    }
+
+    public static Performer Create(string name, IList<PerformerInfo>? performerInfos = null)
+    {
+        var errorMessages = new List<string>();
+
+        ValidatePerformerCreation(name, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        if (performerInfos != null && performerInfos.Count > 0)
+        {
+            return new Performer(name, performerInfos);
+        }
+
+        return new Performer(name);
+    }
+
+    private static void ValidatePerformerCreation(string name, IList<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))
         {
-            //TODO: throw domain exception
-            throw new ArgumentNullException("name");
+            errorMessages.Add(DefaultErrorMessages.PerformerNameIsRequired);
         }
 
-        //TODO: add constant for 100
         if (name.Length >= 100)
         {
-            //TODO: throw new domain exception
-            throw new Exception("Long name of performer");
+            errorMessages.Add(DefaultErrorMessages.PerformerNameLength);
         }
     }
 }

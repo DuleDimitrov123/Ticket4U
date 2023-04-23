@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Shows.Api.Requests;
+using Shows.Api.Requests.Performers;
 using Shows.Application.Performers.Commands;
 using Shows.Application.Performers.Queries;
 using Shows.Application.Performers.Queries.GetPerformerById;
@@ -22,9 +21,15 @@ namespace Shows.Api.Controllers
 
         [HttpGet("{performerId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<PerformerResponse>> GetById([FromRoute] Guid performerId)
         {
             var response = await _mediator.Send(new GetPerformerByIdQuery() { Id = performerId });
+
+            if (response is null)
+            {
+                return NotFound();
+            }
 
             return Ok(response);
         }

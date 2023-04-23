@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Constants;
 using Shows.Domain.Common;
 
 namespace Shows.Domain.Performers;
@@ -58,7 +59,7 @@ public class Performer : AggregateRoot
             errorMessages.Add(DefaultErrorMessages.PerformerNameIsRequired);
         }
 
-        if (name.Length >= 100)
+        if (name.Length > PerformerConstants.PerfomerNameMaxLenght)
         {
             errorMessages.Add(DefaultErrorMessages.PerformerNameLength);
         }

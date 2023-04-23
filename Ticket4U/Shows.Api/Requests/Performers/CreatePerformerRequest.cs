@@ -1,4 +1,4 @@
-﻿namespace Shows.Api.Requests;
+﻿namespace Shows.Api.Requests.Performers;
 
 public record CreatePerformerRequest(string Name, IList<CreatePerformerInfoRequest>? CreatePerformerInfoRequests);
 

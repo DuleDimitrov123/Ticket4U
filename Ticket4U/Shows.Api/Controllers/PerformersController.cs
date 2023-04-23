@@ -4,6 +4,7 @@ using Shows.Api.Requests.Performers;
 using Shows.Application.Performers.Commands;
 using Shows.Application.Performers.Queries;
 using Shows.Application.Performers.Queries.GetPerformerById;
+using Shows.Application.Performers.Queries.GetPerformerDetailById;
 using Shows.Domain.Performers;
 
 namespace Shows.Api.Controllers
@@ -34,7 +35,20 @@ namespace Shows.Api.Controllers
             return Ok(response);
         }
 
-        //TODO: Get performer with performer info
+        [HttpGet("{performerId}/detail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PerformerResponse>> GetDetailById([FromRoute] Guid performerId)
+        {
+            var response = await _mediator.Send(new GetPerformerDetailByIdQuery() { Id = performerId });
+
+            if (response is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]

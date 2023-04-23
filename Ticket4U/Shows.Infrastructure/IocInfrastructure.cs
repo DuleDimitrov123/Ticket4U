@@ -18,6 +18,8 @@ public static class IocInfrastructure
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        services.AddScoped<IPerformerRepository, PerformerRepository>();
+
         return services;
     }
 }

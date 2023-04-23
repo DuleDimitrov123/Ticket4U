@@ -10,5 +10,8 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Performer, PerformerResponse>().ReverseMap();
+        CreateMap<Performer, PerformerDetailResponse>().ReverseMap();
+
+        CreateMap<PerformerInfo, PerformerInfoResponse>().ReverseMap();
     }
 }

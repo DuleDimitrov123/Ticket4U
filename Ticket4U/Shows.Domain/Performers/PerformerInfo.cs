@@ -38,10 +38,7 @@ public class PerformerInfo : Entity
             errorMessages.Add(DefaultErrorMessages.PerformerInfoNameRequired);
         }
 
-        if (string.IsNullOrEmpty(value))
-        {
-            errorMessages.Add(DefaultErrorMessages.PerformerInfoValueRequired);
-        }
+        ValidatePerformerInfoValue(value, errorMessages);
 
         if (errorMessages.Count > 0)
         {
@@ -49,5 +46,27 @@ public class PerformerInfo : Entity
         }
 
         return new PerformerInfo(name, value);
+    }
+
+    public void UpdatePerformerInfoValue(string newValue)
+    {
+        var errorMessages = new List<string>();
+
+        ValidatePerformerInfoValue(newValue, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        Value = newValue;
+    }
+
+    private static void ValidatePerformerInfoValue(string value, IList<string> errorMessages)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            errorMessages.Add(DefaultErrorMessages.PerformerInfoValueRequired);
+        }
     }
 }

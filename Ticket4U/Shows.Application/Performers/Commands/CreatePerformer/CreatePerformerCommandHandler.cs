@@ -3,7 +3,7 @@ using MediatR;
 using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Performers;
 
-namespace Shows.Application.Performers.Commands;
+namespace Shows.Application.Performers.Commands.CreatePerformer;
 
 public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerCommand, Guid>
 {

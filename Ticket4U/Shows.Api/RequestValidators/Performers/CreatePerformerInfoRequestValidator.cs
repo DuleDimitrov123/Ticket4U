@@ -4,7 +4,7 @@ using Shows.Api.Requests.Performers;
 
 namespace Shows.Api.RequestValidators.Performers;
 
-public class CreatePerformerInfoRequestValidator : AbstractValidator<CreatePerformerInfoRequest>
+public class CreatePerformerInfoRequestValidator : AbstractValidator<PerformerInfoRequest>
 {
     public CreatePerformerInfoRequestValidator()
     {

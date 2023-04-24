@@ -52,6 +52,39 @@ public class Performer : AggregateRoot
         return new Performer(name);
     }
 
+    public void AddPerfomerInfos(IList<PerformerInfo> performerInfos)
+    {
+        foreach (var performerInfo in performerInfos)
+        {
+            var existingPerformerInfo = PerformerInfos.FirstOrDefault(p => p.Name == performerInfo.Name);
+
+            if (existingPerformerInfo != null)
+            {
+                if (existingPerformerInfo.Value != performerInfo.Value)
+                {
+                    existingPerformerInfo.UpdatePerformerInfoValue(performerInfo.Value);
+                }
+            }
+            else
+            {
+                PerformerInfos.Add(performerInfo);
+            }
+        }
+    }
+
+    public void RemovePerformerInfo(IList<string> performerInfoNamesToDelete)
+    {
+        foreach (var performerInfoName in performerInfoNamesToDelete)
+        {
+            var performerInfoToDelete = PerformerInfos.Where(pi => pi.Name == performerInfoName).FirstOrDefault();
+
+            if(performerInfoToDelete != null)
+            {
+                PerformerInfos.Remove(performerInfoToDelete);
+            }
+        }
+    }
+
     private static void ValidatePerformerCreation(string name, IList<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))

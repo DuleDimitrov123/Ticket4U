@@ -7,5 +7,5 @@ public class CreatePerformerCommand : IRequest<Guid>
 {
     public string Name { get; set; }
 
-    public IList<PerformerInfo> PerformerInfos { get; set; }
+    public Dictionary<string, string> PerformerInfos { get; set; }
 }

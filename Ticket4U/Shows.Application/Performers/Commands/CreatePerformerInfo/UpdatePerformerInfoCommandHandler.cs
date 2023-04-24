@@ -23,7 +23,11 @@ public class UpdatePerformerInfoCommandHandler : IRequestHandler<UpdatePerformer
             throw new NotFoundException(nameof(Performer), request.PerformerId);
         }
 
-        performer.AddPerfomerInfos(request.PerformerInfos);
+        foreach (KeyValuePair<string, string> entry in request.PerformerInfos)
+        {
+            performer.AddPerformerInfo(PerformerInfo.Create(entry.Key, entry.Value));
+        }
+
         await _repository.Update(performer);
 
         return Unit.Value;

@@ -52,23 +52,20 @@ public class Performer : AggregateRoot
         return new Performer(name);
     }
 
-    public void AddPerfomerInfos(IList<PerformerInfo> performerInfos)
+    public void AddPerformerInfo(PerformerInfo performerInfo)
     {
-        foreach (var performerInfo in performerInfos)
-        {
-            var existingPerformerInfo = PerformerInfos.FirstOrDefault(p => p.Name == performerInfo.Name);
+        var existingPerformerInfo = PerformerInfos.FirstOrDefault(p => p.Name == performerInfo.Name);
 
-            if (existingPerformerInfo != null)
+        if (existingPerformerInfo != null)
+        {
+            if (existingPerformerInfo.Value != performerInfo.Value)
             {
-                if (existingPerformerInfo.Value != performerInfo.Value)
-                {
-                    existingPerformerInfo.UpdatePerformerInfoValue(performerInfo.Value);
-                }
+                existingPerformerInfo.UpdatePerformerInfoValue(performerInfo.Value);
             }
-            else
-            {
-                PerformerInfos.Add(performerInfo);
-            }
+        }
+        else
+        {
+            PerformerInfos.Add(performerInfo);
         }
     }
 

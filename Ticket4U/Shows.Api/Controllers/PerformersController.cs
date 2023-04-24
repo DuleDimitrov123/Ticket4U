@@ -49,8 +49,7 @@ namespace Shows.Api.Controllers
             var command = new CreatePerformerCommand()
             {
                 Name = request.Name,
-                PerformerInfos = request.PerformerInfoRequests?.Select(
-                    req => PerformerInfo.Create(req.Name, req.Value)).ToList()
+                PerformerInfos = request.PerformerInfoRequests
             };
 
             var performerId = await _mediator.Send(command);
@@ -66,8 +65,7 @@ namespace Shows.Api.Controllers
             var command = new UpdatePerformerInfoCommand()
             {
                 PerformerId = performerId,
-                PerformerInfos = request.PerformerInfoRequests?.Select(
-                    req => PerformerInfo.Create(req.Name, req.Value)).ToList()
+                PerformerInfos = request.PerformerInfoRequests
             };
 
             await _mediator.Send(command);

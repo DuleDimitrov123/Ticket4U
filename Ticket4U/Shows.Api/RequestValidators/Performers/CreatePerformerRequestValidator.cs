@@ -15,7 +15,5 @@ public class CreatePerformerRequestValidator : AbstractValidator<CreatePerformer
         RuleFor(performer => performer.Name)
             .MaximumLength(PerformerConstants.PerfomerNameMaxLenght)
             .WithMessage(DefaultErrorMessages.PerformerNameLength);
-
-        //RuleFor(performer => performer.CreatePerformerInfoRequests).SetValidator(new CreatePerformerInfoRequestValidator());
     }
 }

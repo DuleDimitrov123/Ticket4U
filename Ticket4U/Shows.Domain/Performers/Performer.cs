@@ -14,7 +14,6 @@ public class Performer : AggregateRoot
     /// </summary>
     public string Name { get; private set; }
 
-    //TODO: How would you add some new performer info...without deleting old...get by include would work I think and just append new...
     /// <summary>
     /// Additional performer's info
     /// </summary>

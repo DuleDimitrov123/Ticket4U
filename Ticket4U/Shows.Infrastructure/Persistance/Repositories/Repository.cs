@@ -6,7 +6,7 @@ namespace Shows.Infrastructure.Persistance.Repositories;
 
 public class Repository<T> : IRepository<T> where T : AggregateRoot
 {
-    private readonly AppDbContext _dbContext;
+    protected readonly AppDbContext _dbContext;
 
     public Repository(AppDbContext dbContext)
     {

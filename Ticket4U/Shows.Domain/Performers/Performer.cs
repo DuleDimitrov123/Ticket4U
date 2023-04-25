@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Constants;
 using Shows.Domain.Common;
 
 namespace Shows.Domain.Performers;
@@ -51,6 +52,36 @@ public class Performer : AggregateRoot
         return new Performer(name);
     }
 
+    public void AddPerformerInfo(PerformerInfo performerInfo)
+    {
+        var existingPerformerInfo = PerformerInfos.FirstOrDefault(p => p.Name == performerInfo.Name);
+
+        if (existingPerformerInfo != null)
+        {
+            if (existingPerformerInfo.Value != performerInfo.Value)
+            {
+                existingPerformerInfo.UpdatePerformerInfoValue(performerInfo.Value);
+            }
+        }
+        else
+        {
+            PerformerInfos.Add(performerInfo);
+        }
+    }
+
+    public void RemovePerformerInfo(IList<string> performerInfoNamesToDelete)
+    {
+        foreach (var performerInfoName in performerInfoNamesToDelete)
+        {
+            var performerInfoToDelete = PerformerInfos.Where(pi => pi.Name == performerInfoName).FirstOrDefault();
+
+            if(performerInfoToDelete != null)
+            {
+                PerformerInfos.Remove(performerInfoToDelete);
+            }
+        }
+    }
+
     private static void ValidatePerformerCreation(string name, IList<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))
@@ -58,7 +89,7 @@ public class Performer : AggregateRoot
             errorMessages.Add(DefaultErrorMessages.PerformerNameIsRequired);
         }
 
-        if (name.Length >= 100)
+        if (name.Length > PerformerConstants.PerfomerNameMaxLenght)
         {
             errorMessages.Add(DefaultErrorMessages.PerformerNameLength);
         }

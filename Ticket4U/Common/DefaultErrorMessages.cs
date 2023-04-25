@@ -2,6 +2,8 @@
 
 public static class DefaultErrorMessages
 {
+    public static readonly string CantGetByEmptyGuid = "You cannot get objects with empty guid!";
+
     public static readonly string PerformerNameIsRequired = "Performer name is required!";
 
     public static readonly string PerformerNameLength = "Performer name is to long!";

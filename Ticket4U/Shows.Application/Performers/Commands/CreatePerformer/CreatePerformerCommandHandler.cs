@@ -3,7 +3,7 @@ using MediatR;
 using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Performers;
 
-namespace Shows.Application.Performers.Commands;
+namespace Shows.Application.Performers.Commands.CreatePerformer;
 
 public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerCommand, Guid>
 {
@@ -16,7 +16,12 @@ public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerComm
 
     public async Task<Guid> Handle(CreatePerformerCommand request, CancellationToken cancellationToken)
     {
-        var newPerformer = Performer.Create(request.Name, request.PerformerInfos);
+        var newPerformer = Performer.Create(request.Name);
+
+        foreach (KeyValuePair<string, string> entry in request.PerformerInfos)
+        {
+            newPerformer.AddPerformerInfo(PerformerInfo.Create(entry.Key, entry.Value));
+        }
 
         newPerformer = await _repository.Add(newPerformer);
 

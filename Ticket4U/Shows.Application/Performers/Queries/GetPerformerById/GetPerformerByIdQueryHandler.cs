@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Shows.Application.Contracts.Persistance;
+using Shows.Application.Exceptions;
 using Shows.Domain.Performers;
 
 namespace Shows.Application.Performers.Queries.GetPerformerById;
@@ -19,6 +20,11 @@ public class GetPerformerByIdQueryHandler : IRequestHandler<GetPerformerByIdQuer
     public async Task<PerformerResponse> Handle(GetPerformerByIdQuery request, CancellationToken cancellationToken)
     {
         var performer = await _repository.GetById(request.Id);
+
+        if (performer == null)
+        {
+            throw new NotFoundException(nameof(Performer), request.Id);
+        }
 
         return _mapper.Map<PerformerResponse>(performer);
     }

@@ -3,18 +3,18 @@ using Shows.Application.Contracts.Persistance;
 using Shows.Application.Exceptions;
 using Shows.Domain.Performers;
 
-namespace Shows.Application.Performers.Commands.DeletePerformerInfo;
+namespace Shows.Application.Features.Performers.Commands.CreatePerformerInfo;
 
-public class DeletePerformerInfoCommandHandler : IRequestHandler<DeletePerformerInfoCommand, Unit>
+public class UpdatePerformerInfoCommandHandler : IRequestHandler<UpdatePerformerInfoCommand, Unit>
 {
     private readonly IPerformerRepository _repository;
 
-    public DeletePerformerInfoCommandHandler(IPerformerRepository repository)
+    public UpdatePerformerInfoCommandHandler(IPerformerRepository repository)
     {
         _repository = repository;
     }
 
-    public async Task<Unit> Handle(DeletePerformerInfoCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdatePerformerInfoCommand request, CancellationToken cancellationToken)
     {
         var performer = await _repository.GetPerformerWithPerformerInfos(request.PerformerId);
 
@@ -23,7 +23,11 @@ public class DeletePerformerInfoCommandHandler : IRequestHandler<DeletePerformer
             throw new NotFoundException(nameof(Performer), request.PerformerId);
         }
 
-        performer.RemovePerformerInfo(request.PerformerInfoNamesToDelete);
+        foreach (KeyValuePair<string, string> entry in request.PerformerInfos)
+        {
+            performer.AddPerformerInfo(PerformerInfo.Create(entry.Key, entry.Value));
+        }
+
         await _repository.Update(performer);
 
         return Unit.Value;

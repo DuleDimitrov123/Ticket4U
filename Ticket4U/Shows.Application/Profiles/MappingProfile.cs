@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Shows.Application.Performers.Commands;
-using Shows.Application.Performers.Queries;
+using Shows.Application.Features.Performers.Queries;
 using Shows.Domain.Performers;
 
 namespace Shows.Application.Profiles;

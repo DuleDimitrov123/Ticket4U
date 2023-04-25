@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Shows.Domain.Performers;
 
-namespace Shows.Application.Performers.Commands.CreatePerformerInfo;
+namespace Shows.Application.Features.Performers.Commands.CreatePerformerInfo;
 
 public class UpdatePerformerInfoCommand : IRequest<Unit>
 {

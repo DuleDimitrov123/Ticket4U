@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Shows.Application.Performers.Queries.GetPerformerById;
+namespace Shows.Application.Features.Performers.Queries.GetPerformerById;
 
 public class GetPerformerByIdQuery : IRequest<PerformerResponse>
 {

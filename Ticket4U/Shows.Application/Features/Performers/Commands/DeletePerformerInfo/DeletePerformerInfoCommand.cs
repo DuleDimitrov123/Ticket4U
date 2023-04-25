@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Shows.Application.Performers.Commands.DeletePerformerInfo;
+namespace Shows.Application.Features.Performers.Commands.DeletePerformerInfo;
 
 public class DeletePerformerInfoCommand : IRequest<Unit>
 {

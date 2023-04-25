@@ -4,7 +4,7 @@ using Shows.Application.Contracts.Persistance;
 using Shows.Application.Exceptions;
 using Shows.Domain.Performers;
 
-namespace Shows.Application.Performers.Queries.GetPerformerById;
+namespace Shows.Application.Features.Performers.Queries.GetPerformerById;
 
 public class GetPerformerByIdQueryHandler : IRequestHandler<GetPerformerByIdQuery, PerformerResponse>
 {

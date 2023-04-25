@@ -1,13 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shows.Api.Requests.Performers;
-using Shows.Application.Performers.Commands.CreatePerformer;
-using Shows.Application.Performers.Commands.CreatePerformerInfo;
-using Shows.Application.Performers.Commands.DeletePerformerInfo;
-using Shows.Application.Performers.Queries;
-using Shows.Application.Performers.Queries.GetPerformerById;
-using Shows.Application.Performers.Queries.GetPerformerDetailById;
-using Shows.Domain.Performers;
+using Shows.Application.Features.Performers.Queries;
+using Shows.Application.Features.Performers.Queries.GetPerformerById;
+using Shows.Application.Features.Performers.Commands.CreatePerformer;
+using Shows.Application.Features.Performers.Commands.CreatePerformerInfo;
+using Shows.Application.Features.Performers.Commands.DeletePerformerInfo;
+using Shows.Application.Features.Performers.Queries.GetPerformerDetailById;
 
 namespace Shows.Api.Controllers
 {

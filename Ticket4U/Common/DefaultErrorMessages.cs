@@ -11,4 +11,10 @@ public static class DefaultErrorMessages
     public static readonly string PerformerInfoNameRequired = "Performer info name is required!";
 
     public static readonly string PerformerInfoValueRequired = "Performer info value is required!";
+
+    public static readonly string CategoryNameIsRequired = "Category name is required!";
+
+    public static readonly string CategoryDescriptionIsRequired = "Category description is required!";
+
+    public static readonly string CategoryNameLength = "Category name is to long!";
 }

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Shows.Application.Features.Categories.Commands;
+namespace Shows.Application.Features.Categories.Commands.CreateCategory;
 
 public class CreateCategoryCommand : IRequest<Guid>
 {

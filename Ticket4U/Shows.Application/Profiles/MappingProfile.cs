@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Shows.Application.Features.Categories.Commands;
+using Shows.Application.Features.Categories.Commands.CreateCategory;
 using Shows.Application.Features.Categories.Queries;
 using Shows.Application.Features.Performers.Queries;
 using Shows.Domain.Categories;
@@ -16,6 +16,10 @@ public class MappingProfile : Profile
         CreateMap<PerformerInfo, PerformerInfoResponse>().ReverseMap();
 
         CreateMap<Category, CreateCategoryCommand>().ReverseMap();
-        CreateMap<Category, CategoryResponse>().ReverseMap();
+        CreateMap<Category, CategoryResponse>()
+            .ForMember(
+                categoryResponse => categoryResponse.Status, 
+                options => options.MapFrom(category => category.Status.ToString()))
+            .ReverseMap();
     }
 }

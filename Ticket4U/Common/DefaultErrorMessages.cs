@@ -17,4 +17,8 @@ public static class DefaultErrorMessages
     public static readonly string CategoryDescriptionIsRequired = "Category description is required!";
 
     public static readonly string CategoryNameLength = "Category name is to long!";
+
+    public static readonly string CantUpdateArchivedCategory = "Archived categories cannot be updated!";
+
+    public static readonly string CategoryStatusDoesntExist = $"Category status {0} doesn't exist";
 }

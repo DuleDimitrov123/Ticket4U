@@ -3,7 +3,7 @@ using MediatR;
 using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Categories;
 
-namespace Shows.Application.Features.Categories.Commands;
+namespace Shows.Application.Features.Categories.Commands.CreateCategory;
 
 public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommand, Guid>
 {

@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shows.Api.Requests.Categories;
-using Shows.Application.Features.Categories.Commands;
+using Shows.Application.Features.Categories.Commands.ArchiveCategory;
+using Shows.Application.Features.Categories.Commands.CreateCategory;
+using Shows.Application.Features.Categories.Commands.UpdateCategory;
 using Shows.Application.Features.Categories.Queries;
 using Shows.Application.Features.Categories.Queries.GetCategories;
 using Shows.Application.Features.Categories.Queries.GetCategoryById;
@@ -20,6 +22,7 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateCategory([FromBody] CreateCategoryRequest request)
     {
         var command = new CreateCategoryCommand()
@@ -34,6 +37,8 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet("{categoryId}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<CategoryResponse>> GetById([FromRoute] Guid categoryId)
     {
         var response = await _mediator.Send(new GetCategoryByIdQuery() { CategoryId = categoryId });
@@ -42,10 +47,39 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IList<CategoryResponse>>> GetAll()
     {
         var response = await _mediator.Send(new GetCategoriesQuery());
 
         return Ok(response);
+    }
+
+    [HttpPut("{categoryId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> UpdateCategory([FromRoute] Guid categoryId, [FromBody] UpdateCategoryRequest request)
+    {
+        var command = new UpdateCategoryCommand()
+        {
+            CategoryId = categoryId,
+            NewName = request.NewName,
+            NewDescription = request.NewDescription
+        };
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    [HttpPut("{categoryId}/archive")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> ArchiveCategory([FromRoute] Guid categoryId)
+    {
+        await _mediator.Send(new ArchiveCategoryCommand() { CategoryId = categoryId });
+
+        return NoContent();
     }
 }

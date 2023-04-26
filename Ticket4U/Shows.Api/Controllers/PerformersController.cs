@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Shows.Api.Requests.Performers;
-using Shows.Application.Performers.Commands.CreatePerformer;
-using Shows.Application.Performers.Commands.CreatePerformerInfo;
-using Shows.Application.Performers.Commands.DeletePerformerInfo;
-using Shows.Application.Performers.Queries;
-using Shows.Application.Performers.Queries.GetPerformerById;
-using Shows.Application.Performers.Queries.GetPerformerDetailById;
+using Shows.Application.Features.Performers.Queries;
+using Shows.Application.Features.Performers.Queries.GetPerformerById;
+using Shows.Application.Features.Performers.Commands.CreatePerformer;
+using Shows.Application.Features.Performers.Commands.CreatePerformerInfo;
+using Shows.Application.Features.Performers.Commands.DeletePerformerInfo;
+using Shows.Application.Features.Performers.Queries.GetPerformerDetailById;
 using Shows.Domain.Performers;
+using Shows.Application.Features.Performers.Queries.GetPerformers;
 
 namespace Shows.Api.Controllers
 {
@@ -20,6 +21,15 @@ namespace Shows.Api.Controllers
         public PerformersController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IList<PerformerInfo>>> GetAll()
+        {
+            var response = await _mediator.Send(new GetPerformersQuery());
+
+            return Ok(response);
         }
 
         [HttpGet("{performerId}")]

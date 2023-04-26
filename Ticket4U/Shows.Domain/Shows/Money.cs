@@ -1,4 +1,5 @@
-﻿using Shows.Domain.Common;
+﻿using Common;
+using Shows.Domain.Common;
 
 namespace Shows.Domain.Shows;
 
@@ -21,22 +22,26 @@ public record Money : ValueObject
 
     public static Money Create(string currency, decimal amount)
     {
+        IList<string> errorMessages = new List<string>();
+
         if (string.IsNullOrEmpty(currency))
         {
-            //TODO: throw domain exception
-            throw new ArgumentNullException(nameof(currency));
+            errorMessages.Add(DefaultErrorMessages.MoneyCurrencyRequired);
         }
 
         if (currency.Length != 3)
         {
-            //TODO: throw domain exception
-            throw new Exception("Lenght of currency string should be 3");
+            errorMessages.Add(DefaultErrorMessages.MoneyCurrencyLength);
         }
 
         if (amount < 0)
         {
-            //TODO: throw domain exception
-            throw new Exception("Amount of money cannot be negative");
+            errorMessages.Add(DefaultErrorMessages.MoneyAmountNotNegative);
+        }
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
         }
 
         return new Money(currency, amount);

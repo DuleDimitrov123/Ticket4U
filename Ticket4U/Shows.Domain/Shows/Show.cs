@@ -102,6 +102,20 @@ public class Show : AggregateRoot
         return new Show(name, location, numberOfPlaces, ticketPrice, performerId, categoryId);
     }
 
+    public void UpdateStartingDateTime(DateTime newStartingDateTime)
+    {
+        ShowMessages.Add(
+            ShowMessage.Create(
+                ShowConstants.ShowIsPostponedName,
+                ShowConstants.ShowIsPostponedValue.Replace("{oldDateTime}", StartingDateTime.ToString())
+                    .Replace("{newDateTime}", newStartingDateTime.ToString()),
+                Id));
+
+        //TODO: Add domain event that starting date time is changed
+
+        StartingDateTime = newStartingDateTime;
+    }
+
     public void UpdateShowName(string newName)
     {
         IList<string> errorMessages = new List<string>();

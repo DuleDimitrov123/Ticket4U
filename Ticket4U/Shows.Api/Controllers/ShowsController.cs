@@ -8,6 +8,7 @@ using Shows.Application.Features.Shows.Commands.DeleteShow;
 using Shows.Application.Features.Shows.Commands.UpdateShowLocation;
 using Shows.Application.Features.Shows.Commands.UpdateShowName;
 using Shows.Application.Features.Shows.Commands.UpdateShowPrice;
+using Shows.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 using Shows.Application.Features.Shows.Queries;
 using Shows.Application.Features.Shows.Queries.GetShowById;
 using Shows.Application.Features.Shows.Queries.GetShowDetailById;
@@ -104,6 +105,20 @@ namespace Shows.Api.Controllers
             {
                 Id = showId,
                 NewAmount = request.NewAmount
+            });
+
+            return NoContent();
+        }
+
+        [HttpPut("{showId}/newStartingDateTime")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateShowStartingDateTime([FromRoute] Guid showId, [FromBody] UpdateShowStartingDateTimeRequest request)
+        {
+            await _mediator.Send(new UpdateShowStartingDateTimeCommand()
+            {
+                ShowId = showId,
+                NewStartingDateTime = request.NewStartingDateTime,
             });
 
             return NoContent();

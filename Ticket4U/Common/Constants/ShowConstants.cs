@@ -11,4 +11,8 @@ public static class ShowConstants
     public static int ShowMessageNameMaxLength = 100;
 
     public static int ShowMessageValueMaxLength = 100;
+
+    public static string ShowIsPostponedName = "Show date time is postponed!";
+
+    public static string ShowIsPostponedValue = "Show date time is postponed from {oldDateTime} to {newDateTime}!";
 }

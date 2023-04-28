@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shows.Infrastructure.Persistance;
 
@@ -11,9 +12,11 @@ using Shows.Infrastructure.Persistance;
 namespace Shows.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230426165606_AmmendShowEntity")]
+    partial class AmmendShowEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,9 +110,6 @@ namespace Shows.Infrastructure.Migrations
                     b.Property<Guid>("PerformerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartingDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -136,6 +136,9 @@ namespace Shows.Infrastructure.Migrations
                     b.Property<Guid>("ShowId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ShowId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -143,6 +146,8 @@ namespace Shows.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ShowId");
+
+                    b.HasIndex("ShowId1");
 
                     b.ToTable("ShowMessage");
                 });
@@ -198,10 +203,14 @@ namespace Shows.Infrastructure.Migrations
             modelBuilder.Entity("Shows.Domain.Shows.ShowMessage", b =>
                 {
                     b.HasOne("Shows.Domain.Shows.Show", null)
-                        .WithMany("ShowMessages")
+                        .WithMany()
                         .HasForeignKey("ShowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Shows.Domain.Shows.Show", null)
+                        .WithMany("ShowMessages")
+                        .HasForeignKey("ShowId1");
                 });
 
             modelBuilder.Entity("Shows.Domain.Performers.Performer", b =>

@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Constants;
 using Shows.Domain.Common;
 
 namespace Shows.Domain.Shows;
@@ -29,7 +30,7 @@ public record Money : ValueObject
             errorMessages.Add(DefaultErrorMessages.MoneyCurrencyRequired);
         }
 
-        if (currency.Length != 3)
+        if (currency.Length != ShowConstants.MoneyCurrencyExactLength)
         {
             errorMessages.Add(DefaultErrorMessages.MoneyCurrencyLength);
         }

@@ -9,8 +9,12 @@ public static class IocApi
 {
     public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
+        var assembly = typeof(IocApi).Assembly;
+
         services.AddInfrastructure(configuration);
         services.AddApplication();
+
+        services.AddAutoMapper(assembly);
 
         #region FluentValidation
 
@@ -20,7 +24,7 @@ public static class IocApi
             options.ImplicitlyValidateChildProperties = true;
         });
 
-        services.AddValidatorsFromAssemblies(new[] { typeof(IocApi).Assembly });
+        services.AddValidatorsFromAssemblies(new[] { assembly });
 
         #endregion
 

@@ -1,5 +1,7 @@
-﻿using Shows.Domain.Common;
-using Shows.Domain.Performers;
+﻿using Common;
+using Common.Constants;
+using Shows.Domain.Common;
+using System.Xml.Linq;
 
 namespace Shows.Domain.Shows;
 
@@ -19,6 +21,11 @@ public class Show : AggregateRoot
     /// Show location
     /// </summary>
     public string Location { get; private set; }
+
+    /// <summary>
+    /// Show starting date and time
+    /// </summary>
+    public DateTime StartingDateTime { get; set; }
 
     /// <summary>
     /// Show status
@@ -45,34 +52,147 @@ public class Show : AggregateRoot
     /// </summary>
     public Guid PerformerId { get; private set; }
 
+    /// <summary>
+    /// Show category id
+    /// </summary>
+    public Guid CategoryId { get; private set; }
+
     #endregion
 
     #region constructors
 
-    private Show(string name, string location, ShowStatus showStatus, NumberOfPlaces numberOfPlaces, Money ticketPrice, Guid performerId)
+    //Required for EF Core in order to create migration
+    //When getting from db, this ctor is called
+    private Show()
+    {
+        ShowMessages = new List<ShowMessage>();
+    }
+
+    private Show(string name, string location, NumberOfPlaces numberOfPlaces,
+        Money ticketPrice, Guid performerId, Guid categoryId)
     {
         ShowMessages = new List<ShowMessage>();
 
         Name = name;
         Location = location;
-        Status = showStatus;
         NumberOfPlaces = numberOfPlaces;
         TicketPrice = ticketPrice;
         PerformerId = performerId;
+        CategoryId = categoryId;
+
+        Status = ShowStatus.HasTickets;
     }
 
     #endregion
 
     #region domain logic
 
-    //public static Show Create(string name, string location, ShowStatus showStatus, NumberOfPlaces numberOfPlaces, Money ticketPrice, Guid performerId)
-    //{
-    //    if (string.IsNullOrEmpty(name))
-    //    {
-    //        //throw DomainException
-    //        throw new ArgumentNullException("name");
-    //    }
-    //}
+    public static Show Create(string name, string location, NumberOfPlaces numberOfPlaces,
+        Money ticketPrice, Guid performerId, Guid categoryId)
+    {
+        IList<string> errorMessages = new List<string>();
+
+        ValidateShowCreate(name, location, numberOfPlaces, ticketPrice, performerId, categoryId, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        return new Show(name, location, numberOfPlaces, ticketPrice, performerId, categoryId);
+    }
+
+    public void UpdateStartingDateTime(DateTime newStartingDateTime)
+    {
+        ShowMessages.Add(
+            ShowMessage.Create(
+                ShowConstants.ShowIsPostponedName,
+                ShowConstants.ShowIsPostponedValue.Replace("{oldDateTime}", StartingDateTime.ToString())
+                    .Replace("{newDateTime}", newStartingDateTime.ToString()),
+                Id));
+
+        //TODO: Add domain event that starting date time is changed
+
+        StartingDateTime = newStartingDateTime;
+    }
+
+    public void UpdateShowName(string newName)
+    {
+        IList<string> errorMessages = new List<string>();
+
+        ValidateShowName(newName, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        Name = newName;
+    }
+
+    public void UpdateShowLocation(string newLocation)
+    {
+        IList<string> errorMessages = new List<string>();
+
+        ValidateShowLocation(newLocation, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        Location = newLocation;
+    }
+
+    public void UpdateTicketPriceAmount(decimal newAmount)
+    {
+        //TicketPrice is Money, which is Value Object, don't update it, create new!
+        TicketPrice = Money.Create(TicketPrice.Currency, newAmount);
+    }
+
+    public static void ValidateShowCreate(string name, string location, NumberOfPlaces numberOfPlaces,
+        Money ticketPrice, Guid performerId, Guid categoryId, IList<string> errorMessages)
+    {
+        ValidateShowName(name, errorMessages);
+
+        ValidateShowLocation(location, errorMessages);
+
+        if (performerId.Equals(Guid.Empty))
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowPerformerIdRequired);
+        }
+
+        if (categoryId.Equals(Guid.Empty))
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowCategoryIdRequired);
+        }
+    }
+
+    public void AddShowMessage(string showMessageName, string showMessageValue)
+    {
+        ShowMessages.Add(ShowMessage.Create(showMessageName, showMessageValue, Id));
+    }
+
+    private static void ValidateShowName(string name, IList<string> errorMessages)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowNameIsRequired);
+        }
+
+        if (name.Length > ShowConstants.ShowNameMaxLenght)
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowNameLength);
+        }
+    }
+
+    private static void ValidateShowLocation(string location, IList<string> errorMessages)
+    {
+        if (string.IsNullOrEmpty(location))
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowLocationIsRequired);
+        }
+    }
 
     #endregion
 }

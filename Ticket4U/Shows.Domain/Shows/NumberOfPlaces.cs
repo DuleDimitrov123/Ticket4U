@@ -1,4 +1,5 @@
-﻿using Shows.Domain.Common;
+﻿using Common;
+using Shows.Domain.Common;
 
 namespace Shows.Domain.Shows;
 
@@ -16,11 +17,17 @@ public record NumberOfPlaces : ValueObject
 
     public static NumberOfPlaces Create(int numberOfTickets)
     {
+        IList<string> errorMessages = new List<string>();
+
         //first check if numberOfTickets is > 0
         if (numberOfTickets <= 0)
         {
-            //TODO: throw domain exception
-            return null;
+            errorMessages.Add(DefaultErrorMessages.NumberOfPlacesGreaterThan0);
+        }
+
+        if(errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
         }
 
         return new NumberOfPlaces(numberOfTickets);

@@ -21,4 +21,38 @@ public static class DefaultErrorMessages
     public static readonly string CantUpdateArchivedCategory = "Archived categories cannot be updated!";
 
     public static readonly string CategoryStatusDoesntExist = $"Category status {0} doesn't exist";
+
+    public static readonly string ShowNameIsRequired = "Show name is required!";
+
+    public static readonly string ShowNameLength = "Show name is to long!";
+
+    public static readonly string ShowLocationIsRequired = "Show location is required!";
+
+    public static readonly string ShowStatusIsRequired = "Show status is required!";
+
+    public static readonly string ShowLocationLength = "Show location is to long!";
+
+    public static readonly string NumberOfPlacesGreaterThan0 = "Number of places need to be greated than 0!";
+
+    public static readonly string MoneyCurrencyRequired = "Money currency is required!";
+
+    public static readonly string MoneyCurrencyLength = "Money currency has invalid format. Format requires only 3 characters!";
+
+    public static readonly string MoneyAmountNotNegative = "Money amount cannot be negative!";
+
+    public static readonly string ShowPerformerIdRequired = "Show needs to have the performer!";
+
+    public static readonly string ShowCategoryIdRequired = "Show needs to have the category!";
+
+    public static readonly string ShowStatusDoesntExist = $"Show status {0} doesn't exist";
+
+    public static readonly string ShowMessageNameRequired = "Show message name is required!";
+
+    public static readonly string ShowMessageNameLength = "Show message name is to long!";
+
+    public static readonly string ShowMessageValueRequired = "Show message value is required!";
+
+    public static readonly string ShowMessageValueLength = "Show message value is to long!";
+
+    public static readonly string ShowMessageShowIdRequired = "Show message show id is required!";
 }

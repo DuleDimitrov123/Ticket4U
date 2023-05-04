@@ -5,7 +5,7 @@ using Shows.Domain.Categories;
 
 namespace Shows.Application.Features.Categories.Queries.GetCategories;
 
-internal class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IList<CategoryResponse>>
+public class GetCategoriesQueryHandler : IRequestHandler<GetCategoriesQuery, IList<CategoryResponse>>
 {
     private readonly IMapper _mapper;
     private readonly IRepository<Category> _repository;

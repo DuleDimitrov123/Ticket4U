@@ -15,11 +15,4 @@ public static class Categories
     public static Category Category3 = Category.Create("Category3", "Description of category 3");
 
     public static Guid Category3Id = Guid.NewGuid();
-
-    public static IList<Category> CategoriesList = new List<Category>()
-    {
-        Shows.UnitTests.Dummies.Categories.Category1,
-        Shows.UnitTests.Dummies.Categories.Category2,
-        Shows.UnitTests.Dummies.Categories.Category3
-    };
 }

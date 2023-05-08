@@ -28,7 +28,5 @@ public class CreateCategoryCommandHandlerTests : CategoriesQueryCommandHandlerTe
 
         var allCategories = await _mockCategoryRepository.Object.GetAll();
         allCategories.Count.ShouldBe(4);
-
-        RepositoryMocks.InitCategories();
     }
 }

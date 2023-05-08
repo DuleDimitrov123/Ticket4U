@@ -6,28 +6,19 @@ namespace Shows.UnitTests.Mocks;
 
 public static class RepositoryMocks
 {
-    private static IList<Category> categories;
-
-    static RepositoryMocks()
-    {
-        InitCategories();
-    }
-
-    public static void InitCategories()
-    {
-        categories = Shows.UnitTests.Dummies.Categories.CategoriesList;
-    }
-
     public static IMock<IRepository<Category>> InitCategoryMockRepository()
     {
         var mockCategoryRepository = new Mock<IRepository<Category>>();
+
+        var categories = new List<Category>()
+        {
+            Category.Create("Category1", "Description of category 1"),
+            Category.Create("Category2", "Description of category 2"),
+            Category.Create("Category3", "Description of category 3")
+        };
+
         mockCategoryRepository.Setup(repo => repo.GetAll()).ReturnsAsync(
-            new List<Category>()
-            {
-                Shows.UnitTests.Dummies.Categories.Category1,
-                Shows.UnitTests.Dummies.Categories.Category2,
-                Shows.UnitTests.Dummies.Categories.Category3
-            });
+            categories);
 
         mockCategoryRepository.Setup(repo => repo.GetById(It.IsAny<Guid>()))
             .ReturnsAsync(Shows.UnitTests.Dummies.Categories.Category1);

@@ -14,15 +14,18 @@ public class CustomWebApplicationFactory<TStartup>
     {
         builder.ConfigureServices(services =>
         {
+            var descriptor = services.SingleOrDefault
+                   (d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+
+            if (descriptor != null)
+            {
+                services.Remove(descriptor);
+            }
+
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("ShowsConnectionStringInMemoryTest1");
+                options.UseInMemoryDatabase("ShowsConnectionStringInMemoryTest");
             });
-
-            //var dbContextOptions = new DbContextOptionsBuilder<AppDbContext>()
-            //    .UseInMemoryDatabase("ShowsConnectionStringInMemoryTest1").Options;
-
-            //var context = new AppDbContext(dbContextOptions);
 
             var sp = services.BuildServiceProvider();
 

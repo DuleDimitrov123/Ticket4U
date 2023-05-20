@@ -25,7 +25,7 @@ namespace Shows.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IList<PerformerInfo>>> GetAll()
+        public async Task<ActionResult<IList<PerformerResponse>>> GetAll()
         {
             var response = await _mediator.Send(new GetPerformersQuery());
 

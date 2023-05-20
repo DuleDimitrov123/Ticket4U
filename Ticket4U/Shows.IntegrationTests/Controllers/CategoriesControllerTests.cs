@@ -45,7 +45,7 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
     }
 
     [Fact]
-    public async Task GetPersonByIdNotFound()
+    public async Task GetCategoryByIdNotFound()
     {
         var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{Guid.NewGuid()}");
 
@@ -53,7 +53,7 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
     }
 
     [Fact]
-    public async Task GetPersonWithEmptyGuid()
+    public async Task GetCategoryWithEmptyGuid()
     {
         var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{Guid.Empty}");
 

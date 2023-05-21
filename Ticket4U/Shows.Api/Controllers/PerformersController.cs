@@ -45,7 +45,7 @@ namespace Shows.Api.Controllers
         [HttpGet("{performerId}/detail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<PerformerResponse>> GetDetailById([FromRoute] Guid performerId)
+        public async Task<ActionResult<PerformerDetailResponse>> GetDetailById([FromRoute] Guid performerId)
         {
             var response = await _mediator.Send(new GetPerformerDetailByIdQuery() { Id = performerId });
 

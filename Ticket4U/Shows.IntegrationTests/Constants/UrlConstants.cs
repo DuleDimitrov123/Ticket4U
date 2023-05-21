@@ -14,5 +14,9 @@ public static class UrlConstants
 
     public const string BasePerformerURL = "/api/performers";
 
+    public const string SpecificPerformerDetail = "detail";
+
+    public const string SpecificUpdatePerformerInfo = "performer-info";
+
     #endregion
 }

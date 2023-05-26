@@ -15,6 +15,8 @@ public class CreateShowCommand : IRequest<Guid>
 
     public int TickerPriceAmount { get; set; }
 
+    public DateTime StartingDateTime { get; set; }
+
     public Guid PerformerId { get; set; }
 
     public Guid CategoryId { get; set; }
@@ -24,6 +26,7 @@ public class CreateShowCommand : IRequest<Guid>
         return Show.Create(Name, Location,
             NumberOfPlaces.Create(NumberOfplaces),
             Money.Create(TicketPriceCurrency, TickerPriceAmount),
+            StartingDateTime,
             PerformerId,
             CategoryId);
     }

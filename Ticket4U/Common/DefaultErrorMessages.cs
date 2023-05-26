@@ -32,6 +32,8 @@ public static class DefaultErrorMessages
 
     public static readonly string ShowLocationLength = "Show location is to long!";
 
+    public static readonly string ShowStartingDateTimeNotInFuture = "Show starting DateTime needs to be in the future!";
+
     public static readonly string NumberOfPlacesGreaterThan0 = "Number of places need to be greated than 0!";
 
     public static readonly string MoneyCurrencyRequired = "Money currency is required!";

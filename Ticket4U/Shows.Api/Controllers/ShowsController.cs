@@ -42,7 +42,7 @@ namespace Shows.Api.Controllers
         [HttpGet("{showId}/detail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ShowResponse>> GetDetailById([FromRoute] Guid showId)
+        public async Task<ActionResult<ShowDetailResponse>> GetDetailById([FromRoute] Guid showId)
         {
             var response = await _mediator.Send(new GetShowDetailByIdQuery { ShowId = showId });
 
@@ -52,7 +52,7 @@ namespace Shows.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ShowResponse>> GetAll()
+        public async Task<ActionResult<List<ShowResponse>>> GetAll()
         {
             var response = await _mediator.Send(new GetShowsQuery());
 

@@ -1,32 +1,18 @@
 ﻿using Shouldly;
-using Shows.Api.Requests.Categories;
 using Shows.Api.Requests.Performers;
 using Shows.Application.Features.Performers.Queries;
 using Shows.IntegrationTests.Base;
 using Shows.IntegrationTests.Constants;
 using System.Net;
-using System.Net.Http.Json;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Shows.IntegrationTests.Controllers;
 
-public class PerformersControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+public class PerformersControllerTests : BaseControllerTests
 {
-    private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
-
     public PerformersControllerTests(CustomWebApplicationFactory<Program> factory)
+        :base(factory)
     {
-        _factory = factory;
-        _client = _factory.GetAnonymousClient();
-
-        _jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
     }
 
     [Fact]
@@ -183,58 +169,5 @@ public class PerformersControllerTests : IClassFixture<CustomWebApplicationFacto
         performer.PerformerInfos.Select(pi => pi.Name).ShouldContain("Number of concerts");
         performer.PerformerInfos.Select(pi => pi.Value).ShouldNotContain("01.01.1999.");
         performer.PerformerInfos.Select(pi => pi.Value).ShouldContain("100");
-    }
-
-    private async Task UpdatePerformerInfo(Guid performerInfo, UpdatePerformerInfoRequest updatePerformerInfoRequest)
-    {
-        var response = await _client.PutAsJsonAsync($"{UrlConstants.BasePerformerURL}/{performerInfo}/{UrlConstants.SpecificUpdatePerformerInfo}", 
-            updatePerformerInfoRequest);
-
-        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
-    }
-
-    private async Task DeletePerformerInfo(Guid performerInfo, DeletePerformerInfoRequest deletePerformerInfoRequest)
-    {
-        var stringContent = new StringContent(JsonSerializer.Serialize(deletePerformerInfoRequest), Encoding.UTF8, "application/json");
-        var request = new HttpRequestMessage(HttpMethod.Delete, $"{UrlConstants.BasePerformerURL}/{performerInfo}/{UrlConstants.SpecificUpdatePerformerInfo}");
-        request.Content = stringContent;
-
-        var response = await _client.SendAsync(request);
-
-        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
-    }
-
-    private async Task<Guid> CreatePerformer(CreatePerformerRequest createPerformerRequest)
-    {
-        var createResponse = await _client.PostAsJsonAsync($"{UrlConstants.BasePerformerURL}", createPerformerRequest);
-        var performerId = await createResponse.Content.ReadFromJsonAsync<Guid>();
-
-        createResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        return performerId;
-    }
-
-    private async Task<PerformerResponse> GetPerformer(Guid performerId)
-    {
-        var getResponse = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{performerId}");
-        var performer = await getResponse.Content.ReadFromJsonAsync<PerformerResponse>();
-
-        getResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        performer.ShouldNotBeNull();
-
-        return performer;
-    }
-
-    private async Task<PerformerDetailResponse> GetPerformerDetail(Guid performerId)
-    {
-        var getResponse = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{performerId}/{UrlConstants.SpecificPerformerDetail}");
-        var performer = await getResponse.Content.ReadFromJsonAsync<PerformerDetailResponse>();
-
-        getResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        performer.ShouldNotBeNull();
-
-        return performer;
     }
 }

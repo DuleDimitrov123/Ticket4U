@@ -69,7 +69,7 @@ public class Show : AggregateRoot
     }
 
     private Show(string name, string location, NumberOfPlaces numberOfPlaces,
-        Money ticketPrice, Guid performerId, Guid categoryId)
+        Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId)
     {
         ShowMessages = new List<ShowMessage>();
 
@@ -77,6 +77,7 @@ public class Show : AggregateRoot
         Location = location;
         NumberOfPlaces = numberOfPlaces;
         TicketPrice = ticketPrice;
+        StartingDateTime = startingDateTime;
         PerformerId = performerId;
         CategoryId = categoryId;
 
@@ -88,18 +89,18 @@ public class Show : AggregateRoot
     #region domain logic
 
     public static Show Create(string name, string location, NumberOfPlaces numberOfPlaces,
-        Money ticketPrice, Guid performerId, Guid categoryId)
+        Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId)
     {
         IList<string> errorMessages = new List<string>();
 
-        ValidateShowCreate(name, location, numberOfPlaces, ticketPrice, performerId, categoryId, errorMessages);
+        ValidateShowCreate(name, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId, errorMessages);
 
         if (errorMessages.Count > 0)
         {
             throw new DomainException(errorMessages);
         }
 
-        return new Show(name, location, numberOfPlaces, ticketPrice, performerId, categoryId);
+        return new Show(name, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId);
     }
 
     public void UpdateStartingDateTime(DateTime newStartingDateTime)
@@ -151,11 +152,16 @@ public class Show : AggregateRoot
     }
 
     public static void ValidateShowCreate(string name, string location, NumberOfPlaces numberOfPlaces,
-        Money ticketPrice, Guid performerId, Guid categoryId, IList<string> errorMessages)
+        Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId, IList<string> errorMessages)
     {
         ValidateShowName(name, errorMessages);
 
         ValidateShowLocation(location, errorMessages);
+
+        if (startingDateTime < DateTime.Now)
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowStartingDateTimeNotInFuture);
+        }
 
         if (performerId.Equals(Guid.Empty))
         {

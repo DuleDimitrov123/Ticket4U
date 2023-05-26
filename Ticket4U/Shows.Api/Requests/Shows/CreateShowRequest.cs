@@ -12,6 +12,8 @@ public record CreateShowRequest
 
     public int TickerPriceAmount { get; set; }
 
+    public DateTime StartingDateTime { get; set; }
+
     public Guid PerformerId { get; set; }
 
     public Guid CategoryId { get; set; }

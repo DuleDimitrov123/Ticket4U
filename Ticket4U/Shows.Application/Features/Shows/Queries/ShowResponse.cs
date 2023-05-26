@@ -6,6 +6,8 @@ public class ShowResponse
 
     public string Location { get; set; }
 
+    public DateTime StartingDateTime { get; set; }
+
     public string Status { get; set; }
 
     public int NumberOfplaces { get; set; }

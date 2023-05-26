@@ -19,4 +19,22 @@ public static class UrlConstants
     public const string SpecificUpdatePerformerInfo = "performer-info";
 
     #endregion
+
+    #region ShowsController
+
+    public const string BaseShowURL = "/api/shows";
+
+    public const string SpecificShowDetail = "detail";
+
+    public const string SpecificUpdateShowName = "newName";
+
+    public const string SpecificUpdateShowLocation = "newLocation";
+
+    public const string SpecificUpdateShowPrice = "newPrice";
+
+    public const string SpecificUpdateShowStartingDateTime = "newStartingDateTime";
+
+    public const string SpecificAddShowMessage = "showMessages";
+
+    #endregion
 }

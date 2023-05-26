@@ -1,33 +1,19 @@
-﻿using Azure;
-using EmptyFiles;
-using Shouldly;
+﻿using Shouldly;
 using Shows.Api.Requests.Categories;
 using Shows.Application.Features.Categories.Queries;
 using Shows.Domain.Categories;
 using Shows.IntegrationTests.Base;
 using Shows.IntegrationTests.Constants;
 using System.Net;
-using System.Net.Http.Json;
-using System.Runtime.InteropServices;
 using System.Text.Json;
 
 namespace Shows.IntegrationTests.Controllers;
 
-public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+public class CategoriesControllerTests : BaseControllerTests
 {
-    private readonly CustomWebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
-
     public CategoriesControllerTests(CustomWebApplicationFactory<Program> factory)
+        :base(factory)
     {
-        _factory = factory;
-        _client = _factory.GetAnonymousClient();
-
-        _jsonSerializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
     }
 
     [Fact]
@@ -108,13 +94,6 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
         category!.Description.ShouldBe(updatedCategory.NewDescription);
     }
 
-    private async Task UpdateCategory(Guid categoryId, UpdateCategoryRequest updateCategoryRequest)
-    {
-        var response = await _client.PutAsJsonAsync($"{UrlConstants.BaseCategoryURL}/{categoryId}", updateCategoryRequest);
-
-        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
-    }
-
     [Fact]
     public async Task ArchiveCategorySuccessfully()
     {
@@ -134,34 +113,5 @@ public class CategoriesControllerTests : IClassFixture<CustomWebApplicationFacto
         category.ShouldNotBeNull();
 
         category!.Status.ShouldBe(CategoryStatus.IsArchived.ToString());
-    }
-
-    private async Task<Guid> CreateCategory(CreateCategoryRequest createCategoryRequest)
-    {
-        var createResponse = await _client.PostAsJsonAsync($"{UrlConstants.BaseCategoryURL}", createCategoryRequest);
-        var categoryId = await createResponse.Content.ReadFromJsonAsync<Guid>();
-
-        createResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        return categoryId;
-    }
-
-    private async Task<CategoryResponse> GetCategory(Guid categoryId)
-    {
-        var getResponse = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{categoryId}");
-        var category = await getResponse.Content.ReadFromJsonAsync<CategoryResponse>();
-
-        getResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-        category.ShouldNotBeNull();
-
-        return category;
-    }
-
-    private async Task ArchiveCategory(Guid categoryId)
-    {
-        var response = await _client.PutAsync($"{UrlConstants.BaseCategoryURL}/{categoryId}/{UrlConstants.SpecificArchiveCategoryURL}", null);
-
-        response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
     }
 }

@@ -18,9 +18,12 @@ public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerComm
     {
         var newPerformer = Performer.Create(request.Name);
 
-        foreach (KeyValuePair<string, string> entry in request.PerformerInfos)
+        if (request.PerformerInfos != null)
         {
-            newPerformer.AddPerformerInfo(PerformerInfo.Create(entry.Key, entry.Value));
+            foreach (KeyValuePair<string, string> entry in request.PerformerInfos)
+            {
+                newPerformer.AddPerformerInfo(PerformerInfo.Create(entry.Key, entry.Value));
+            }
         }
 
         newPerformer = await _repository.Add(newPerformer);

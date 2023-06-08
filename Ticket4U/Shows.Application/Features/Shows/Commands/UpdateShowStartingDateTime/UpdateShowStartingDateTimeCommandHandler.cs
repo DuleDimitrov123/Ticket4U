@@ -5,7 +5,7 @@ using Shows.Domain.Shows;
 
 namespace Shows.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 
-internal class UpdateShowStartingDateTimeCommandHandler : IRequestHandler<UpdateShowStartingDateTimeCommand, Unit>
+public class UpdateShowStartingDateTimeCommandHandler : IRequestHandler<UpdateShowStartingDateTimeCommand, Unit>
 {
     private readonly IShowRepository _repository;
 

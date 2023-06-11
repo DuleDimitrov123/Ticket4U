@@ -1,7 +1,6 @@
 ﻿using Common;
 using Common.Constants;
-using Shows.Domain.Common;
-using System.Xml.Linq;
+using Shared.Domain;
 
 namespace Shows.Domain.Shows;
 

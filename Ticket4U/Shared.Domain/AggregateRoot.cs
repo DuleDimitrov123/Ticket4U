@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace Shows.Domain.Common;
+namespace Shared.Domain;
 
 /// <summary>
 /// Base class for all aggregate roots

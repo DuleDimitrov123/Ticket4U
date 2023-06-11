@@ -1,6 +1,6 @@
 ﻿using Common;
 using Common.Constants;
-using Shows.Domain.Common;
+using Shared.Domain;
 
 namespace Shows.Domain.Performers;
 

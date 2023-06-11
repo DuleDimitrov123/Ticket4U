@@ -1,5 +1,5 @@
 ﻿using Common;
-using Shows.Domain.Common;
+using Shared.Domain;
 
 namespace Shows.Domain.Shows;
 

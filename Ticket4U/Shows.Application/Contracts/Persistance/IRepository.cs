@@ -1,4 +1,4 @@
-﻿using Shows.Domain.Common;
+﻿using Shared.Domain;
 
 namespace Shows.Application.Contracts.Persistance;
 

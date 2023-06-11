@@ -1,4 +1,4 @@
-﻿namespace Shows.Domain.Common;
+﻿namespace Shared.Domain;
 
 /// <summary>
 /// Value object

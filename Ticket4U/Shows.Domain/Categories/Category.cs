@@ -1,14 +1,14 @@
 ﻿using Common;
 using Common.Constants;
-using Shows.Domain.Common;
+using Shared.Domain;
 
 namespace Shows.Domain.Categories;
 
 public class Category : AggregateRoot
 {
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
-    public string Description { get; set; }
+    public string Description { get; private set; }
 
     public CategoryStatus Status { get; private set; }
 

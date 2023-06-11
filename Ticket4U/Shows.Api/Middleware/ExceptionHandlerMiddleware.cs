@@ -1,5 +1,5 @@
-﻿using Shows.Application.Exceptions;
-using Shows.Domain.Common;
+﻿using Shared.Domain;
+using Shows.Application.Exceptions;
 using System.Net;
 using System.Text.Json;
 

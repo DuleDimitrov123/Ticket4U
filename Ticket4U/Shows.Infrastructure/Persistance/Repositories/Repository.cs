@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shared.Domain;
 using Shows.Application.Contracts.Persistance;
-using Shows.Domain.Common;
 
 namespace Shows.Infrastructure.Persistance.Repositories;
 

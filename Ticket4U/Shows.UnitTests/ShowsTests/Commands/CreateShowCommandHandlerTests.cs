@@ -5,6 +5,7 @@ using Shows.Application.Features.Shows.Commands.CreateShow;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shared.Domain;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 

@@ -1,4 +1,4 @@
-﻿namespace Shows.Domain.Common;
+﻿namespace Shared.Domain;
 
 public class DomainException : Exception
 {

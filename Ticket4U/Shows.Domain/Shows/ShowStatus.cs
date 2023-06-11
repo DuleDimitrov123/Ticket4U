@@ -6,5 +6,5 @@
 public enum ShowStatus
 {
     HasTickets,
-    IsSoledOut
+    IsSoldOut
 }

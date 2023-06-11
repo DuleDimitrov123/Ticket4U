@@ -7,7 +7,7 @@ namespace Shows.IntegrationTests.Base;
 
 public class Utilities
 {
-    public static void InitializeDbForTestsAsync(AppDbContext context)
+    public static void InitializeDbForTestsAsync(ShowsDbContext context)
     {
         context.Categories.Add(Category.Create("Category1", "Description of category 1"));
         context.Categories.Add(Category.Create("Category2", "Description of category 2"));
@@ -38,12 +38,12 @@ public class Utilities
         context.SaveChangesAsync();
     }
 
-    public static Performer? GetPerformerByName(string name, AppDbContext context)
+    public static Performer? GetPerformerByName(string name, ShowsDbContext context)
     {
         return context.Performers.Where(p => p.Name == name).FirstOrDefault();
     }
 
-    public static Category? GetCategoryByName(string name, AppDbContext context)
+    public static Category? GetCategoryByName(string name, ShowsDbContext context)
     {
         return context.Categories.Where(c => c.Name == name).FirstOrDefault();
     }

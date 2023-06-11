@@ -11,7 +11,7 @@ using Shows.Infrastructure.Persistance;
 
 namespace Shows.Infrastructure.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(ShowsDbContext))]
     [Migration("20230425211933_CreateCategoryEntity")]
     partial class CreateCategoryEntity
     {

@@ -15,14 +15,14 @@ public class CustomWebApplicationFactory<TStartup>
         builder.ConfigureServices(services =>
         {
             var descriptor = services.SingleOrDefault
-                   (d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
+                   (d => d.ServiceType == typeof(DbContextOptions<ShowsDbContext>));
 
             if (descriptor != null)
             {
                 services.Remove(descriptor);
             }
 
-            services.AddDbContext<AppDbContext>(options =>
+            services.AddDbContext<ShowsDbContext>(options =>
             {
                 options.UseInMemoryDatabase("ShowsConnectionStringInMemoryTest");
             });
@@ -32,7 +32,7 @@ public class CustomWebApplicationFactory<TStartup>
             using (var scope = sp.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
-                var context = scopedServices.GetRequiredService<AppDbContext>();
+                var context = scopedServices.GetRequiredService<ShowsDbContext>();
                 var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
                 context.Database.EnsureCreated();

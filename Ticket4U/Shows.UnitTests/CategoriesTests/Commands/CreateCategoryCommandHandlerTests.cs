@@ -1,7 +1,5 @@
-﻿using Moq;
-using Shouldly;
+﻿using Shouldly;
 using Shows.Application.Features.Categories.Commands.CreateCategory;
-using Shows.UnitTests.Mocks;
 
 namespace Shows.UnitTests.Categories.Commands;
 

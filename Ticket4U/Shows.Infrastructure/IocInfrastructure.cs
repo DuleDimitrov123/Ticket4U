@@ -11,7 +11,7 @@ public static class IocInfrastructure
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContext<ShowsDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("ShowsConnectionString"));
         });

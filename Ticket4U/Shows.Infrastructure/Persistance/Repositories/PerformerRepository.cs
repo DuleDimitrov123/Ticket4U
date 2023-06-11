@@ -6,7 +6,7 @@ namespace Shows.Infrastructure.Persistance.Repositories;
 
 public class PerformerRepository : Repository<Performer>, IPerformerRepository
 {
-    public PerformerRepository(AppDbContext dbContext) : base(dbContext)
+    public PerformerRepository(ShowsDbContext dbContext) : base(dbContext)
     {
     }
 

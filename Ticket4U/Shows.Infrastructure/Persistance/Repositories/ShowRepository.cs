@@ -6,7 +6,7 @@ namespace Shows.Infrastructure.Persistance.Repositories;
 
 public class ShowRepository : Repository<Show>, IShowRepository
 {
-    public ShowRepository(AppDbContext dbContext) : base(dbContext)
+    public ShowRepository(ShowsDbContext dbContext) : base(dbContext)
     {
     }
 

@@ -11,7 +11,7 @@ using Shows.Infrastructure.Persistance;
 
 namespace Shows.Infrastructure.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(ShowsDbContext))]
     [Migration("20230426091917_MakeCategoryStatusString")]
     partial class MakeCategoryStatusString
     {

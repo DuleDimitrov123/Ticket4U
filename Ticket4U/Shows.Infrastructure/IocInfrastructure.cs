@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shows.Application.Contracts.Outbox;
 using Shows.Application.Contracts.Persistance;
+using Shows.Infrastructure.Outbox;
 using Shows.Infrastructure.Persistance;
 using Shows.Infrastructure.Persistance.Repositories;
 
@@ -20,6 +22,16 @@ public static class IocInfrastructure
 
         services.AddScoped<IPerformerRepository, PerformerRepository>();
         services.AddScoped<IShowRepository, ShowRepository>();
+
+        //CAP outbox
+        services.AddCap(options =>
+        {
+            options.UseEntityFramework<ShowsDbContext>();
+
+            options.UseRabbitMQ(configuration.GetSection("EventBusSettings:Host").Value!);
+        });
+
+        services.AddScoped<IShowPublisher, ShowPublisher>();
 
         return services;
     }

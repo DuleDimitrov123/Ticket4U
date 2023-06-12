@@ -6,6 +6,8 @@ using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
 using Shared.Domain;
+using MediatR;
+using Shows.Application.Features.Shows.Notifications.ShowCreated;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
@@ -44,6 +46,8 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
         var categoryMockRepository = new Mock<IRepository<Category>>();
         categoryMockRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(category);
 
+        var mediatorMock = new Mock<IMediator>();
+
         var command = new CreateShowCommand()
         {
             Name = "ShowName",
@@ -56,7 +60,7 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
             CategoryId = category.Id
         };
 
-        var handler = new CreateShowCommandHandler(showsMockRepository.Object, categoryMockRepository.Object, performerMockRepository.Object);
+        var handler = new CreateShowCommandHandler(showsMockRepository.Object, categoryMockRepository.Object, performerMockRepository.Object, mediatorMock.Object);
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

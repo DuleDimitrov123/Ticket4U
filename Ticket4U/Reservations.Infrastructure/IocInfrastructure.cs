@@ -17,6 +17,13 @@ public static class IocInfrastructure
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        services.AddCap(options =>
+        {
+            options.UseEntityFramework<ReservationsDbContext>();
+
+            options.UseRabbitMQ(configuration.GetSection("EventBusSettings:Host").Value!);
+        });
+
         return services;
     }
 }

@@ -12,6 +12,9 @@ public class Show : AggregateRoot
 
     public int NumberOfPlaces { get; private set; }
 
+    //represents ShowStatus from Shows microservice
+    public bool IsSoldOut { get; private set; }
+
     public Guid ExternalId { get; private set; }
 
     private Show(string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId)

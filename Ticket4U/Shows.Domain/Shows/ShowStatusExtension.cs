@@ -11,8 +11,8 @@ public static class ShowStatusExtension
         {
             case "HasTickets":
                 return ShowStatus.HasTickets;
-            case "IsSoledOut":
-                return ShowStatus.IsSoledOut;
+            case "IsSoldOut":
+                return ShowStatus.IsSoldOut;
             default:
                 throw new DomainException(
                     new List<string>()

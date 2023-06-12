@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Reservations.Application.Contracts.Persistance;
+using Reservations.Infrastructure.Persistance.Repositories;
 
 namespace Reservations.Infrastructure;
 
@@ -7,7 +10,12 @@ public static class IocInfrastructure
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        //TODO: Add DbContext and Repos
+        services.AddDbContext<ReservationsDbContext>(options =>
+        {
+            options.UseSqlServer(configuration.GetConnectionString("ReservationsConnectionString"));
+        });
+
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         return services;
     }

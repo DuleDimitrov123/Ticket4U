@@ -18,7 +18,7 @@ public class Reservation : AggregateRoot
         NumberOfReservations = numberOfReservations;
     }
 
-    public Reservation Create(Guid userId, Guid showId, NumberOfReservations numberOfReservations)
+    public static Reservation Create(Guid userId, Guid showId, NumberOfReservations numberOfReservations)
     {
         IList<string> errorMessages = new List<string>();
 
@@ -29,10 +29,10 @@ public class Reservation : AggregateRoot
             throw new DomainException(errorMessages);
         }
 
-        return new Reservation(UserId, ShowId, numberOfReservations);
+        return new Reservation(userId, showId, numberOfReservations);
     }
 
-    private void ValidateReservationCreation(Guid userId, Guid showId, IList<string> errorMessages)
+    private static void ValidateReservationCreation(Guid userId, Guid showId, IList<string> errorMessages)
     {
         if (userId == Guid.Empty)
         {

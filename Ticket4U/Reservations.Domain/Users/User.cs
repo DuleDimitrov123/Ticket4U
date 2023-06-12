@@ -22,7 +22,8 @@ public class User : AggregateRoot
 
     private User(string email, Guid externalId)
     {
-        
+        Email = email;
+        ExternalId = externalId;
     }
 
     public static User Create(string email, Guid externalId)

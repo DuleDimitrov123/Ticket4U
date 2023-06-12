@@ -8,6 +8,8 @@ public static class IocApplication
     {
         var assembly = typeof(IocApplication).Assembly;
 
+        services.AddAutoMapper(assembly);
+
         services.AddMediatR(configuration =>
             configuration.RegisterServicesFromAssemblies(assembly));
 

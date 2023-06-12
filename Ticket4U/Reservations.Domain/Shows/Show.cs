@@ -23,6 +23,7 @@ public class Show : AggregateRoot
         StartingDateTime = startingDateTime;
         NumberOfPlaces = numberOfPlaces;
         ExternalId = externalId;
+        IsSoldOut = false;
     }
 
     public static Show Create(string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId)

@@ -19,6 +19,7 @@ public class ShowsController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpPost("CAPROUTE-CreateShowInReservations")]
     [CapSubscribe(ShowDomainEventsConstants.NewShowCreated)]
     public async Task<ActionResult> CreateShow(CreatedShowEvent createdShowEvent)
     {

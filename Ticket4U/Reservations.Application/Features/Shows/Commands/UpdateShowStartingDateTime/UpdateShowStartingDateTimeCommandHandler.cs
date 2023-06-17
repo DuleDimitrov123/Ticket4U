@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Reservations.Application.Contracts.Persistance;
 using Reservations.Domain.Shows;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
 
 namespace Reservations.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 

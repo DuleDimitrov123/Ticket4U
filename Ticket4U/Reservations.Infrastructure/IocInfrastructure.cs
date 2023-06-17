@@ -18,6 +18,7 @@ public static class IocInfrastructure
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.AddScoped<IShowRepository, ShowRepository>();
+        services.AddScoped<IReservationRepository, ReservationRepository>();
 
         services.AddCap(options =>
         {

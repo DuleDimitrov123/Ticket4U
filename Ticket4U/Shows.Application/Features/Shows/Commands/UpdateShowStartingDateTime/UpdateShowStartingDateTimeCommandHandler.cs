@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Shared.Domain.Events;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
 using Shows.Application.Features.Shows.Notifications.ShowStartingDateTimeUpdated;
 using Shows.Domain.Shows;
 

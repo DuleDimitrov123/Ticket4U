@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
 using Shows.Application.Features.Shows.Notifications.ShowCreated;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;

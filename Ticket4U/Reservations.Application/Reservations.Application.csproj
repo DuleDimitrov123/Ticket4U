@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Reservations\Queries\" />
     <Folder Include="Features\Shows\Queries\" />
     <Folder Include="Features\Users\Queries\" />
   </ItemGroup>

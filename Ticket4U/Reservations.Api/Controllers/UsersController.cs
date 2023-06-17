@@ -16,7 +16,7 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
+    [HttpPost("CAPROUTE-CreateUserInReservations")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)
     {

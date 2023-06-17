@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
+using Shows.Application.Features.Shows.Notifications.ShowCreated;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
@@ -12,12 +13,17 @@ public class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
     private readonly IRepository<Show> _showRepository;
     private readonly IRepository<Category> _categoryRepository;
     private readonly IRepository<Performer> _performerRepository;
+    private readonly IMediator _mediator;
 
-    public CreateShowCommandHandler(IRepository<Show> showRepository, IRepository<Category> categoryRepository, IRepository<Performer> performerRepository)
+    public CreateShowCommandHandler(IRepository<Show> showRepository, 
+        IRepository<Category> categoryRepository, 
+        IRepository<Performer> performerRepository,
+        IMediator mediator)
     {
         _showRepository = showRepository;
         _categoryRepository = categoryRepository;
         _performerRepository = performerRepository;
+        _mediator = mediator;
     }
 
     public async Task<Guid> Handle(CreateShowCommand request, CancellationToken cancellationToken)
@@ -39,6 +45,8 @@ public class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
         }
         
         show = await _showRepository.Add(show);
+
+        await _mediator.Publish(new ShowCreatedNotification(show));
 
         return show.Id;
     }

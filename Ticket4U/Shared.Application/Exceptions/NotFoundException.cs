@@ -1,4 +1,4 @@
-﻿namespace Shows.Application.Exceptions;
+﻿namespace Shared.Application.Exceptions;
 
 public class NotFoundException : Exception
 {

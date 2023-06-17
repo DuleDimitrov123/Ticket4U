@@ -15,10 +15,10 @@ public class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
 
     public async Task<Guid> Handle(CreateShowCommand request, CancellationToken cancellationToken)
     {
-        var category = Show.Create(request.Name, request.StartingDateTime, request.NumberOfPlaces, request.ExternalId);
+        var show = Show.Create(request.Name, request.StartingDateTime, request.NumberOfPlaces, request.ExternalId);
 
-        category = await _repository.Add(category);
+        show = await _repository.Add(show);
 
-        return category.Id;
+        return show.Id;
     }
 }

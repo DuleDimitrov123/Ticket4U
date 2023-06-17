@@ -6,6 +6,7 @@ using Shows.Application.Features.Shows.Queries;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shared.Domain.Events;
 
 namespace Shows.Application.Profiles;
 
@@ -55,5 +56,14 @@ public class MappingProfile : Profile
             .ReverseMap();
 
         CreateMap<ShowMessage, ShowMessageResponse>().ReverseMap();
+
+        CreateMap<Show, CreatedShowEvent>()
+            .ForMember(
+                createdShowEvent => createdShowEvent.NumberOfPlaces,
+                options => options.MapFrom(show => show.NumberOfPlaces.Value))
+            .ForMember(
+                createdShowEvent => createdShowEvent.ExternalId,
+                options => options.MapFrom(show => show.Id))
+            .ReverseMap();
     }
 }

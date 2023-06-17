@@ -14,10 +14,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Reservations.Domain\Reservations.Domain.csproj" />
+    <ProjectReference Include="..\Shared.Application\Shared.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Reservations\Queries\" />
     <Folder Include="Features\Shows\Queries\" />
     <Folder Include="Features\Users\Queries\" />
   </ItemGroup>

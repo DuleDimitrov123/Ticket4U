@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
 using Shows.Domain.Categories;
 
 namespace Shows.Application.Features.Categories.Queries.GetCategoryById;

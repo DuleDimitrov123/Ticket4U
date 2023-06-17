@@ -40,6 +40,11 @@ public class Show : AggregateRoot
         return new Show(name, startingDateTime, numberOfPlaces, externalId);
     }
 
+    public void UpdateStartingDateTime(DateTime newStartingDateTime)
+    {
+        StartingDateTime = newStartingDateTime;
+    }
+
     private static void ValidateShowCreation(string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId, List<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))

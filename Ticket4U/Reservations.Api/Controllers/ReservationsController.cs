@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Api.Requests.Reservations;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
+using Reservations.Application.Features.Reservations.Queries.GetReservationById;
+using Reservations.Application.Features.Reservations.Queries.GetReservations;
+using Reservations.Application.Features.Reservations.Queries.GetReservationsByUserId;
+using Reservations.Application.Features.Reservations.Responses;
 
 namespace Reservations.Api.Controllers;
 
@@ -28,6 +32,32 @@ public class ReservationsController : ControllerBase
         };
 
         var response = await _mediator.Send(command);
+
+        return Ok(response);
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IList<ReservationResponse>>> GetAll()
+    {
+        var response = await _mediator.Send(new GetReservationsQuery());
+
+        return Ok(response);
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<ReservationResponse>> GetById([FromRoute]Guid id)
+    {
+        var response = await _mediator.Send(new GetReservationByIdQuery() { ReservationId = id});
+
+        return Ok(response);
+    }
+
+    [HttpGet("/user/{userId}")]
+    public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute]Guid userId)
+    {
+        var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });
 
         return Ok(response);
     }

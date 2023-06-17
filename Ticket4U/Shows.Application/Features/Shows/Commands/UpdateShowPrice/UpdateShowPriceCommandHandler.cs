@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Exceptions;
+using Shared.Application.Exceptions;
 using Shows.Domain.Shows;
 
 namespace Shows.Application.Features.Shows.Commands.UpdateShowPrice;

@@ -1,7 +1,11 @@
-﻿using MediatR;
+﻿using DotNetCore.CAP;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Api.Requests.Shows;
 using Reservations.Application.Features.Shows.Commands.CreateShow;
+using Reservations.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
+using Shared.Domain.Events;
+using Shared.Domain.Events.Constants;
 
 namespace Reservations.Api.Controllers;
 
@@ -16,20 +20,52 @@ public class ShowsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> CreateShow([FromBody] CreateShowRequest request)
+    [HttpPost("CAPROUTE-CreateShowInReservations")]
+    [CapSubscribe(ShowDomainEventsConstants.NewShowCreated)]
+    public async Task<ActionResult> CreateShow(CreatedShowEvent createdShowEvent)
     {
         var command = new CreateShowCommand()
         {
-            Name = request.Name,
-            StartingDateTime = request.StartingDateTime,
-            NumberOfPlaces = request.NumberOfPlaces,
-            ExternalId = request.ExternalId
+            Name = createdShowEvent.Name,
+            StartingDateTime = createdShowEvent.StartingDateTime,
+            NumberOfPlaces = createdShowEvent.NumberOfPlaces,
+            ExternalId = createdShowEvent.ExternalId
         };
 
         var response = await _mediator.Send(command);
 
         return Ok(response);
     }
+
+    [HttpPost("CAPROUTE-UpdateShowStartingDateTime")]
+    [CapSubscribe(ShowDomainEventsConstants.ShowStartingDateTimeUpdated)]
+    public async Task<ActionResult> UpdateShowStartingDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent)
+    {
+        var command = new UpdateShowStartingDateTimeCommand()
+        {
+            ExternalShowId = updatedShowsStartingDateTimeEvent.ShowId,
+            NewStartingDateTime = updatedShowsStartingDateTimeEvent.NewStartingDateTime
+        };
+
+        await _mediator.Send(command);
+
+        return NoContent();
+    }
+
+    //[HttpPost]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //public async Task<ActionResult> CreateShow([FromBody] CreateShowRequest request)
+    //{
+    //    var command = new CreateShowCommand()
+    //    {
+    //        Name = request.Name,
+    //        StartingDateTime = request.StartingDateTime,
+    //        NumberOfPlaces = request.NumberOfPlaces,
+    //        ExternalId = request.ExternalId
+    //    };
+
+    //    var response = await _mediator.Send(command);
+
+    //    return Ok(response);
+    //}
 }

@@ -11,4 +11,11 @@ public class TestShowPublisher : IShowPublisher
 
         return Task.CompletedTask;
     }
+
+    public Task PublishUpdatedShowDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent)
+    {
+        Console.WriteLine($"PUBLISHING UpdatedShowsStartingDateTimeEvent with ShowId: {updatedShowsStartingDateTimeEvent.ShowId}");
+
+        return Task.CompletedTask;
+    }
 }

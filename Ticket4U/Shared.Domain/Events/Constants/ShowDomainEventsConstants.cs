@@ -3,4 +3,6 @@
 public static class ShowDomainEventsConstants
 {
     public const string NewShowCreated = "NewShowCreated";
+
+    public const string ShowStartingDateTimeUpdated = "ShowStartingDateTimeUpdated";
 }

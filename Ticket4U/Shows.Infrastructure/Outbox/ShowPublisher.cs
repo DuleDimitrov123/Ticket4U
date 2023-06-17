@@ -24,4 +24,12 @@ public class ShowPublisher : IShowPublisher
             await _capPublisher.PublishAsync(ShowDomainEventsConstants.NewShowCreated, createdShowEvent);
         }
     }
+
+    public async Task PublishUpdatedShowDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent)
+    {
+        using (var transaction = _dbContext.Database.BeginTransaction(_capPublisher, true))
+        {
+            await _capPublisher.PublishAsync(ShowDomainEventsConstants.ShowStartingDateTimeUpdated, updatedShowsStartingDateTimeEvent);
+        }
+    }
 }

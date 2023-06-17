@@ -17,6 +17,8 @@ public static class IocInfrastructure
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        services.AddScoped<IShowRepository, ShowRepository>();
+
         services.AddCap(options =>
         {
             options.UseEntityFramework<ReservationsDbContext>();

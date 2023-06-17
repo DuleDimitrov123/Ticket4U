@@ -46,7 +46,6 @@ public class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
         
         show = await _showRepository.Add(show);
 
-        //TODO: Maybe consider publishing it when saving aggregate root to db
         await _mediator.Publish(new ShowCreatedNotification(show));
 
         return show.Id;

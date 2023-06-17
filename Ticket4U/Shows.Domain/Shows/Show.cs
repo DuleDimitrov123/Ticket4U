@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.Constants;
 using Shared.Domain;
+using Shared.Domain.Events;
 
 namespace Shows.Domain.Shows;
 
@@ -110,8 +111,6 @@ public class Show : AggregateRoot
                 ShowConstants.ShowIsPostponedValue.Replace("{oldDateTime}", StartingDateTime.ToString())
                     .Replace("{newDateTime}", newStartingDateTime.ToString()),
                 Id));
-
-        //TODO: Add domain event that starting date time is changed
 
         StartingDateTime = newStartingDateTime;
     }

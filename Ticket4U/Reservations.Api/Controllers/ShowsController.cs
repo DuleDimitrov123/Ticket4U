@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Api.Requests.Shows;
 using Reservations.Application.Features.Shows.Commands.CreateShow;
+using Reservations.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 using Shared.Domain.Events;
 using Shared.Domain.Events.Constants;
 
@@ -34,6 +35,21 @@ public class ShowsController : ControllerBase
         var response = await _mediator.Send(command);
 
         return Ok(response);
+    }
+
+    [HttpPost("CAPROUTE-UpdateShowStartingDateTime")]
+    [CapSubscribe(ShowDomainEventsConstants.ShowStartingDateTimeUpdated)]
+    public async Task<ActionResult> UpdateShowStartingDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent)
+    {
+        var command = new UpdateShowStartingDateTimeCommand()
+        {
+            ExternalShowId = updatedShowsStartingDateTimeEvent.ShowId,
+            NewStartingDateTime = updatedShowsStartingDateTimeEvent.NewStartingDateTime
+        };
+
+        await _mediator.Send(command);
+
+        return NoContent();
     }
 
     //[HttpPost]

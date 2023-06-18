@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Api.Requests.Reservations;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
+using Reservations.Application.Features.Reservations.Commands.UpdateNumberOfReservations;
 using Reservations.Application.Features.Reservations.Queries.GetReservationById;
 using Reservations.Application.Features.Reservations.Queries.GetReservations;
 using Reservations.Application.Features.Reservations.Queries.GetReservationsByUserId;
@@ -60,5 +61,17 @@ public class ReservationsController : ControllerBase
         var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });
 
         return Ok(response);
+    }
+
+    [HttpPut("{reservationId}/newNumberOfResevations")]
+    public async Task<ActionResult> UpdateNumberOfReservations([FromRoute]Guid reservationId, [FromBody] UpdateNumberOfReservationsRequest request)
+    {
+        await _mediator.Send(new UpdateNumberOfReservationsQuery()
+        {
+            Id = reservationId,
+            NewNumberOfReservations = request.NewNumberOfReservations
+        });
+
+        return NoContent();
     }
 }

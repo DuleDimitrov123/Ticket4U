@@ -1,6 +1,6 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Features.Shows.Commands.UpdateShowPrice;
 using Shows.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 using Shows.Domain.Shows;
 
@@ -25,7 +25,7 @@ public class UpdateShowStartingDateTimeCommandHandlerTests
         var showsMockRepository = new Mock<IShowRepository>();
         showsMockRepository.Setup(x => x.GetShowWithShowMessages(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var handler = new UpdateShowStartingDateTimeCommandHandler(showsMockRepository.Object);
+        var handler = new UpdateShowStartingDateTimeCommandHandler(showsMockRepository.Object, new Mock<IMediator>().Object);
 
         var command = new UpdateShowStartingDateTimeCommand() { ShowId = show.Id, NewStartingDateTime = updatedShowStartingDateTime };
 

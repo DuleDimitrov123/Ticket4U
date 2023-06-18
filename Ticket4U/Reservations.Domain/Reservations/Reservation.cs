@@ -1,5 +1,6 @@
 ﻿using Reservations.Common;
 using Shared.Domain;
+using System.Net.NetworkInformation;
 
 namespace Reservations.Domain.Reservations;
 
@@ -30,6 +31,12 @@ public class Reservation : AggregateRoot
         }
 
         return new Reservation(userId, showId, numberOfReservations);
+    }
+
+    public void UpdateNumberOfReservations(int newNumberOfReservations)
+    {
+        //NumberOfReservations is ValueObject, don't update, but create new!
+        NumberOfReservations = NumberOfReservations.Create(newNumberOfReservations);
     }
 
     private static void ValidateReservationCreation(Guid userId, Guid showId, IList<string> errorMessages)

@@ -55,7 +55,7 @@ public class ReservationsController : ControllerBase
         return Ok(response);
     }
 
-    [HttpGet("/user/{userId}")]
+    [HttpGet("user/{userId}")]
     public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute]Guid userId)
     {
         var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });

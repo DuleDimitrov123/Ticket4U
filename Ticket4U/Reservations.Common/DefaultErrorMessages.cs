@@ -18,7 +18,11 @@ public static class DefaultErrorMessages
 
     public static readonly string NumberOfReservationsGreaterThanLimit = "One user cannot make more resrevations than ";
 
+    public static readonly string CantCreateReservationWithEmptyGuid = "Can't create reservation with empty guid!";
+
     public static readonly string UserIdForReservationRequired = "UserId for reservation is required!";
+
+    public static readonly string CantCreateUserWithEmptyGuid = "Can't create user with empty guid!";
 
     public static readonly string ShowIdForReservationRequired = "ShowId for reservation is required!";
 }

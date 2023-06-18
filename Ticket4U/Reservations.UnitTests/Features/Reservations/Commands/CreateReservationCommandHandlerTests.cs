@@ -2,6 +2,8 @@
 using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
 using Reservations.Domain.Reservations;
+using Reservations.Domain.Shows;
+using Reservations.Domain.Users;
 using Shouldly;
 using System.Reflection;
 
@@ -14,9 +16,11 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
     {
         //arrange
         var reservations = new List<Reservation>();
+        var show = Show.Create("Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
+        var user = User.Create("user1@gmail.com", Guid.NewGuid());
 
-        var mockRepository = new Mock<IRepository<Reservation>>();
-        mockRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
+        var mockReservationRepository = new Mock<IRepository<Reservation>>();
+        mockReservationRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
             .ReturnsAsync(
                 (Reservation res) =>
                 {
@@ -28,6 +32,12 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
                     return res;
                 });
 
+        var mockShowRepository = new Mock<IRepository<Show>>();
+        mockShowRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
+
+        var mockUserRepository = new Mock<IRepository<User>>();
+        mockUserRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(user);
+
         var command = new CreateReservationCommand()
         {
             ShowId = Guid.NewGuid(),
@@ -35,7 +45,7 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
             NumberOfReservations = 3
         };
 
-        var handler = new CreateReservationCommandHandler(mockRepository.Object);
+        var handler = new CreateReservationCommandHandler(mockReservationRepository.Object, mockShowRepository.Object, mockUserRepository.Object);
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

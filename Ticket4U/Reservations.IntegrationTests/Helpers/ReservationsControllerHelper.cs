@@ -112,4 +112,28 @@ public class ReservationsControllerHelper : BaseControllerTests
             return (response.StatusCode, default(T));
         }
     }
+
+    protected Task<HttpStatusCode> UpdateNumberOfReservations(Guid reservationId, 
+        UpdateNumberOfReservationsRequest request, bool mocked = true)
+    {
+        SetUpClient(mocked, _output);
+        return UpdateNumberOfReservationsWithSetUpClient(reservationId, request);
+    }
+
+    private async Task<HttpStatusCode> UpdateNumberOfReservationsWithSetUpClient(Guid reservationId,
+        UpdateNumberOfReservationsRequest request)
+    {
+        var url = $"{UrlConstants.BaseReservationURL}/{reservationId}{UrlConstants.UpdateNumberOfReservationsSpecificURL}";
+
+        var response = await _httpClient.PutAsJsonAsync(url, request);
+
+        try
+        {
+            return response.StatusCode;
+        }
+        catch
+        {
+            return response.StatusCode;
+        }
+    }
 }

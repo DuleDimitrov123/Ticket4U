@@ -77,4 +77,23 @@ public class ReservationsControllerTests : ReservationsControllerHelper
         r.ShowId.ShouldBe(InstanceConstants.Show1Id);
         r.NumberOfReservations.ShouldNotBe(0);
     }
+
+    [Fact]
+    public async Task UpdateNumberOfReservationsSuccessfully()
+    {
+        //update
+        var request = new UpdateNumberOfReservationsRequest(5);
+        var statusCode = await UpdateNumberOfReservations(InstanceConstants.ReservationId1, request, false);
+
+        statusCode.ShouldBe(HttpStatusCode.NoContent);
+
+        //get and check
+        var (statusCodeGet, result) = await GetReservationById<ReservationResponse>(InstanceConstants.ReservationId1, false);
+
+        statusCodeGet.ShouldBe(HttpStatusCode.OK);
+
+        result.ShouldNotBeNull();
+
+        result.NumberOfReservations.ShouldBe(request.NewNumberOfReservations);
+    }
 }

@@ -64,8 +64,8 @@ public class CustomWebApplicationFactory<TStartup>
         var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
         var reservationRepository = serviceProvider.GetRequiredService<IRepository<Reservation>>();
 
-        var show1 = Show.Create(InstanceConstants.Show1Id, "Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
-        var user1 = User.Create(InstanceConstants.User1Id, "user1@gmail.com", Guid.NewGuid());
+        var show1 = Show.Create(InstanceConstants.Show1Id, "Show1", DateTime.Now.AddDays(10), 100, InstanceConstants.ExternalShow1Id);
+        var user1 = User.Create(InstanceConstants.User1Id, "user1@gmail.com", InstanceConstants.ExternalUser1Id);
         var reservation1 = Reservation.Create(InstanceConstants.ReservationId1, InstanceConstants.User1Id, InstanceConstants.Show1Id, NumberOfReservations.Create(3));
 
         await showRepository.Add(show1);

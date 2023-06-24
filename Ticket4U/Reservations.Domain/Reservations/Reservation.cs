@@ -65,7 +65,7 @@ public class Reservation : AggregateRoot
     {
         if (reservationId == Guid.Empty)
         {
-            errorMessages.Add("CANNOT CREATE RESERVATION WITH EMPTY GUID!");
+            errorMessages.Add(DefaultErrorMessages.CantCreateReservationWithEmptyGuid);
         }
 
         ValidateReservationCreation(userId, showId, errorMessages);

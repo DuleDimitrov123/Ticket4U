@@ -26,6 +26,30 @@ public class Show : AggregateRoot
         IsSoldOut = false;
     }
 
+    private Show(Guid showId, string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId)
+    {
+        Id = showId;
+        Name = name;
+        StartingDateTime = startingDateTime;
+        NumberOfPlaces = numberOfPlaces;
+        ExternalId = externalId;
+        IsSoldOut = false;
+    }
+
+    public static Show Create(Guid showId, string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId)
+    {
+        var errorMessages = new List<string>();
+
+        ValidateShowCreation(showId, name, startingDateTime, numberOfPlaces, externalId, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        return new Show(showId, name, startingDateTime, numberOfPlaces, externalId);
+    }
+
     public static Show Create(string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId)
     {
         var errorMessages = new List<string>();
@@ -66,5 +90,15 @@ public class Show : AggregateRoot
         {
             errorMessages.Add(DefaultErrorMessages.NumberOfPlacesGreaterThan0);
         }
+    }
+
+    private static void ValidateShowCreation(Guid showId, string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId, List<string> errorMessages)
+    {
+        if (showId == Guid.Empty)
+        {
+            errorMessages.Add("CANNOT CREATE SHOW WITH EMPTY GUID!");
+        }
+
+        ValidateShowCreation(name, startingDateTime, numberOfPlaces, externalId, errorMessages);
     }
 }

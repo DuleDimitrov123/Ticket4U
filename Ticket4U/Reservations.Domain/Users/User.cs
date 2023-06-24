@@ -26,6 +26,13 @@ public class User : AggregateRoot
         ExternalId = externalId;
     }
 
+    private User(Guid userId, string email, Guid externalId)
+    {
+        Id = userId;
+        Email = email;
+        ExternalId = externalId;
+    }
+
     public static User Create(string email, Guid externalId)
     {
         var errorMessages = new List<string>();
@@ -40,6 +47,20 @@ public class User : AggregateRoot
         return new User(email, externalId);
     }
 
+    public static User Create(Guid userId, string email, Guid externalId)
+    {
+        var errorMessages = new List<string>();
+
+        ValidateUserCreation(userId, email, externalId, errorMessages);
+
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
+
+        return new User(userId, email, externalId);
+    }
+
     private static void ValidateUserCreation(string email, Guid externalId, List<string> errorMessages)
     {
         if (string.IsNullOrEmpty(email))
@@ -51,5 +72,15 @@ public class User : AggregateRoot
         {
             errorMessages.Add(DefaultErrorMessages.EmailNotValidFormat);
         }
+    }
+
+    private static void ValidateUserCreation(Guid userId, string email, Guid externalId, List<string> errorMessages)
+    {
+        if (userId == Guid.Empty)
+        {
+            errorMessages.Add(DefaultErrorMessages.CantCreateUserWithEmptyGuid);
+        }
+
+        ValidateUserCreation(email, externalId, errorMessages);
     }
 }

@@ -16,6 +16,7 @@ public class UsersController : ControllerBase
         _mediator = mediator;
     }
 
+    //TODO: Event would be added instead of CreateUserRequest when connected with users microservice
     [HttpPost("CAPROUTE-CreateUserInReservations")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)

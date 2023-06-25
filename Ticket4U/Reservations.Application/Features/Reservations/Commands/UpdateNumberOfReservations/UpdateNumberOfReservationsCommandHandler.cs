@@ -9,28 +9,28 @@ using Shared.Domain.Events;
 
 namespace Reservations.Application.Features.Reservations.Commands.UpdateNumberOfReservations;
 
-public class UpdateNumberOfReservationsQueryHandler : IRequestHandler<UpdateNumberOfReservationsQuery, Unit>
+public class UpdateNumberOfReservationsCommandHandler : IRequestHandler<UpdateNumberOfReservationsCommand, Unit>
 {
-    private readonly IRepository<Reservation> _reservationRpository;
+    private readonly IRepository<Reservation> _reservationRepository;
     private readonly ICheckShowReservation _checkShowReservation;
     private readonly IRepository<Show> _showRepository;
     private readonly IMediator _mediator;
 
-    public UpdateNumberOfReservationsQueryHandler(
+    public UpdateNumberOfReservationsCommandHandler(
         IRepository<Reservation> reservationRepository,
         IRepository<Show> showRepository,
         ICheckShowReservation checkShowReservation,
         IMediator mediator)
     {
-        _reservationRpository = reservationRepository;
+        _reservationRepository = reservationRepository;
         _checkShowReservation = checkShowReservation;
         _showRepository = showRepository;
         _mediator = mediator;
     }
 
-    public async Task<Unit> Handle(UpdateNumberOfReservationsQuery request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateNumberOfReservationsCommand request, CancellationToken cancellationToken)
     {
-        var reservation = await _reservationRpository.GetById(request.Id);
+        var reservation = await _reservationRepository.GetById(request.Id);
 
         if (reservation == null)
         {
@@ -83,7 +83,7 @@ public class UpdateNumberOfReservationsQueryHandler : IRequestHandler<UpdateNumb
         }
 
         reservation.UpdateNumberOfReservations(request.NewNumberOfReservations);
-        await _reservationRpository.Update(reservation);
+        await _reservationRepository.Update(reservation);
 
         return Unit.Value;
     }

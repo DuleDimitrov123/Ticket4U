@@ -34,13 +34,13 @@ public class UpdateNumberOfReservationsQueryHandlerTests
             .Setup(c => c.GetNumberOfAvailableReservations(It.IsAny<Show>()))
             .ReturnsAsync(show.NumberOfPlaces);
 
-        var handler = new UpdateNumberOfReservationsQueryHandler(
+        var handler = new UpdateNumberOfReservationsCommandHandler(
             reservationRepositoryMock.Object,
             showRepositoryMock.Object,
             checkShowReservationMock.Object,
             new Mock<IMediator>().Object);
 
-        var command = new UpdateNumberOfReservationsQuery() { Id = reservation.Id, NewNumberOfReservations = newNumberOfReservations };
+        var command = new UpdateNumberOfReservationsCommand() { Id = reservation.Id, NewNumberOfReservations = newNumberOfReservations };
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

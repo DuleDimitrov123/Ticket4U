@@ -69,6 +69,16 @@ public class Show : AggregateRoot
         StartingDateTime = newStartingDateTime;
     }
 
+    public void SellOutTheShow()
+    {
+        IsSoldOut = true;
+    }
+
+    public void UnSellOutTheShow()
+    {
+        IsSoldOut = false;
+    }
+
     private static void ValidateShowCreation(string name, DateTime startingDateTime, int numberOfPlaces, Guid externalId, List<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))

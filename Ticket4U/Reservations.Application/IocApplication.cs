@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Reservations.Application.Services;
 
 namespace Reservations.Application;
 
@@ -12,6 +13,8 @@ public static class IocApplication
 
         services.AddMediatR(configuration =>
             configuration.RegisterServicesFromAssemblies(assembly));
+
+        services.AddScoped<ICheckShowReservation, CheckShowReservation>();
 
         return services;
     }

@@ -1,6 +1,8 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
+using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
 using Reservations.Domain.Users;
@@ -45,7 +47,17 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
             NumberOfReservations = 3
         };
 
-        var handler = new CreateReservationCommandHandler(mockReservationRepository.Object, mockShowRepository.Object, mockUserRepository.Object);
+        var mockCheckShowReservation = new Mock<ICheckShowReservation>();
+        mockCheckShowReservation
+            .Setup(c => c.GetNumberOfAvailableReservations(It.IsAny<Show>()))
+            .ReturnsAsync(show.NumberOfPlaces);
+
+        var handler = new CreateReservationCommandHandler(
+            mockReservationRepository.Object, 
+            mockShowRepository.Object, 
+            mockUserRepository.Object,
+            mockCheckShowReservation.Object,
+            new Mock<IMediator>().Object);
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

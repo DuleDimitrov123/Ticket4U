@@ -66,7 +66,7 @@ public class ReservationsController : ControllerBase
     [HttpPut("{reservationId}/newNumberOfResevations")]
     public async Task<ActionResult> UpdateNumberOfReservations([FromRoute]Guid reservationId, [FromBody] UpdateNumberOfReservationsRequest request)
     {
-        await _mediator.Send(new UpdateNumberOfReservationsQuery()
+        await _mediator.Send(new UpdateNumberOfReservationsCommand()
         {
             Id = reservationId,
             NewNumberOfReservations = request.NewNumberOfReservations

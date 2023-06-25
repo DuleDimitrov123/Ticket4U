@@ -177,6 +177,16 @@ public class Show : AggregateRoot
         ShowMessages.Add(ShowMessage.Create(showMessageName, showMessageValue, Id));
     }
 
+    public void SellOutTheShow()
+    {
+        Status = ShowStatus.IsSoldOut;
+    }
+
+    public void UnSellOutTheShow()
+    {
+        Status = ShowStatus.HasTickets;
+    }
+
     private static void ValidateShowName(string name, IList<string> errorMessages)
     {
         if (string.IsNullOrEmpty(name))

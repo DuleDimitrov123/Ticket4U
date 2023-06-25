@@ -2,7 +2,7 @@
 
 namespace Reservations.Application.Features.Reservations.Commands.UpdateNumberOfReservations;
 
-public class UpdateNumberOfReservationsQuery : IRequest<Unit>
+public class UpdateNumberOfReservationsCommand : IRequest<Unit>
 {
     public Guid Id { get; set; }
 

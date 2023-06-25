@@ -16,4 +16,11 @@ public class ReservationRepository : Repository<Reservation>, IReservationReposi
             .Where(reservation => reservation.UserId == userId)
             .ToListAsync();
     }
+
+    public async Task<IList<Reservation>> GetReservationsForTheShow(Guid showId)
+    {
+        return await _dbContext.Reservations
+            .Where(reservation => reservation.ShowId == showId)
+            .ToListAsync();
+    }
 }

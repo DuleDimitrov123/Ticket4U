@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
+using DotNetCore.CAP;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Domain.Events;
+using Shared.Domain.Events.Constants;
 using Shows.Api.Requests.Shows;
 using Shows.Application.Features.Shows.Commands.AddShowMessage;
+using Shows.Application.Features.Shows.Commands.ChangeShowStatus;
 using Shows.Application.Features.Shows.Commands.CreateShow;
 using Shows.Application.Features.Shows.Commands.DeleteShow;
 using Shows.Application.Features.Shows.Commands.UpdateShowLocation;
@@ -145,6 +149,17 @@ namespace Shows.Api.Controllers
                 ShowMessageName = request.ShowMessageName,
                 ShowMessageValue = request.ShowMessageValue
             });
+
+            return NoContent();
+        }
+
+        [HttpPost("CAPROUTE-ChangedShowStatus")]
+        [CapSubscribe(ShowDomainEventsConstants.ChangedShowStatus)]
+        public async Task<ActionResult> ChangeShowStatus(ChangedShowStatusEvent changedShowStatusEvent)
+        {
+            var command = _mapper.Map<ChangeShowStatusCommand>(changedShowStatusEvent);
+
+            await _mediator.Send(command);
 
             return NoContent();
         }

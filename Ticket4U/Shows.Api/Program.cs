@@ -1,5 +1,6 @@
 using Serilog;
 using Shows.Api;
+using Shows.Api.Helpers;
 using Shows.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,8 @@ app.UseCustomExceptionHandler();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.AddDBMigrations();
 
 app.Run();
 

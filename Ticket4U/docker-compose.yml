@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  reservations.api:
+    build:
+      context: .
+      dockerfile: Reservations.Api/Dockerfile
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - reservations.mssql.database
+      - ticket4u-rabbitmq
+
+  shows.api:
+    build:
+      context: .
+      dockerfile: Shows.Api/Dockerfile
+    ports:
+      - "8081:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - shows.mssql.database
+      - ticket4u-rabbitmq
+
+  reservations.mssql.database:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "dusanPassword9&7!"
+      MSSQL_PID: "Express"
+    ports:
+      - "1436:1433"
+
+  shows.mssql.database:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "dusanPassword9&7!"
+      MSSQL_PID: "Express"
+    ports:
+      - "1435:1433"
+
+  ticket4u-rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 8088:15672

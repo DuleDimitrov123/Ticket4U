@@ -10,7 +10,14 @@ public static class WebApplicationExtensions
         using (var serviceScope = app.Services.CreateScope())
         {
             var context = serviceScope.ServiceProvider.GetService<ShowsDbContext>();
-            context.Database.Migrate();
+            try
+            {
+                context.Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Could not run migrations: {ex.Message}");
+            }
         }
     }
 }

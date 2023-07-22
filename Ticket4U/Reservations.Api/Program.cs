@@ -30,6 +30,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.AddDBMigrations();
+
 app.Run();
 
 public partial class Program { }

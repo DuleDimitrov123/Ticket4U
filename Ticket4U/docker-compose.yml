@@ -25,6 +25,20 @@ services:
       - shows.mssql.database
       - ticket4u-rabbitmq
 
+  ticket4u.apigateway:
+    build:
+      context: .
+      dockerfile: Ticket4U.ApiGateway/Dockerfile
+    ports:
+      - "8082:80"
+    expose:
+        - 80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - reservations.api
+      - shows.api
+
   reservations.mssql.database:
     image: "mcr.microsoft.com/mssql/server"
     environment:

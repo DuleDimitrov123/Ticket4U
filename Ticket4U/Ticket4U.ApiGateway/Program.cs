@@ -1,5 +1,5 @@
-using Reservations.Api;
-using Reservations.Api.Helpers;
+using Ocelot.DependencyInjection;
+using Ocelot.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.DocumentFilter<RemoveCAPRoutes>();
-});
+builder.Services.AddSwaggerGen();
 
-builder.Services.AddApi(builder.Configuration);
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Services.AddOcelot(builder.Configuration);
 
 var app = builder.Build();
 
@@ -30,8 +28,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.AddDBMigrations();
+await app.UseOcelot();
 
 app.Run();
-
-public partial class Program { }

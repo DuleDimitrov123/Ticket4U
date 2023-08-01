@@ -6,7 +6,8 @@
       "serviceActions": {
         "reservations.api": "StartDebugging",
         "shows.api": "StartDebugging",
-        "ticket4u.apigateway": "StartDebugging"
+        "ticket4u.apigateway": "StartDebugging",
+        "users.api": "StartDebugging"
       }
     }
   }

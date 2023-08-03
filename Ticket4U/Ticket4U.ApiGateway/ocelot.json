@@ -4,6 +4,30 @@
   },
   "Routes": [
     {
+      "UpstreamPathTemplate": "/authenticate",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/users/authenticate",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 80
+        }
+      ]
+    },
+    {
+      "UpstreamPathTemplate": "/register",
+      "UpstreamHttpMethod": [ "POST" ],
+      "DownstreamPathTemplate": "/api/users/register",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "users.api",
+          "Port": 80
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/shows",
       "UpstreamHttpMethod": [ "GET", "POST" ],
       "DownstreamPathTemplate": "/api/shows",
@@ -13,7 +37,10 @@
           "Host": "shows.api",
           "Port": 80
         }
-      ]
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
     {
       "UpstreamPathTemplate": "/shows/{showId}",

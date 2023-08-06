@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reservations.Api.Requests.Reservations;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
@@ -12,6 +13,7 @@ namespace Reservations.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ReservationsController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -48,15 +50,15 @@ public class ReservationsController : ControllerBase
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<ReservationResponse>> GetById([FromRoute]Guid id)
+    public async Task<ActionResult<ReservationResponse>> GetById([FromRoute] Guid id)
     {
-        var response = await _mediator.Send(new GetReservationByIdQuery() { ReservationId = id});
+        var response = await _mediator.Send(new GetReservationByIdQuery() { ReservationId = id });
 
         return Ok(response);
     }
 
     [HttpGet("user/{userId}")]
-    public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute]Guid userId)
+    public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute] Guid userId)
     {
         var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });
 
@@ -64,7 +66,7 @@ public class ReservationsController : ControllerBase
     }
 
     [HttpPut("{reservationId}/newNumberOfResevations")]
-    public async Task<ActionResult> UpdateNumberOfReservations([FromRoute]Guid reservationId, [FromBody] UpdateNumberOfReservationsRequest request)
+    public async Task<ActionResult> UpdateNumberOfReservations([FromRoute] Guid reservationId, [FromBody] UpdateNumberOfReservationsRequest request)
     {
         await _mediator.Send(new UpdateNumberOfReservationsCommand()
         {

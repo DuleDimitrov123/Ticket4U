@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Reservations.Infrastructure.Outbox;
+using Shared.Infrastructure.Authentication;
 using Shows.Application.Contracts.Outbox;
 using Shows.Application.Contracts.Persistance;
 using Shows.Infrastructure.Outbox;
@@ -38,6 +39,8 @@ public static class IocInfrastructure
         });
 
         services.AddScoped<IShowPublisher, ShowPublisher>();
+
+        services.AddCustomAuthentication(configuration);
 
         return services;
     }

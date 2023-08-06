@@ -1,19 +1,20 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shows.Api.Requests.Performers;
-using Shows.Application.Features.Performers.Queries;
-using Shows.Application.Features.Performers.Queries.GetPerformerById;
 using Shows.Application.Features.Performers.Commands.CreatePerformer;
 using Shows.Application.Features.Performers.Commands.CreatePerformerInfo;
 using Shows.Application.Features.Performers.Commands.DeletePerformerInfo;
+using Shows.Application.Features.Performers.Queries;
+using Shows.Application.Features.Performers.Queries.GetPerformerById;
 using Shows.Application.Features.Performers.Queries.GetPerformerDetailById;
-using Shows.Domain.Performers;
 using Shows.Application.Features.Performers.Queries.GetPerformers;
 
 namespace Shows.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PerformersController : ControllerBase
     {
         private readonly IMediator _mediator;

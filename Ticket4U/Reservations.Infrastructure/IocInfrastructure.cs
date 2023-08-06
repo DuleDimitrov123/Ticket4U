@@ -5,6 +5,7 @@ using Reservations.Application.Contracts.Outbox;
 using Reservations.Application.Contracts.Persistance;
 using Reservations.Infrastructure.Outbox;
 using Reservations.Infrastructure.Persistance.Repositories;
+using Shared.Infrastructure.Authentication;
 
 namespace Reservations.Infrastructure;
 
@@ -35,6 +36,8 @@ public static class IocInfrastructure
         });
 
         services.AddScoped<IReservationPublisher, ReservationPublisher>();
+
+        services.AddCustomAuthentication(configuration);
 
         return services;
     }

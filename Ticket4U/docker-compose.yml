@@ -25,12 +25,24 @@ services:
       - shows.mssql.database
       - ticket4u-rabbitmq
 
+  users.api:
+    build:
+      context: .
+      dockerfile: Users.Api/Dockerfile
+    ports:
+      - "8082:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - users.mssql.database
+      - ticket4u-rabbitmq
+
   ticket4u.apigateway:
     build:
       context: .
       dockerfile: Ticket4U.ApiGateway/Dockerfile
     ports:
-      - "8082:80"
+      - "8083:80"
     expose:
         - 80
     environment:
@@ -57,7 +69,17 @@ services:
     ports:
       - "1435:1433"
 
+  users.mssql.database:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "dusanPassword9&7!"
+      MSSQL_PID: "Express"
+    ports:
+      - "1438:1433"
+
   ticket4u-rabbitmq:
     image: rabbitmq:3-management
     ports:
       - 8088:15672
+

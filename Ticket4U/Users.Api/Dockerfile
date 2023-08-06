@@ -4,20 +4,19 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-#EXPOSE 8083
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Ticket4U.ApiGateway/Ticket4U.ApiGateway.csproj", "Ticket4U.ApiGateway/"]
-RUN dotnet restore "Ticket4U.ApiGateway/Ticket4U.ApiGateway.csproj"
+COPY ["Users.Api/Users.Api.csproj", "Users.Api/"]
+RUN dotnet restore "Users.Api/Users.Api.csproj"
 COPY . .
-WORKDIR "/src/Ticket4U.ApiGateway"
-RUN dotnet build "Ticket4U.ApiGateway.csproj" -c Release -o /app/build
+WORKDIR "/src/Users.Api"
+RUN dotnet build "Users.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Ticket4U.ApiGateway.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Users.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Ticket4U.ApiGateway.dll"]
+ENTRYPOINT ["dotnet", "Users.Api.dll"]

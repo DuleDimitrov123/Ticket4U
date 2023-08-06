@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shows.Api.Requests.Categories;
 using Shows.Application.Features.Categories.Commands.ArchiveCategory;
@@ -12,6 +13,7 @@ namespace Shows.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CategoriesController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DotNetCore.CAP;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Domain.Events;
 using Shared.Domain.Events.Constants;
@@ -22,6 +23,7 @@ namespace Shows.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ShowsController : ControllerBase
     {
         private readonly IMapper _mapper;

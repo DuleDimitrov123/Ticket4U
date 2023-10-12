@@ -60,6 +60,14 @@ public static class IocAuthentication
             };
         });
 
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RequireAdmin", policy =>
+            {
+                policy.RequireRole("Admin");
+            });
+        });
+
         return services;
     }
 }

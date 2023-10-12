@@ -25,6 +25,7 @@ public class CategoriesController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<ActionResult> CreateCategory([FromBody] CreateCategoryRequest request)
     {
         var command = new CreateCategoryCommand()
@@ -61,6 +62,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<ActionResult> UpdateCategory([FromRoute] Guid categoryId, [FromBody] UpdateCategoryRequest request)
     {
         var command = new UpdateCategoryCommand()
@@ -78,6 +80,7 @@ public class CategoriesController : ControllerBase
     [HttpPut("{categoryId}/archive")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [Authorize(Policy = "RequireAdmin")]
     public async Task<ActionResult> ArchiveCategory([FromRoute] Guid categoryId)
     {
         await _mediator.Send(new ArchiveCategoryCommand() { CategoryId = categoryId });

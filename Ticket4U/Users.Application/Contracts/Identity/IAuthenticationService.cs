@@ -6,5 +6,5 @@ public interface IAuthenticationService
 {
     Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest request);
 
-    Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request);
+    Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request, bool isAdmin = false);
 }

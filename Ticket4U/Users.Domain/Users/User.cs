@@ -9,6 +9,8 @@ public class User : IdentityUser
 
     public string LastName { get; /*private*/ set; }
 
+    public bool IsAdmin { get; set; }
+
     //private User(string firstName, string lastName)
     //{
     //    FirstName = firstName;

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Users.Infrastructure.Identity;
 
@@ -11,9 +12,11 @@ using Users.Infrastructure.Identity;
 namespace Users.Infrastructure.Migrations
 {
     [DbContext(typeof(UsersIdentityDbContext))]
-    partial class UsersIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230918071516_AddIsAdminField")]
+    partial class AddIsAdminField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -31,6 +31,10 @@ app.MapControllers();
 
 app.AddDBMigrations();
 
+await app.AddUserRoles();
+
+await app.AddDefaultAdminUsers();
+
 app.Run();
 
 public partial class Program { }

@@ -24,7 +24,8 @@ public static class IocInfrastructure
         });
 
         services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<UsersIdentityDbContext>().AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<UsersIdentityDbContext>()
+            .AddDefaultTokenProviders();
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
 

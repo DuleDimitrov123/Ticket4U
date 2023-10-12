@@ -88,7 +88,7 @@ public class AuthenticationService : IAuthenticationService
         return jwtSecurityToken;
     }
 
-    public async Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request)
+    public async Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request, bool isAdmin = false)
     {
         var existingUser = await _userManager.FindByNameAsync(request.UserName);
 
@@ -97,33 +97,29 @@ public class AuthenticationService : IAuthenticationService
             throw new Exception($"Username {request.UserName} already exists.");
         }
 
+        var existingEmail = await _userManager.FindByEmailAsync(request.Email);
+
+        if (existingEmail != null)
+        {
+            throw new Exception($"Email {request.Email} already exists.");
+        }
+
         var user = new User
         {
             Email = request.Email,
             FirstName = request.FirstName,
             LastName = request.LastName,
             UserName = request.UserName,
-            EmailConfirmed = true
+            EmailConfirmed = true,
+            IsAdmin = isAdmin
         };
 
-        var existingEmail = await _userManager.FindByEmailAsync(request.Email);
+        var result = await _userManager.CreateAsync(user, request.Password);
 
-        if (existingEmail == null)
-        {
-            var result = await _userManager.CreateAsync(user, request.Password);
+        var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
 
-            if (result.Succeeded)
-            {
-                return new RegistrationResponse() { UserId = user.Id };
-            }
-            else
-            {
-                throw new Exception($"{result.Errors}");
-            }
-        }
-        else
-        {
-            throw new Exception($"Email {request.Email} already exists.");
-        }
+        return result.Succeeded && roleResult.Succeeded
+            ? new RegistrationResponse() { UserId = user.Id }
+            : throw new Exception($"{result.Errors.Concat(roleResult.Errors)}");
     }
 }

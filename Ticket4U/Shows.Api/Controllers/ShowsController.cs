@@ -67,6 +67,7 @@ namespace Shows.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateShowRequest request)
         {
             var response = await _mediator.Send(_mapper.Map<CreateShowCommand>(request));
@@ -77,6 +78,7 @@ namespace Shows.Api.Controllers
         [HttpPut("{showId}/newName")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowName([FromRoute] Guid showId, [FromBody] UpdateShowNameRequest request)
         {
             await _mediator.Send(new UpdateShowNameCommand()
@@ -91,6 +93,7 @@ namespace Shows.Api.Controllers
         [HttpPut("{showId}/newLocation")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowLocation([FromRoute] Guid showId, [FromBody] UpdateShowLocationRequest request)
         {
             await _mediator.Send(new UpdateShowLocationCommand()
@@ -105,6 +108,7 @@ namespace Shows.Api.Controllers
         [HttpPut("{showId}/newPrice")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowPrice([FromRoute] Guid showId, [FromBody] UpdateShowPriceRequest request)
         {
             await _mediator.Send(new UpdateShowPriceCommand()
@@ -119,6 +123,7 @@ namespace Shows.Api.Controllers
         [HttpPut("{showId}/newStartingDateTime")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowStartingDateTime([FromRoute] Guid showId, [FromBody] UpdateShowStartingDateTimeRequest request)
         {
             await _mediator.Send(new UpdateShowStartingDateTimeCommand()
@@ -133,6 +138,7 @@ namespace Shows.Api.Controllers
         [HttpDelete("{showId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> DeleteShow([FromRoute] Guid showId)
         {
             await _mediator.Send(new DeleteShowCommand() { Id = showId });
@@ -143,6 +149,7 @@ namespace Shows.Api.Controllers
         [HttpPost("{showId}/showMessages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> AddShowMessage([FromRoute] Guid showId, [FromBody] AddShowMessageRequest request)
         {
             await _mediator.Send(new AddShowMessageCommand()

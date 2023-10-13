@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Shared.IntegrationTests.Authorization;
+using Shouldly;
 using Shows.Api.Requests.Shows;
 using Shows.Application.Features.Shows.Queries;
 using Shows.IntegrationTests.Base;
@@ -19,6 +20,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task GetShowsSuccessResult()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
+
         var response = await _client.GetAsync(UrlConstants.BaseShowURL);
 
         var responseString = await response.Content.ReadAsStringAsync();
@@ -33,6 +36,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task GetShowByIdNotFound()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
+
         var response = await _client.GetAsync($"{UrlConstants.BaseShowURL}/{Guid.NewGuid()}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -41,6 +46,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task GetShowWithEmptyGuid()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
+
         var response = await _client.GetAsync($"{UrlConstants.BaseShowURL}/{Guid.Empty}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -49,6 +56,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task GetShowSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //first create show
         var (showId, newShow) = await CreateDefaultShow();
 
@@ -70,6 +79,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task CreateShowSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         var (showId, _) = await CreateDefaultShow();
 
         showId.ShouldNotBe(Guid.Empty);
@@ -78,6 +89,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdateShowNameSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //first create show
         var (showId, _) = await CreateDefaultShow();
 
@@ -96,6 +109,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdateShowLocationSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //first create show
         var (showId, _) = await CreateDefaultShow();
 
@@ -114,6 +129,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdateShowPriceSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //first create show
         var (showId, _) = await CreateDefaultShow();
 
@@ -132,6 +149,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdateShowStartingDateTimeSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //first create show
         var (showId, _) = await CreateDefaultShow();
 
@@ -150,6 +169,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task DeleteShowSuccesffully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //create a show
         var (showId, _) = await CreateDefaultShow();
 
@@ -168,6 +189,8 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task AddShowMessageSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
+
         //create show
         var (showId, _) = await CreateDefaultShow();
 

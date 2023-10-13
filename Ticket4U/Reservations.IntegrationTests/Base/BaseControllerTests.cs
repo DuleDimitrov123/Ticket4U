@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.TestHost;
-using System.Net.Http.Headers;
+﻿using Shared.IntegrationTests.Authorization;
 using Xunit.Abstractions;
 
 namespace Reservations.IntegrationTests.Base;
@@ -16,7 +15,7 @@ public class BaseControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         _output = output;
     }
 
-    public void SetUpClient(bool mocked, ITestOutputHelper testOutputHelper)
+    public void SetUpClient(bool mocked, AuthorizationType authorizationType, ITestOutputHelper testOutputHelper)
     {
         if (!mocked)
         {
@@ -26,6 +25,8 @@ public class BaseControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         {
             _httpClient = GetNewClientWithMocks(testOutputHelper);
         }
+
+        _httpClient.SetAuthorization(authorizationType);
     }
 
     private HttpClient GetNewClient(ITestOutputHelper testOutputHelper)

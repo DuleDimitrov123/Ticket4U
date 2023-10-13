@@ -1,7 +1,7 @@
-﻿using Reservations.Api.Requests.Reservations;
-using Reservations.IntegrationTests.Base;
+﻿using Reservations.IntegrationTests.Base;
 using Reservations.IntegrationTests.Constants;
 using Shared.Domain.Events;
+using Shared.IntegrationTests.Authorization;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit.Abstractions;
@@ -19,7 +19,7 @@ public class ShowsControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> CreateShow<T>(CreatedShowEvent createdShowEvent, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.UnAuthorized, _output);
         return CreateShowWithSetupClient<T>(createdShowEvent);
     }
 
@@ -43,7 +43,7 @@ public class ShowsControllerHelper : BaseControllerTests
 
     protected Task<HttpStatusCode> UpdateShowStartingDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.UnAuthorized, _output);
         return UpdateShowStartingDateTimeWithSetUpClient(updatedShowsStartingDateTimeEvent);
     }
 

@@ -1,10 +1,10 @@
-﻿using Reservations.IntegrationTests.Base;
-using Shared.Domain.Events;
-using System.Net.Http.Json;
-using System.Net;
-using Xunit.Abstractions;
+﻿using Reservations.Api.Requests.Users;
+using Reservations.IntegrationTests.Base;
 using Reservations.IntegrationTests.Constants;
-using Reservations.Api.Requests.Users;
+using Shared.IntegrationTests.Authorization;
+using System.Net;
+using System.Net.Http.Json;
+using Xunit.Abstractions;
 
 namespace Reservations.IntegrationTests.Helpers;
 
@@ -19,7 +19,7 @@ public class UsersControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> CreateUser<T>(CreateUserRequest createUserRequest, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.UnAuthorized, _output);
         return CreateShowWithSetupClient<T>(createUserRequest);
     }
 

@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Shared.IntegrationTests.Authorization;
+using Shouldly;
 using Shows.Api.Requests.Performers;
 using Shows.Application.Features.Performers.Queries;
 using Shows.IntegrationTests.Base;
@@ -11,13 +12,14 @@ namespace Shows.IntegrationTests.Controllers;
 public class PerformersControllerTests : BaseControllerTests
 {
     public PerformersControllerTests(CustomWebApplicationFactory<Program> factory)
-        :base(factory)
+        : base(factory)
     {
     }
 
     [Fact]
     public async Task GetPerformersSuccessResult()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync(UrlConstants.BasePerformerURL);
 
         var responseString = await response.Content.ReadAsStringAsync();
@@ -32,6 +34,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerByIdNotFound()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.NewGuid()}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -40,6 +43,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerWithEmptyGuid()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.Empty}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -48,6 +52,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create performer
         var newPerformer = new CreatePerformerRequest("Test Performer", new Dictionary<string, string>());
         var performerId = await CreatePerformer(newPerformer);
@@ -63,6 +68,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerDetailByIdNotFound()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.NewGuid()}/{UrlConstants.SpecificPerformerDetail}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -71,6 +77,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerDetailWithEmptyGuid()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.Empty}/{UrlConstants.SpecificPerformerDetail}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -79,6 +86,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerDetailSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create performer
         var newPerformerInfo = new Dictionary<string, string>()
             {
@@ -93,7 +101,7 @@ public class PerformersControllerTests : BaseControllerTests
         var performer = await GetPerformerDetail(performerId);
 
         performer!.Name.ShouldBe(newPerformer.Name);
-        
+
         performer.PerformerInfos.Count.ShouldBe(1);
         performer.PerformerInfos.Select(pi => pi.Name).ShouldContain("DateOfBirth");
         performer.PerformerInfos.Select(pi => pi.Value).ShouldContain("01.01.1999.");
@@ -102,6 +110,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task CreatePerfromerSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         var newPerformer = new CreatePerformerRequest("Test Performer", new Dictionary<string, string>());
 
         var performerId = await CreatePerformer(newPerformer);
@@ -112,6 +121,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdatePerformerInfoSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create performer with performer info
         var newPerformerInfo = new Dictionary<string, string>()
             {
@@ -145,6 +155,7 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task DeletePerformerInfoSuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create performer with performer info
         var newPerformerInfo = new Dictionary<string, string>()
             {

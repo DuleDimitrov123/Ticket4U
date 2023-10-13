@@ -1,17 +1,13 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Shows.Infrastructure.Persistance;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Shows.Application.Contracts.Persistance;
-using Shows.Domain.Shows;
-using Shows.Application.Contracts.Outbox;
-using DotNet.Testcontainers.Containers;
-using DotNet.Testcontainers.Builders;
+﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
-using System.Linq;
+using DotNet.Testcontainers.Containers;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
+using Shows.Application.Contracts.Outbox;
+using Shows.Infrastructure.Persistance;
 using Shows.IntegrationTests.Overrides;
 
 namespace Shows.IntegrationTests.Base;
@@ -68,6 +64,5 @@ public class CustomWebApplicationFactory<TStartup>
     public HttpClient GetAnonymousClient()
     {
         return CreateClient();
-
     }
 }

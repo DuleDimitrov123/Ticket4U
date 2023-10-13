@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.TestHost;
-using Reservations.Api.Requests.Reservations;
+﻿using Reservations.Api.Requests.Reservations;
 using Reservations.IntegrationTests.Base;
 using Reservations.IntegrationTests.Constants;
+using Shared.IntegrationTests.Authorization;
 using System.Net;
 using System.Net.Http.Json;
 using Xunit.Abstractions;
@@ -19,7 +19,7 @@ public class ReservationsControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> CreateReservation<T>(CreateReservationRequest request, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.BasicAuthorization, _output);
         return CreateReservationWithSetUpClient<T>(request);
     }
 
@@ -43,7 +43,7 @@ public class ReservationsControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> GetReservationById<T>(Guid reservationId, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.BasicAuthorization, _output);
         return GetReservationByIdWithSetUpClient<T>(reservationId);
     }
 
@@ -67,7 +67,7 @@ public class ReservationsControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> GetReservationByUserId<T>(Guid reservationId, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.BasicAuthorization, _output);
         return GetReservationByUserIdWithSetUpClient<T>(reservationId);
     }
 
@@ -91,7 +91,7 @@ public class ReservationsControllerHelper : BaseControllerTests
 
     protected Task<(HttpStatusCode StatusCode, T? result)> GetReservations<T>(bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.BasicAuthorization, _output);
         return GetReservationsWithSetUpClient<T>();
     }
 
@@ -113,10 +113,10 @@ public class ReservationsControllerHelper : BaseControllerTests
         }
     }
 
-    protected Task<HttpStatusCode> UpdateNumberOfReservations(Guid reservationId, 
+    protected Task<HttpStatusCode> UpdateNumberOfReservations(Guid reservationId,
         UpdateNumberOfReservationsRequest request, bool mocked = true)
     {
-        SetUpClient(mocked, _output);
+        SetUpClient(mocked, AuthorizationType.BasicAuthorization, _output);
         return UpdateNumberOfReservationsWithSetUpClient(reservationId, request);
     }
 

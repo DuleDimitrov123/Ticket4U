@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using Shared.IntegrationTests.Authorization;
+using Shouldly;
 using Shows.Api.Requests.Categories;
 using Shows.Application.Features.Categories.Queries;
 using Shows.Domain.Categories;
@@ -12,13 +13,14 @@ namespace Shows.IntegrationTests.Controllers;
 public class CategoriesControllerTests : BaseControllerTests
 {
     public CategoriesControllerTests(CustomWebApplicationFactory<Program> factory)
-        :base(factory)
+        : base(factory)
     {
     }
 
     [Fact]
     public async Task GetCategoriesSuccessResult()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync(UrlConstants.BaseCategoryURL);
 
         var responseString = await response.Content.ReadAsStringAsync();
@@ -33,6 +35,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task GetCategoryByIdNotFound()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{Guid.NewGuid()}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
@@ -41,6 +44,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task GetCategoryWithEmptyGuid()
     {
+        _client.SetAuthorization(AuthorizationType.BasicAuthorization);
         var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{Guid.Empty}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -49,6 +53,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task GetCategorySuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create category
         var newCategory = new CreateCategoryRequest("Test Category", "Description of Test Category");
         var categoryId = await CreateCategory(newCategory);
@@ -66,6 +71,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task CreateCategorySuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         var newCategory = new CreateCategoryRequest("Test Category", "Description of Test Category");
 
         var categoryId = await CreateCategory(newCategory);
@@ -76,6 +82,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task UpdateCategorySuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //first create category
         var newCategory = new CreateCategoryRequest("Test Category", "Description of Test Category");
         var categoryId = await CreateCategory(newCategory);
@@ -97,6 +104,7 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task ArchiveCategorySuccessfully()
     {
+        _client.SetAuthorization(AuthorizationType.AdminAuthorization);
         //create category first
         var newCategory = new CreateCategoryRequest("Test Category", "Description of Test Category");
 

@@ -16,52 +16,52 @@ public class User : AggregateRoot
     public string Email { get; private set; }
 
     /// <summary>
-    /// User's external id from users service
+    /// Username from users service
     /// </summary>
-    public Guid ExternalId { get; private set; }
+    public string UserName { get; private set; }
 
-    private User(string email, Guid externalId)
+    private User(string email, string userName)
     {
         Email = email;
-        ExternalId = externalId;
+        UserName = userName;
     }
 
-    private User(Guid userId, string email, Guid externalId)
+    private User(Guid userId, string email, string userName)
     {
         Id = userId;
         Email = email;
-        ExternalId = externalId;
+        UserName = userName;
     }
 
-    public static User Create(string email, Guid externalId)
+    public static User Create(string email, string userName)
     {
         var errorMessages = new List<string>();
 
-        ValidateUserCreation(email, externalId, errorMessages);
+        ValidateUserCreation(email, userName, errorMessages);
 
         if (errorMessages.Count > 0)
         {
             throw new DomainException(errorMessages);
         }
 
-        return new User(email, externalId);
+        return new User(email, userName);
     }
 
-    public static User Create(Guid userId, string email, Guid externalId)
+    public static User Create(Guid userId, string email, string userName)
     {
         var errorMessages = new List<string>();
 
-        ValidateUserCreation(userId, email, externalId, errorMessages);
+        ValidateUserCreation(userId, email, userName, errorMessages);
 
         if (errorMessages.Count > 0)
         {
             throw new DomainException(errorMessages);
         }
 
-        return new User(userId, email, externalId);
+        return new User(userId, email, userName);
     }
 
-    private static void ValidateUserCreation(string email, Guid externalId, List<string> errorMessages)
+    private static void ValidateUserCreation(string email, string userName, List<string> errorMessages)
     {
         if (string.IsNullOrEmpty(email))
         {
@@ -72,15 +72,20 @@ public class User : AggregateRoot
         {
             errorMessages.Add(DefaultErrorMessages.EmailNotValidFormat);
         }
+
+        if (string.IsNullOrEmpty(userName))
+        {
+            errorMessages.Add(DefaultErrorMessages.UserNameIsRequired);
+        }
     }
 
-    private static void ValidateUserCreation(Guid userId, string email, Guid externalId, List<string> errorMessages)
+    private static void ValidateUserCreation(Guid userId, string email, string userName, List<string> errorMessages)
     {
         if (userId == Guid.Empty)
         {
             errorMessages.Add(DefaultErrorMessages.CantCreateUserWithEmptyGuid);
         }
 
-        ValidateUserCreation(email, externalId, errorMessages);
+        ValidateUserCreation(email, userName, errorMessages);
     }
 }

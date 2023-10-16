@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Reservations.Infrastructure.Outbox;
 using Shared.Infrastructure.Authentication;
+using Shared.Infrastructure.Outbox;
 using Shows.Application.Contracts.Outbox;
 using Shows.Application.Contracts.Persistance;
 using Shows.Infrastructure.Outbox;

@@ -1,6 +1,6 @@
-﻿using Reservations.Api.Requests.Users;
-using Reservations.IntegrationTests.Base;
+﻿using Reservations.IntegrationTests.Base;
 using Reservations.IntegrationTests.Constants;
+using Shared.Domain.Events;
 using Shared.IntegrationTests.Authorization;
 using System.Net;
 using System.Net.Http.Json;
@@ -17,13 +17,13 @@ public class UsersControllerHelper : BaseControllerTests
         _output = output;
     }
 
-    protected Task<(HttpStatusCode StatusCode, T? result)> CreateUser<T>(CreateUserRequest createUserRequest, bool mocked = true)
+    protected Task<(HttpStatusCode StatusCode, T? result)> CreateUser<T>(CreatedUserEvent createUserRequest, bool mocked = true)
     {
         SetUpClient(mocked, AuthorizationType.UnAuthorized, _output);
         return CreateShowWithSetupClient<T>(createUserRequest);
     }
 
-    private async Task<(HttpStatusCode StatusCode, T? result)> CreateShowWithSetupClient<T>(CreateUserRequest createUserRequest)
+    private async Task<(HttpStatusCode StatusCode, T? result)> CreateShowWithSetupClient<T>(CreatedUserEvent createUserRequest)
     {
         var url = $"{UrlConstants.BaseUserURL}/{UrlConstants.CreateUserSpecificURL}";
 

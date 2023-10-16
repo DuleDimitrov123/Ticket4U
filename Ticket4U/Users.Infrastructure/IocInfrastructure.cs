@@ -3,11 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Infrastructure.Authentication;
+using Shared.Infrastructure.Outbox;
 using Users.Application.Contracts.Identity;
+using Users.Application.Contracts.Outbox;
 using Users.Application.Models.Identity;
 using Users.Domain.Users;
 using Users.Infrastructure.Identity;
 using Users.Infrastructure.Identity.Services;
+using Users.Infrastructure.Outbox;
 
 namespace Users.Infrastructure;
 
@@ -28,6 +31,20 @@ public static class IocInfrastructure
             .AddDefaultTokenProviders();
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+        //Add CAP
+        var capOptionsConstants = new CapOptionsConstants();
+        configuration.Bind("CapOptionsConstants", capOptionsConstants);
+
+        services.AddCap(options =>
+        {
+            options.FailedRetryCount = capOptionsConstants.FailedRetryCount;
+
+            options.UseEntityFramework<UsersIdentityDbContext>();
+
+            options.UseRabbitMQ(configuration.GetSection("EventBusSettings:Host").Value!);
+        });
+        services.AddScoped<IUserPublisher, UserPublisher>();
 
         services.AddCustomAuthentication(configuration);
 

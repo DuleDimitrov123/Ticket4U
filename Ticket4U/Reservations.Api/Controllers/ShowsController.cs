@@ -1,7 +1,6 @@
 ﻿using DotNetCore.CAP;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reservations.Api.Requests.Shows;
 using Reservations.Application.Features.Shows.Commands.CreateShow;
 using Reservations.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 using Shared.Domain.Events;
@@ -21,7 +20,7 @@ public class ShowsController : ControllerBase
     }
 
     [HttpPost("CAPROUTE-CreateShowInReservations")]
-    [CapSubscribe(ShowDomainEventsConstants.NewShowCreated)]
+    [CapSubscribe(Ticket4UDomainEventsConstants.NewShowCreated)]
     public async Task<ActionResult> CreateShow(CreatedShowEvent createdShowEvent)
     {
         var command = new CreateShowCommand()
@@ -38,7 +37,7 @@ public class ShowsController : ControllerBase
     }
 
     [HttpPost("CAPROUTE-UpdateShowStartingDateTime")]
-    [CapSubscribe(ShowDomainEventsConstants.ShowStartingDateTimeUpdated)]
+    [CapSubscribe(Ticket4UDomainEventsConstants.ShowStartingDateTimeUpdated)]
     public async Task<ActionResult> UpdateShowStartingDateTime(UpdatedShowsStartingDateTimeEvent updatedShowsStartingDateTimeEvent)
     {
         var command = new UpdateShowStartingDateTimeCommand()

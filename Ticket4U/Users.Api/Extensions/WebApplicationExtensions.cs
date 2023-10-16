@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Users.Application.Contracts.Identity;
-using Users.Application.Models.Identity;
+using Users.Application.Features.Users.Commands.RegistrateUser;
 using Users.Infrastructure.Identity;
 
 namespace Users.Api.Extensions;
@@ -39,7 +39,7 @@ public static class WebApplicationExtensions
 
     public async static Task AddDefaultAdminUsers(this WebApplication app)
     {
-        var user1 = new RegistrationRequest
+        var user1 = new RegistrateUserCommand
         {
             FirstName = "Dusan",
             LastName = "Dimitrov",
@@ -48,18 +48,11 @@ public static class WebApplicationExtensions
             UserName = "DuleDimitrov"
         };
 
-        try
+        using (var serviceScope = app.Services.CreateScope())
         {
-            using (var serviceScope = app.Services.CreateScope())
-            {
-                var authenticationService = serviceScope.ServiceProvider.GetRequiredService<IAuthenticationService>();
+            var mediator = serviceScope.ServiceProvider.GetRequiredService<IMediator>();
 
-                await authenticationService.RegistrateAsync(user1, true);
-            }
-        }
-        catch (Exception ex)
-        {
-
+            await mediator.Send(user1);
         }
     }
 }

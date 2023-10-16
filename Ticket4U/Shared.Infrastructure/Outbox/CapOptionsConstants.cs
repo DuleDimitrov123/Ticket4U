@@ -1,4 +1,4 @@
-﻿namespace Reservations.Infrastructure.Outbox;
+﻿namespace Shared.Infrastructure.Outbox;
 
 public class CapOptionsConstants
 {

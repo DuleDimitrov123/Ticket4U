@@ -6,6 +6,7 @@ using Reservations.Application.Contracts.Persistance;
 using Reservations.Infrastructure.Outbox;
 using Reservations.Infrastructure.Persistance.Repositories;
 using Shared.Infrastructure.Authentication;
+using Shared.Infrastructure.Outbox;
 
 namespace Reservations.Infrastructure;
 

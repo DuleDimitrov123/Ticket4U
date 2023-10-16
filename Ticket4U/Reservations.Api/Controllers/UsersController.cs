@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using DotNetCore.CAP;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Reservations.Api.Requests.Users;
 using Reservations.Application.Features.Users.Commands;
+using Shared.Domain.Events;
+using Shared.Domain.Events.Constants;
 
 namespace Reservations.Api.Controllers;
 
@@ -18,13 +20,13 @@ public class UsersController : ControllerBase
 
     //TODO: Event would be added instead of CreateUserRequest when connected with users microservice
     [HttpPost("CAPROUTE-CreateUserInReservations")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> CreateUser([FromBody] CreateUserRequest request)
+    [CapSubscribe(Ticket4UDomainEventsConstants.NewUserCreated)]
+    public async Task<ActionResult> CreateUser(CreatedUserEvent request)
     {
         var command = new CreateUserCommand()
         {
             Email = request.Email,
-            ExternalId = request.ExternalId
+            UserName = request.UserName
         };
 
         var response = await _mediator.Send(command);

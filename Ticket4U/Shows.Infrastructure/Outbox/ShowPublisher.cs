@@ -21,7 +21,7 @@ public class ShowPublisher : IShowPublisher
     {
         using(var transaction = _dbContext.Database.BeginTransaction(_capPublisher, true))
         {
-            await _capPublisher.PublishAsync(ShowDomainEventsConstants.NewShowCreated, createdShowEvent);
+            await _capPublisher.PublishAsync(Ticket4UDomainEventsConstants.NewShowCreated, createdShowEvent);
         }
     }
 
@@ -29,7 +29,7 @@ public class ShowPublisher : IShowPublisher
     {
         using (var transaction = _dbContext.Database.BeginTransaction(_capPublisher, true))
         {
-            await _capPublisher.PublishAsync(ShowDomainEventsConstants.ShowStartingDateTimeUpdated, updatedShowsStartingDateTimeEvent);
+            await _capPublisher.PublishAsync(Ticket4UDomainEventsConstants.ShowStartingDateTimeUpdated, updatedShowsStartingDateTimeEvent);
         }
     }
 }

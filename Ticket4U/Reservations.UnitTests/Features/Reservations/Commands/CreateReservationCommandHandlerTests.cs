@@ -7,7 +7,6 @@ using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
 using Reservations.Domain.Users;
 using Shouldly;
-using System.Reflection;
 
 namespace Reservations.UnitTests.Features.Reservations.Commands;
 
@@ -19,7 +18,7 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
         //arrange
         var reservations = new List<Reservation>();
         var show = Show.Create("Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
-        var user = User.Create("user1@gmail.com", Guid.NewGuid());
+        var user = User.Create("user1@gmail.com", "user1");
 
         var mockReservationRepository = new Mock<IRepository<Reservation>>();
         mockReservationRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
@@ -53,8 +52,8 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
             .ReturnsAsync(show.NumberOfPlaces);
 
         var handler = new CreateReservationCommandHandler(
-            mockReservationRepository.Object, 
-            mockShowRepository.Object, 
+            mockReservationRepository.Object,
+            mockShowRepository.Object,
             mockUserRepository.Object,
             mockCheckShowReservation.Object,
             new Mock<IMediator>().Object);

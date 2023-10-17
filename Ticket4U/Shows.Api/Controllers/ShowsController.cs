@@ -163,7 +163,7 @@ namespace Shows.Api.Controllers
         }
 
         [HttpPost("CAPROUTE-ChangedShowStatus")]
-        [CapSubscribe(ShowDomainEventsConstants.ChangedShowStatus)]
+        [CapSubscribe(Ticket4UDomainEventsConstants.ChangedShowStatus)]
         public async Task<ActionResult> ChangeShowStatus(ChangedShowStatusEvent changedShowStatusEvent)
         {
             var command = _mapper.Map<ChangeShowStatusCommand>(changedShowStatusEvent);

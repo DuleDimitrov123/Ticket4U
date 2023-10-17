@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
-using Shows.Application.Contracts.Outbox;
 using Shared.Domain.Events;
+using Shows.Application.Contracts.Outbox;
 
 namespace Shows.Application.Features.Shows.Notifications.ShowCreated;
 
@@ -22,7 +22,6 @@ public class ShowCreatedNotificationHandler : INotificationHandler<ShowCreatedNo
 
         Console.WriteLine($"Show created! Name: {createdShowEvent.Name}");
 
-        //TODO: Publish it!!!!!
         await _showPublisher.PublishCreatedShow(createdShowEvent);
     }
 }

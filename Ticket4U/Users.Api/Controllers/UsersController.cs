@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Users.Application.Contracts.Identity;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Users.Application.Features.Users.Commands.AuthenticateUser;
+using Users.Application.Features.Users.Commands.RegistrateUser;
 using Users.Application.Models.Identity;
 
 namespace Users.Api.Controllers
@@ -8,25 +10,25 @@ namespace Users.Api.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMediator _mediator;
 
-        public UsersController(IAuthenticationService authenticationService)
+        public UsersController(IMediator mediator)
         {
-            _authenticationService = authenticationService;
+            _mediator = mediator;
         }
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<AuthenticateResponse>> Authenticate([FromBody] AuthenticateRequest request)
+        public async Task<ActionResult<AuthenticateResponse>> Authenticate([FromBody] AuthenticateUserCommand command)
         {
-            var response = await _authenticationService.AuthenticateAsync(request);
+            var response = await _mediator.Send(command);
 
             return Ok(response);
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<RegistrationResponse>> Register([FromBody] RegistrationRequest request)
+        public async Task<ActionResult<RegistrationResponse>> Register([FromBody] RegistrateUserCommand command)
         {
-            var response = await _authenticationService.RegistrateAsync(request);
+            var response = await _mediator.Send(command);
 
             return Ok(response);
         }

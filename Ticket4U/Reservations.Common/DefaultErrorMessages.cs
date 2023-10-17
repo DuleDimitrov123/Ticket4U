@@ -4,7 +4,9 @@ public static class DefaultErrorMessages
 {
     public static readonly string CantGetByEmptyGuid = "You cannot get objects with empty guid!";
 
-    public static readonly string UserEmailIsRequired = "User emailis required!";
+    public static readonly string UserEmailIsRequired = "User email is required!";
+
+    public static readonly string UserNameIsRequired = "UserName is required!";
 
     public const string EmailNotValidFormat = "Email must be in valid format.";
 

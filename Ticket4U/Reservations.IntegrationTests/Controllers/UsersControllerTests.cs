@@ -1,7 +1,6 @@
-﻿using Reservations.Api.Requests.Users;
-using Reservations.IntegrationTests.Base;
-using Reservations.IntegrationTests.Constants;
+﻿using Reservations.IntegrationTests.Base;
 using Reservations.IntegrationTests.Helpers;
+using Shared.Domain.Events;
 using Shouldly;
 using System.Net;
 using Xunit.Abstractions;
@@ -17,7 +16,7 @@ public class UsersControllerTests : UsersControllerHelper
     [Fact]
     public async Task CreateUserSuccessfully()
     {
-        var createUserRequest = new CreateUserRequest("testuser@gmail.com", InstanceConstants.ExternalUser1Id);
+        var createUserRequest = new CreatedUserEvent("testuser@gmail.com", "testuser");
         var (statusCode, result) = await CreateUser<Guid>(createUserRequest, false);
 
         statusCode.ShouldBe(HttpStatusCode.OK);

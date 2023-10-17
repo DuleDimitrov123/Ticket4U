@@ -20,7 +20,7 @@ public class ReservationPublisher : IReservationPublisher
     {
         using(var transaction = _dbContext.Database.BeginTransaction(_capPublisher, true))
         {
-            await _capPublisher.PublishAsync(ShowDomainEventsConstants.ChangedShowStatus, changedShowStatusEvent);
+            await _capPublisher.PublishAsync(Ticket4UDomainEventsConstants.ChangedShowStatus, changedShowStatusEvent);
         }
     }
 }

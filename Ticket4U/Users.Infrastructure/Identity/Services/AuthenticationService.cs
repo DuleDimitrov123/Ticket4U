@@ -7,6 +7,7 @@ using System.Text;
 using Users.Application.Contracts.Identity;
 using Users.Application.Models.Identity;
 using Users.Domain.Users;
+using Users.Infrastructure.Identity.Exceptions;
 
 namespace Users.Infrastructure.Identity.Services;
 
@@ -94,14 +95,14 @@ public class AuthenticationService : IAuthenticationService
 
         if (existingUser != null)
         {
-            throw new Exception($"Username {request.UserName} already exists.");
+            throw new UserAlreadyExistsException(request.UserName, "username");
         }
 
         var existingEmail = await _userManager.FindByEmailAsync(request.Email);
 
         if (existingEmail != null)
         {
-            throw new Exception($"Email {request.Email} already exists.");
+            throw new UserAlreadyExistsException(request.Email, "email");
         }
 
         var user = new User

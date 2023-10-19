@@ -1,0 +1,48 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "ticket4U",
+      "TransformByOcelotConfig": false,
+      "Config": [
+        {
+          "Name": "Ticket4U.ApiGateway",
+          "Version": "1.0",
+          "Url": "http://localhost:8083/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "shows",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "Shows.Api",
+          "Version": "1.0",
+          "Url": "http://localhost:8081/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "reservations",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "Reservations.Api",
+          "Version": "1.0",
+          "Url": "http://localhost:8080/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "users",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "Users.Api",
+          "Version": "1.0",
+          "Url": "http://localhost:8082/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

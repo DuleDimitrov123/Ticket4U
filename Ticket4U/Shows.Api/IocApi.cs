@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Shared.Api.Swagger;
 using Shows.Application;
 using Shows.Infrastructure;
 
@@ -27,6 +28,8 @@ public static class IocApi
         services.AddValidatorsFromAssemblies(new[] { assembly });
 
         #endregion
+
+        services.AddSwaggerSecurity("Shows API", "v1");
 
         return services;
     }

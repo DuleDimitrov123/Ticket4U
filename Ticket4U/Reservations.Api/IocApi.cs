@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Reservations.Application;
 using Reservations.Infrastructure;
+using Shared.Api.Swagger;
 
 namespace Reservations.Api;
 
@@ -22,6 +23,8 @@ public static class IocApi
         });
 
         services.AddValidatorsFromAssemblies(new[] { assembly });
+
+        services.AddSwaggerSecurity("Reservations API", "v1");
 
         return services;
     }

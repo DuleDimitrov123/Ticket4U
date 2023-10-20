@@ -24,7 +24,6 @@ public class AddDefaultAdminUsersService : BackgroundService
             UserName = "DuleDimitrov"
         };
 
-
         using var scope = _serviceScopeFactory.CreateScope();
 
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();

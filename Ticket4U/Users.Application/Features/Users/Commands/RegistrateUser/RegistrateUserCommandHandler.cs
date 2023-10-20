@@ -31,7 +31,8 @@ public class RegistrateUserCommandHandler : IRequestHandler<RegistrateUserComman
 
         //publish event
         await _mediator.Publish(new UserCreatedNotification(
-                new CreatedUserEvent(request.Email, request.UserName)));
+                new CreatedUserEvent(request.Email, request.UserName)),
+                cancellationToken);
 
         return registrationResponse;
     }

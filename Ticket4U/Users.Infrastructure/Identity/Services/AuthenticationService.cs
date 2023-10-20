@@ -105,15 +105,7 @@ public class AuthenticationService : IAuthenticationService
             throw new UserAlreadyExistsException(request.Email, "email");
         }
 
-        var user = new User
-        {
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            UserName = request.UserName,
-            EmailConfirmed = true,
-            IsAdmin = isAdmin
-        };
+        var user = User.Create(request.Email, request.UserName, request.FirstName, request.LastName, true, isAdmin);
 
         var result = await _userManager.CreateAsync(user, request.Password);
 

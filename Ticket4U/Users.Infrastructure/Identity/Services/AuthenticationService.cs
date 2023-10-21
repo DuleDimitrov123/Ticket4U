@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Application.Exceptions;
+using Shared.Infrastructure.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Users.Application.Contracts.Identity;
 using Users.Application.Models.Identity;
 using Users.Domain.Users;
-using Users.Infrastructure.Identity.Exceptions;
 
 namespace Users.Infrastructure.Identity.Services;
 
@@ -32,7 +33,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
         {
-            throw new Exception($"User with {request.Email} already exists.");
+            throw new NotFoundException("User", request.Email);
         }
 
         var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);

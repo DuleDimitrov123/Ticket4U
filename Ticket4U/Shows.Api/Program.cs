@@ -1,7 +1,7 @@
 using Serilog;
+using Shared.Api.Middlewares;
 using Shows.Api;
 using Shows.Api.Helpers;
-using Shows.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 

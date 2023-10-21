@@ -1,4 +1,4 @@
-﻿namespace Users.Infrastructure.Identity.Exceptions;
+﻿namespace Shared.Infrastructure.Exceptions;
 
 public class UserAlreadyExistsException : Exception
 {

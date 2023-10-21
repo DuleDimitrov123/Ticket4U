@@ -1,9 +1,10 @@
-﻿using Shared.Domain;
+﻿using Microsoft.AspNetCore.Http;
 using Shared.Application.Exceptions;
+using Shared.Domain;
 using System.Net;
 using System.Text.Json;
 
-namespace Shows.Api.Middleware;
+namespace Shared.Api.Middlewares;
 
 public class ExceptionHandlerMiddleware
 {

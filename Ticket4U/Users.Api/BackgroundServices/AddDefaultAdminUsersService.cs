@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using Shared.Infrastructure.Exceptions;
 using Users.Application.Features.Users.Commands.RegistrateUser;
-using Users.Infrastructure.Identity.Exceptions;
 
 namespace Users.Api.BackgroundServices;
 

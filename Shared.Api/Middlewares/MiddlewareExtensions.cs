@@ -1,4 +1,6 @@
-﻿namespace Shows.Api.Middleware;
+﻿using Microsoft.AspNetCore.Builder;
+
+namespace Shared.Api.Middlewares;
 
 public static class MiddlewareExtensions
 {

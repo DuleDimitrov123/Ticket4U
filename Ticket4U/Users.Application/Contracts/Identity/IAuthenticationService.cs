@@ -1,10 +1,12 @@
-﻿using Users.Application.Models.Identity;
+﻿using Users.Application.Features.Users.Commands.AuthenticateUser;
+using Users.Application.Features.Users.Commands.RegistrateUser;
+using Users.Application.Models.Identity;
 
 namespace Users.Application.Contracts.Identity;
 
 public interface IAuthenticationService
 {
-    Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest request);
+    Task<AuthenticateResponse> AuthenticateAsync(AuthenticateUserCommand command);
 
-    Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request, bool isAdmin = false);
+    Task<RegistrationResponse> RegistrateAsync(RegistrateUserCommand command);
 }

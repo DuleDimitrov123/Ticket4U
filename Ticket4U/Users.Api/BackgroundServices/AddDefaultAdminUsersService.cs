@@ -1,6 +1,6 @@
 ﻿using MediatR;
+using Shared.Infrastructure.Exceptions;
 using Users.Application.Features.Users.Commands.RegistrateUser;
-using Users.Infrastructure.Identity.Exceptions;
 
 namespace Users.Api.BackgroundServices;
 
@@ -21,9 +21,9 @@ public class AddDefaultAdminUsersService : BackgroundService
             LastName = "Dimitrov",
             Email = "dusan.dimitrov@gmail.com",
             Password = "TestPass12*4NotReal",
-            UserName = "DuleDimitrov"
+            UserName = "DuleDimitrov",
+            IsAdmin = true
         };
-
 
         using var scope = _serviceScopeFactory.CreateScope();
 

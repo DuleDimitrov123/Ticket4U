@@ -1,3 +1,4 @@
+using Shared.Api.Middlewares;
 using Users.Api;
 using Users.Api.BackgroundServices;
 using Users.Api.Extensions;
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+
+app.UseCustomExceptionHandler();
 
 app.UseAuthentication();
 

@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Application.Exceptions;
+using Shared.Infrastructure.Exceptions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Users.Application.Contracts.Identity;
+using Users.Application.Features.Users.Commands.AuthenticateUser;
+using Users.Application.Features.Users.Commands.RegistrateUser;
 using Users.Application.Models.Identity;
 using Users.Domain.Users;
-using Users.Infrastructure.Identity.Exceptions;
 
 namespace Users.Infrastructure.Identity.Services;
 
@@ -26,20 +29,20 @@ public class AuthenticationService : IAuthenticationService
         _signInManager = signInManager;
     }
 
-    public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateRequest request)
+    public async Task<AuthenticateResponse> AuthenticateAsync(AuthenticateUserCommand command)
     {
-        var user = await _userManager.FindByEmailAsync(request.Email);
+        var user = await _userManager.FindByEmailAsync(command.Email);
 
         if (user == null)
         {
-            throw new Exception($"User with {request.Email} already exists.");
+            throw new NotFoundException("User", command.Email);
         }
 
-        var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, false, lockoutOnFailure: false);
+        var result = await _signInManager.PasswordSignInAsync(user.UserName, command.Password, false, lockoutOnFailure: false);
 
         if (!result.Succeeded)
         {
-            throw new Exception($"Credentials for '{request.Email} aren't valid!'");
+            throw new Exception($"Credentials for '{command.Email} aren't valid!'");
         }
 
         JwtSecurityToken jwtSecurityToken = await GenerateToken(user);
@@ -89,38 +92,41 @@ public class AuthenticationService : IAuthenticationService
         return jwtSecurityToken;
     }
 
-    public async Task<RegistrationResponse> RegistrateAsync(RegistrationRequest request, bool isAdmin = false)
+    public async Task<RegistrationResponse> RegistrateAsync(RegistrateUserCommand command)
     {
-        var existingUser = await _userManager.FindByNameAsync(request.UserName);
+        var existingUser = await _userManager.FindByNameAsync(command.UserName);
 
         if (existingUser != null)
         {
-            throw new UserAlreadyExistsException(request.UserName, "username");
+            throw new UserAlreadyExistsException(command.UserName, "username");
         }
 
-        var existingEmail = await _userManager.FindByEmailAsync(request.Email);
+        var existingEmail = await _userManager.FindByEmailAsync(command.Email);
 
         if (existingEmail != null)
         {
-            throw new UserAlreadyExistsException(request.Email, "email");
+            throw new UserAlreadyExistsException(command.Email, "email");
         }
 
-        var user = new User
+        var user = User.Create(command.Email, command.UserName, command.FirstName, command.LastName, true, command.IsAdmin);
+
+        var result = await _userManager.CreateAsync(user, command.Password);
+
+        if (!result.Succeeded)
         {
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            UserName = request.UserName,
-            EmailConfirmed = true,
-            IsAdmin = isAdmin
-        };
+            throw new Exception($"{result.Errors}");
+        }
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+        if (command.IsAdmin)
+        {
+            var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
 
-        var roleResult = await _userManager.AddToRoleAsync(user, "Admin");
+            if (!roleResult.Succeeded)
+            {
+                throw new Exception($"{roleResult.Errors}");
+            }
+        }
 
-        return result.Succeeded && roleResult.Succeeded
-            ? new RegistrationResponse() { UserId = user.Id }
-            : throw new Exception($"{result.Errors.Concat(roleResult.Errors)}");
+        return new RegistrationResponse() { UserId = user.Id };
     }
 }

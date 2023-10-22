@@ -1,46 +1,67 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Shared.Domain;
+using Users.Common;
 
 namespace Users.Domain.Users;
 
-//TODO: Maybe consider refactoring...implement other properties, do not inherit this class
 public class User : IdentityUser
 {
-    public string FirstName { get; /*private*/ set; }
+    public string FirstName { get; private set; }
 
-    public string LastName { get; /*private*/ set; }
+    public string LastName { get; private set; }
 
-    public bool IsAdmin { get; set; }
+    public bool IsAdmin { get; private set; }
 
-    //private User(string firstName, string lastName)
-    //{
-    //    FirstName = firstName;
-    //    LastName = lastName;
-    //}
+    private User()
+    {
 
-    //public static User Create(string firstName, string lastName)
-    //{
-    //    IList<string> errorMessages = new List<string>();
+    }
 
-    //    ValidateUserCreation(firstName, lastName, errorMessages);
+    private User(string email, string username, string firstName, string lastName, bool emailConfirmed, bool isAdmin)
+        : base()
+    {
+        Email = email;
+        UserName = username;
+        FirstName = firstName;
+        LastName = lastName;
+        EmailConfirmed = emailConfirmed;
+        IsAdmin = isAdmin;
+    }
 
-    //    if (errorMessages.Count > 0)
-    //    {
-    //        throw new DomainException(errorMessages);
-    //    }
+    public static User Create(string email, string username, string firstName, string lastName, bool emailConfirmed, bool isAdmin)
+    {
+        IList<string> errorMessages = new List<string>();
 
-    //    return new User(firstName, lastName);
-    //}
+        ValidateUserCreation(email, username, firstName, lastName, emailConfirmed, isAdmin, errorMessages);
 
-    //private static void ValidateUserCreation(string firstName, string lastName, IList<string> errorMessages)
-    //{
-    //    if (string.IsNullOrEmpty(firstName))
-    //    {
-    //        errorMessages.Add("First name for the user cannot be null or empty");
-    //    }
+        if (errorMessages.Count > 0)
+        {
+            throw new DomainException(errorMessages);
+        }
 
-    //    if (string.IsNullOrEmpty(lastName))
-    //    {
-    //        errorMessages.Add("Last name for the user cannot be null or empty");
-    //    }
-    //}
+        return new User(email, username, firstName, lastName, emailConfirmed, isAdmin);
+    }
+
+    private static void ValidateUserCreation(string email, string username, string firstName, string lastName, bool emailConfirmed, bool isAdmin, IList<string> errorMessages)
+    {
+        if (string.IsNullOrEmpty(email))
+        {
+            errorMessages.Add(DefaultErrorMessages.UserEmailRequired);
+        }
+
+        if (string.IsNullOrEmpty(username))
+        {
+            errorMessages.Add(DefaultErrorMessages.UserUsernameRequired);
+        }
+
+        if (string.IsNullOrEmpty(firstName))
+        {
+            errorMessages.Add(DefaultErrorMessages.UserFirstNameRequired);
+        }
+
+        if (string.IsNullOrEmpty(lastName))
+        {
+            errorMessages.Add(DefaultErrorMessages.UserLastNameRequired);
+        }
+    }
 }

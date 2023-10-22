@@ -92,7 +92,7 @@ public class Category : AggregateRoot
             errorMessages.Add(DefaultErrorMessages.CategoryNameIsRequired);
         }
 
-        if (name.Length > CategoryConstants.CategoryNameMaxLength)
+        if (name?.Length > CategoryConstants.CategoryNameMaxLength)
         {
             errorMessages.Add(DefaultErrorMessages.CategoryNameLength);
         }

@@ -17,21 +17,13 @@ public class RegistrateUserCommandHandler : IRequestHandler<RegistrateUserComman
         _mediator = mediator;
     }
 
-    public async Task<RegistrationResponse> Handle(RegistrateUserCommand request, CancellationToken cancellationToken)
+    public async Task<RegistrationResponse> Handle(RegistrateUserCommand command, CancellationToken cancellationToken)
     {
-        var registrationResponse = await _authenticationService.RegistrateAsync(
-            new RegistrationRequest()
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                UserName = request.UserName,
-                Password = request.Password
-            });
+        var registrationResponse = await _authenticationService.RegistrateAsync(command);
 
         //publish event
         await _mediator.Publish(new UserCreatedNotification(
-                new CreatedUserEvent(request.Email, request.UserName)));
+                new CreatedUserEvent(command.Email, command.UserName)));
 
         return registrationResponse;
     }

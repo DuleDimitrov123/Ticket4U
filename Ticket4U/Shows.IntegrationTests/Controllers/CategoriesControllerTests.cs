@@ -1,4 +1,5 @@
-﻿using Shared.IntegrationTests.Authorization;
+﻿using Shared.Api.Middlewares;
+using Shared.IntegrationTests.Authorization;
 using Shouldly;
 using Shows.Api.Requests.Categories;
 using Shows.Application.Features.Categories.Queries;
@@ -35,10 +36,18 @@ public class CategoriesControllerTests : BaseControllerTests
     [Fact]
     public async Task GetCategoryByIdNotFound()
     {
+        var categoryId = Guid.NewGuid();
         _client.SetAuthorization(AuthorizationType.BasicAuthorization);
-        var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{Guid.NewGuid()}");
+        var response = await _client.GetAsync($"{UrlConstants.BaseCategoryURL}/{categoryId}");
+
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        var result = JsonSerializer.Deserialize<ErrorResponse>(responseString, _jsonSerializerOptions);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        result.ShouldNotBeNull();
+        result!.ExceptionMessages.ShouldContain($"{nameof(Category)} {categoryId} is not found");
     }
 
     [Fact]

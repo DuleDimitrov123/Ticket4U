@@ -59,7 +59,7 @@ public class CustomWebApplicationFactory<TStartup>
     {
         var authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
 
-        await authenticationService.RegistrateAsync(TestUsers.TestAdmin, true);
+        await authenticationService.RegistrateAsync(TestUsers.TestAdmin);
     }
 
     public void CustomConfigureServices(IWebHostBuilder builder, ITestOutputHelper testOutputHelper)

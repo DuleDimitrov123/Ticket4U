@@ -24,7 +24,7 @@ public class AuthenticateUserCommandHandlerTests
             Token = "SomeToken"
         };
 
-        authenticationServiceMock.Setup(x => x.AuthenticateAsync(It.IsAny<AuthenticateRequest>()))
+        authenticationServiceMock.Setup(x => x.AuthenticateAsync(It.IsAny<AuthenticateUserCommand>()))
             .ReturnsAsync(authenticateResponse);
 
         var command = new AuthenticateUserCommand()

@@ -13,12 +13,8 @@ public class AuthenticateUserCommandHandler : IRequestHandler<AuthenticateUserCo
         _authenticationService = authenticationService;
     }
 
-    public async Task<AuthenticateResponse> Handle(AuthenticateUserCommand request, CancellationToken cancellationToken)
+    public async Task<AuthenticateResponse> Handle(AuthenticateUserCommand command, CancellationToken cancellationToken)
     {
-        return await _authenticationService.AuthenticateAsync(new AuthenticateRequest()
-        {
-            Email = request.Email,
-            Password = request.Password
-        });
+        return await _authenticationService.AuthenticateAsync(command);
     }
 }

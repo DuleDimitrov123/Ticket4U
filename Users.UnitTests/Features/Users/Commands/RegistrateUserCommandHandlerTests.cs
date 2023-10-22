@@ -20,7 +20,7 @@ public class RegistrateUserCommandHandlerTests
         RegistrateUserCommandHandler handler)
     {
         var registrationResponse = new RegistrationResponse() { UserId = Guid.NewGuid().ToString() };
-        authenticationServiceMock.Setup(x => x.RegistrateAsync(It.IsAny<RegistrationRequest>(), It.IsAny<bool>()))
+        authenticationServiceMock.Setup(x => x.RegistrateAsync(It.IsAny<RegistrateUserCommand>()))
             .ReturnsAsync(registrationResponse);
 
         mediatorMock.Setup(x => x.Publish(It.IsAny<UserCreatedNotification>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);

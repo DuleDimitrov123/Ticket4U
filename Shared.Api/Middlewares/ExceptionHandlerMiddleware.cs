@@ -33,13 +33,13 @@ public class ExceptionHandlerMiddleware
 
         context.Response.ContentType = "application/json";
 
-        var result = string.Empty;
+        IList<string> customExceptionMessages = null;
 
         switch (exception)
         {
             case DomainException domainException:
                 httpStatusCode = HttpStatusCode.BadRequest;
-                result = JsonSerializer.Serialize(domainException.ErrorMessages);
+                customExceptionMessages = domainException.ErrorMessages;
                 break;
             case NotFoundException:
                 httpStatusCode = HttpStatusCode.NotFound;
@@ -51,10 +51,14 @@ public class ExceptionHandlerMiddleware
 
         context.Response.StatusCode = (int)httpStatusCode;
 
-        if (result == string.Empty)
-        {
-            result = JsonSerializer.Serialize(new { error = exception.Message });
-        }
+        var result = JsonSerializer.Serialize(
+            new ErrorResponse(context.Request.Path,
+                httpStatusCode,
+                exception.GetType().Name,
+                customExceptionMessages is null
+                ? new List<string>() { exception.Message }
+                : customExceptionMessages,
+                exception.ToString()));
 
         return context.Response.WriteAsync(result);
     }

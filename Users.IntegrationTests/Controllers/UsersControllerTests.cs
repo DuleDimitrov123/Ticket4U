@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
-using GenFu;
+using Shared.Api.Middlewares;
 using System.Net;
-using Users.Application.Features.Users.Commands.AuthenticateUser;
+using Users.Api.Controllers.Requests;
 using Users.Application.Models.Identity;
 using Users.IntegrationTests.Base;
 using Users.IntegrationTests.Constants;
@@ -17,31 +17,55 @@ public class UsersControllerTests : UsersControllerHelper
     }
 
     [Fact]
-    public async Task AuthenticateSuccessfully()
+    public async Task AuthenticateUser_Successfully()
     {
-        var command = new AuthenticateUserCommand()
-        {
-            Email = TestUsers.TestAdmin.Email,
-            Password = TestUsers.TestAdmin.Password
-        };
+        var request = new AuthenticateUserRequest(TestUsers.TestAdmin.Email, TestUsers.TestAdmin.Password);
 
-        var (statusCode, result) = await Authenticate<AuthenticateResponse>(command, false);
+        var (statusCode, result) = await Authenticate<AuthenticateResponse>(request, false);
 
         statusCode.Should().Be(HttpStatusCode.OK);
 
         result.Should().NotBeNull();
 
-        result!.Email.Should().Be(command.Email);
+        result!.Email.Should().Be(request.Email);
         result!.Token.Should().NotBeNull();
     }
 
     [Fact]
-    public async Task AuthenticateUserNotFound()
+    public async Task AuthenticateUser_NotFound()
     {
-        var command = A.New<AuthenticateUserCommand>();
+        var request = new AuthenticateUserRequest("testemail@gmail.com", "password123/9");
 
-        var (statusCode, _) = await Authenticate<AuthenticateResponse>(command, false);
+        var (statusCode, result) = await Authenticate<ErrorResponse>(request, false);
 
         statusCode.Should().Be(HttpStatusCode.NotFound);
+
+        result.Should().NotBeNull();
+        result!.ExceptionMessages.Should().Contain($"User {request.Email} is not found");
+    }
+
+    [Fact]
+    public async Task AuthenticateUser_WrongPassword()
+    {
+        var request = new AuthenticateUserRequest(TestUsers.TestAdmin.Email, "WRONGPASSWORD");
+
+        var (statusCode, result) = await Authenticate<ErrorResponse>(request, false);
+
+        statusCode.Should().Be(HttpStatusCode.BadRequest);
+
+        result.Should().NotBeNull();
+        result!.ExceptionMessages.Should().Contain($"Credentials for '{request.Email} aren't valid!'");
+    }
+
+    [Fact]
+    public async Task RegisterUser_Successfully()
+    {
+        var request = new RegisterUserRequest("FirstName", "LastName", "something@gmail.com", "Some", "TestPass12*4NotReal");
+
+        var (statusCode, result) = await Register<RegistrationResponse>(request, false);
+
+        statusCode.Should().Be(HttpStatusCode.OK);
+
+        result.Should().NotBeNull();
     }
 }

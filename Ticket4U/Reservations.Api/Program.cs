@@ -1,5 +1,6 @@
 using Reservations.Api;
 using Reservations.Api.Helpers;
+using Shared.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
 }
 
 //app.UseHttpsRedirection();
+
+app.UseCustomExceptionHandler();
 
 app.UseAuthorization();
 

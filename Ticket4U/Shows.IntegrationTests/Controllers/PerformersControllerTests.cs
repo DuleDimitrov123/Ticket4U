@@ -1,7 +1,9 @@
-﻿using Shared.IntegrationTests.Authorization;
+﻿using Shared.Api.Middlewares;
+using Shared.IntegrationTests.Authorization;
 using Shouldly;
 using Shows.Api.Requests.Performers;
 using Shows.Application.Features.Performers.Queries;
+using Shows.Domain.Performers;
 using Shows.IntegrationTests.Base;
 using Shows.IntegrationTests.Constants;
 using System.Net;
@@ -34,10 +36,18 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerByIdNotFound()
     {
+        var performerId = Guid.NewGuid();
+
         _client.SetAuthorization(AuthorizationType.BasicAuthorization);
-        var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.NewGuid()}");
+        var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{performerId}");
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<ErrorResponse>(responseString, _jsonSerializerOptions);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        result.ShouldNotBeNull();
+        result!.ExceptionMessages.ShouldContain($"{nameof(Performer)} {performerId} is not found");
     }
 
     [Fact]
@@ -68,10 +78,18 @@ public class PerformersControllerTests : BaseControllerTests
     [Fact]
     public async Task GetPerformerDetailByIdNotFound()
     {
+        var performerId = Guid.NewGuid();
+
         _client.SetAuthorization(AuthorizationType.BasicAuthorization);
-        var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{Guid.NewGuid()}/{UrlConstants.SpecificPerformerDetail}");
+        var response = await _client.GetAsync($"{UrlConstants.BasePerformerURL}/{performerId}/{UrlConstants.SpecificPerformerDetail}");
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<ErrorResponse>(responseString, _jsonSerializerOptions);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        result.ShouldNotBeNull();
+        result!.ExceptionMessages.ShouldContain($"{nameof(Performer)} {performerId} is not found");
     }
 
     [Fact]

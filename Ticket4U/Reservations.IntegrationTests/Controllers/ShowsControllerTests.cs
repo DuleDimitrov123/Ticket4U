@@ -43,4 +43,16 @@ public class ShowsControllerTests : ShowsControllerHelper
 
         statusCode.ShouldBe(HttpStatusCode.NoContent);
     }
+
+    [Fact]
+    public async Task UpdateShowStartingDateTimeNotFound()
+    {
+        //update
+        var newStartingDateTime = DateTime.Now.AddDays(11);
+        var updatedShowsStartingDateTimeEvent = new UpdatedShowsStartingDateTimeEvent(Guid.NewGuid(), newStartingDateTime, new DateTime());
+
+        var statusCode = await UpdateShowStartingDateTime(updatedShowsStartingDateTimeEvent, false);
+
+        statusCode.ShouldBe(HttpStatusCode.NotFound);
+    }
 }

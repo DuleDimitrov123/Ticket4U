@@ -1,7 +1,9 @@
-﻿using Shared.IntegrationTests.Authorization;
+﻿using Shared.Api.Middlewares;
+using Shared.IntegrationTests.Authorization;
 using Shouldly;
 using Shows.Api.Requests.Shows;
 using Shows.Application.Features.Shows.Queries;
+using Shows.Domain.Shows;
 using Shows.IntegrationTests.Base;
 using Shows.IntegrationTests.Constants;
 using System.Net;
@@ -36,11 +38,18 @@ public class ShowsControllerTests : BaseControllerTests
     [Fact]
     public async Task GetShowByIdNotFound()
     {
+        var showId = Guid.NewGuid();
         _client.SetAuthorization(AuthorizationType.BasicAuthorization);
 
-        var response = await _client.GetAsync($"{UrlConstants.BaseShowURL}/{Guid.NewGuid()}");
+        var response = await _client.GetAsync($"{UrlConstants.BaseShowURL}/{showId}");
+
+        var responseString = await response.Content.ReadAsStringAsync();
+        var result = JsonSerializer.Deserialize<ErrorResponse>(responseString, _jsonSerializerOptions);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+
+        result.ShouldNotBeNull();
+        result!.ExceptionMessages.ShouldContain($"{nameof(Show)} {showId} is not found");
     }
 
     [Fact]

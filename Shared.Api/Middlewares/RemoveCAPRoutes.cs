@@ -2,7 +2,7 @@
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Reservations.Api.Helpers;
+namespace Shared.Api.Middlewares;
 
 public class RemoveCAPRoutes : IDocumentFilter
 {

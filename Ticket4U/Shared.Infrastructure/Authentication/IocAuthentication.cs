@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Infrastructure.Exceptions;
 using System.Text;
-using System.Text.Json;
 
 namespace Shared.Infrastructure.Authentication;
 
@@ -37,25 +36,28 @@ public static class IocAuthentication
             {
                 OnAuthenticationFailed = c =>
                 {
-                    c.NoResult();
-                    c.Response.StatusCode = 500;
-                    c.Response.ContentType = "text/plain";
-                    return c.Response.WriteAsync(c.Exception.ToString());
+                    //c.NoResult();
+                    //c.Response.StatusCode = 500;
+                    //c.Response.ContentType = "text/plain";
+                    //return c.Response.WriteAsync(c.Exception.ToString());
+                    throw new Exception(c.Exception.ToString());
                 },
                 OnChallenge = context =>
                 {
-                    context.HandleResponse();
-                    context.Response.StatusCode = 401;
-                    context.Response.ContentType = "application/json";
-                    var result = JsonSerializer.Serialize("401 Not authorized");
-                    return context.Response.WriteAsync(result);
+                    //context.HandleResponse();
+                    //context.Response.StatusCode = 401;
+                    //context.Response.ContentType = "application/json";
+                    //var result = JsonSerializer.Serialize("401 Not authorized");
+                    //return context.Response.WriteAsync(result);
+                    throw new UserNotAuthorizedException();
                 },
                 OnForbidden = context =>
                 {
-                    context.Response.StatusCode = 403;
-                    context.Response.ContentType = "application/json";
-                    var result = JsonSerializer.Serialize("403 Not authorized");
-                    return context.Response.WriteAsync(result);
+                    //context.Response.StatusCode = 403;
+                    //context.Response.ContentType = "application/json";
+                    //var result = JsonSerializer.Serialize("403 Not authorized");
+                    //return context.Response.WriteAsync(result);
+                    throw new UserForbiddenException();
                 }
             };
         });

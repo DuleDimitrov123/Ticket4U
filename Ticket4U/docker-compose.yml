@@ -59,6 +59,8 @@ services:
       MSSQL_PID: "Express"
     ports:
       - "1436:1433"
+    volumes:
+      - reservations_data:/var/opt/mssql
 
   shows.mssql.database:
     image: "mcr.microsoft.com/mssql/server"
@@ -68,6 +70,8 @@ services:
       MSSQL_PID: "Express"
     ports:
       - "1435:1433"
+    volumes:
+      - shows_data:/var/opt/mssql
 
   users.mssql.database:
     image: "mcr.microsoft.com/mssql/server"
@@ -77,9 +81,15 @@ services:
       MSSQL_PID: "Express"
     ports:
       - "1438:1433"
+    volumes:
+      - users_data:/var/opt/mssql
 
   ticket4u-rabbitmq:
     image: rabbitmq:3-management
     ports:
       - 8088:15672
 
+volumes:
+  reservations_data:
+  shows_data:
+  users_data:

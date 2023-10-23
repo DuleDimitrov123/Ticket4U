@@ -172,6 +172,18 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/performers/{performerId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/performers/{performerId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "shows.api",
+          "Port": 80
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/performers/{performerId}/detail",
       "UpstreamHttpMethod": [ "GET" ],
       "DownstreamPathTemplate": "/api/performers/{performerId}/detail",

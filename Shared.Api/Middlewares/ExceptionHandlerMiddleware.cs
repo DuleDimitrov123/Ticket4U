@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Shared.Application.Exceptions;
 using Shared.Domain;
+using Shared.Infrastructure.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -43,6 +44,12 @@ public class ExceptionHandlerMiddleware
                 break;
             case NotFoundException:
                 httpStatusCode = HttpStatusCode.NotFound;
+                break;
+            case UserNotAuthorizedException:
+                httpStatusCode = HttpStatusCode.Unauthorized;
+                break;
+            case UserForbiddenException:
+                httpStatusCode = HttpStatusCode.Forbidden;
                 break;
             case Exception:
                 httpStatusCode = HttpStatusCode.BadRequest;

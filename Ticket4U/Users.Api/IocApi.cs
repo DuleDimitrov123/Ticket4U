@@ -1,4 +1,5 @@
-﻿using Users.Application;
+﻿using Shared.Api.FluentValidation;
+using Users.Application;
 using Users.Infrastructure;
 
 namespace Users.Api;
@@ -9,6 +10,8 @@ public static class IocApi
     {
         services.AddInfrastructure(configuration);
         services.AddApplication();
+
+        services.AddCustomFluentValidation(typeof(IocApi).Assembly);
 
         return services;
     }

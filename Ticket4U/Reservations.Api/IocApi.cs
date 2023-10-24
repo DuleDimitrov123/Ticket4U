@@ -1,7 +1,6 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
-using Reservations.Application;
+﻿using Reservations.Application;
 using Reservations.Infrastructure;
+using Shared.Api.FluentValidation;
 using Shared.Api.Swagger;
 
 namespace Reservations.Api;
@@ -16,13 +15,7 @@ public static class IocApi
 
         services.AddInfrastructure(configuration);
 
-        services.AddFluentValidation(options =>
-        {
-            options.AutomaticValidationEnabled = true;
-            options.ImplicitlyValidateChildProperties = true;
-        });
-
-        services.AddValidatorsFromAssemblies(new[] { assembly });
+        services.AddCustomFluentValidation(assembly);
 
         services.AddSwaggerSecurity("Reservations API", "v1");
 

@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.AspNetCore;
+﻿using Shared.Api.FluentValidation;
 using Shared.Api.Swagger;
 using Shows.Application;
 using Shows.Infrastructure;
@@ -17,17 +16,7 @@ public static class IocApi
 
         services.AddAutoMapper(assembly);
 
-        #region FluentValidation
-
-        services.AddFluentValidation(options =>
-        {
-            options.AutomaticValidationEnabled = true;
-            options.ImplicitlyValidateChildProperties = true;
-        });
-
-        services.AddValidatorsFromAssemblies(new[] { assembly });
-
-        #endregion
+        services.AddCustomFluentValidation(assembly);
 
         services.AddSwaggerSecurity("Shows API", "v1");
 

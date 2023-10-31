@@ -4,7 +4,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
@@ -16,6 +15,7 @@ COPY ["Shared.Domain/Shared.Domain.csproj", "Shared.Domain/"]
 COPY ["Shared.Application/Shared.Application.csproj", "Shared.Application/"]
 COPY ["Reservations.Infrastructure/Reservations.Infrastructure.csproj", "Reservations.Infrastructure/"]
 COPY ["Shared.Infrastructure/Shared.Infrastructure.csproj", "Shared.Infrastructure/"]
+COPY ["Shared.Api/Shared.Api.csproj", "Shared.Api/"]
 RUN dotnet restore "Reservations.Api/Reservations.Api.csproj"
 COPY . .
 WORKDIR "/src/Reservations.Api"

@@ -38,6 +38,7 @@ namespace Shows.Api.Controllers
         [HttpGet("{showId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         public async Task<ActionResult<ShowResponse>> GetById([FromRoute] Guid showId)
         {
             var response = await _mediator.Send(new GetShowByIdQuery { ShowId = showId });
@@ -48,6 +49,7 @@ namespace Shows.Api.Controllers
         [HttpGet("{showId}/detail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         public async Task<ActionResult<ShowDetailResponse>> GetDetailById([FromRoute] Guid showId)
         {
             var response = await _mediator.Send(new GetShowDetailByIdQuery { ShowId = showId });
@@ -58,6 +60,7 @@ namespace Shows.Api.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [AllowAnonymous]
         public async Task<ActionResult<List<ShowResponse>>> GetAll()
         {
             var response = await _mediator.Send(new GetShowsQuery());
@@ -164,6 +167,7 @@ namespace Shows.Api.Controllers
 
         [HttpPost("CAPROUTE-ChangedShowStatus")]
         [CapSubscribe(Ticket4UDomainEventsConstants.ChangedShowStatus)]
+        [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> ChangeShowStatus(ChangedShowStatusEvent changedShowStatusEvent)
         {
             var command = _mapper.Map<ChangeShowStatusCommand>(changedShowStatusEvent);

@@ -12,6 +12,7 @@ public static class WebApplicationExtensions
             var context = serviceScope.ServiceProvider.GetService<ShowsDbContext>();
             try
             {
+                context.Database.EnsureDeleted();//DELETE IN PROD!
                 context.Database.Migrate();
             }
             catch (Exception ex)

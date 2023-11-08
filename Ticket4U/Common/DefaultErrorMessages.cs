@@ -26,6 +26,10 @@ public static class DefaultErrorMessages
 
     public static readonly string ShowNameLength = "Show name is to long!";
 
+    public static readonly string ShowDescriptionIsRequired = "Show description is required!";
+
+    public static readonly string ShowDescriptionLength = "Show description is to long!";
+
     public static readonly string ShowLocationIsRequired = "Show location is required!";
 
     public static readonly string ShowStatusIsRequired = "Show status is required!";

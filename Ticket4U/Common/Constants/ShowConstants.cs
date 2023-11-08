@@ -4,6 +4,8 @@ public static class ShowConstants
 {
     public static int ShowNameMaxLenght = 100;
 
+    public static int ShowDescriptionMaxLenght = 100;
+
     public static int ShowLocationMaxLenght = 100;
 
     public static int MoneyCurrencyExactLength = 3;

@@ -70,12 +70,19 @@ public class AuthenticationService : IAuthenticationService
             roleClaims.Add(new Claim("roles", roles[i]));
         }
 
+        if (!user.IsAdmin)//If it is admin, automatically is added roles: Admin
+        {
+            roleClaims.Add(new Claim("roles", "User"));
+        }
+
         var claims = new[]
         {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id)
+            new Claim("firstName", user.FirstName),
+            new Claim("lastName", user.LastName),
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim("uid", user.Id)
             }
         .Union(userClaims)
         .Union(roleClaims);

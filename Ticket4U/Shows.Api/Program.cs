@@ -25,17 +25,16 @@ builder.Host.UseSerilog((context, configuration) =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseSerilogRequestLogging();
 
 //app.UseHttpsRedirection();
 
 app.UseCustomExceptionHandler();
+
+app.UseCors("CORS");
 
 app.UseAuthorization();
 

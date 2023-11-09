@@ -1,5 +1,6 @@
 ﻿using Reservations.Application;
 using Reservations.Infrastructure;
+using Shared.Api.Cors;
 using Shared.Api.FluentValidation;
 using Shared.Api.Swagger;
 
@@ -18,6 +19,8 @@ public static class IocApi
         services.AddCustomFluentValidation(assembly);
 
         services.AddSwaggerSecurity("Reservations API", "v1");
+
+        services.ConfigureCors();
 
         return services;
     }

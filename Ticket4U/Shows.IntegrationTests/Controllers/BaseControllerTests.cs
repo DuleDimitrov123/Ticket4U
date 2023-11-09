@@ -1,18 +1,17 @@
-﻿using Shows.Api.Requests.Categories;
+﻿using Microsoft.AspNetCore.Http;
+using Shouldly;
+using Shows.Api.Requests.Categories;
+using Shows.Api.Requests.Performers;
+using Shows.Api.Requests.Shows;
+using Shows.Application.Features.Categories.Queries;
+using Shows.Application.Features.Performers.Queries;
+using Shows.Application.Features.Shows.Queries;
 using Shows.IntegrationTests.Base;
 using Shows.IntegrationTests.Constants;
-using System.Net.Http.Json;
 using System.Net;
-using System.Text.Json;
-using Shouldly;
-using Shows.Application.Features.Categories.Queries;
-using Shows.Api.Requests.Performers;
-using Shows.Application.Features.Performers.Queries;
+using System.Net.Http.Json;
 using System.Text;
-using Shows.Application.Features.Shows.Queries;
-using Shows.Api.Requests.Shows;
-using Microsoft.AspNetCore.Http;
-using Shows.Domain.Shows;
+using System.Text.Json;
 
 namespace Shows.IntegrationTests.Controllers;
 
@@ -174,6 +173,7 @@ public class BaseControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
         var newShow = new CreateShowRequest()
         {
             Name = "Test show 2",
+            Description = "ShowDescription",
             Location = "Test location",
             NumberOfplaces = 100,
             TicketPriceCurrency = "RSD",

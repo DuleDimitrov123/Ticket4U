@@ -1,13 +1,11 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using Shouldly;
 using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Commands.CreateShow;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
-using Shared.Domain;
-using MediatR;
-using Shows.Application.Features.Shows.Notifications.ShowCreated;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
@@ -52,6 +50,7 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
         {
             Name = "ShowName",
             Location = "ShowLocation",
+            Description = "ShowDescription",
             NumberOfplaces = 100,
             TicketPriceCurrency = "rsd",
             TickerPriceAmount = 1000,

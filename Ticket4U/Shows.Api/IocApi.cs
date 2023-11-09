@@ -1,5 +1,4 @@
-﻿using Shared.Api.Cors;
-using Shared.Api.FluentValidation;
+﻿using Shared.Api.FluentValidation;
 using Shared.Api.Swagger;
 using Shows.Application;
 using Shows.Infrastructure;
@@ -20,8 +19,6 @@ public static class IocApi
         services.AddCustomFluentValidation(assembly);
 
         services.AddSwaggerSecurity("Shows API", "v1");
-
-        services.ConfigureCors();
 
         return services;
     }

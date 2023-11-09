@@ -1,7 +1,4 @@
-﻿using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
-using DotNet.Testcontainers.Containers;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -9,28 +6,26 @@ using Microsoft.Extensions.Logging;
 using Shows.Application.Contracts.Outbox;
 using Shows.Infrastructure.Persistance;
 using Shows.IntegrationTests.Overrides;
+using Testcontainers.MsSql;
 
 namespace Shows.IntegrationTests.Base;
 
 public class CustomWebApplicationFactory<TStartup>
             : WebApplicationFactory<TStartup>, IAsyncLifetime where TStartup : class
 {
-    private readonly MsSqlTestcontainer _container =
-        new TestcontainersBuilder<MsSqlTestcontainer>()
-        .WithDatabase(new MsSqlTestcontainerConfiguration
-        {
-            Database = "ShowsIntegrationTests",
-            Password = "localdevpassword#123",
-        })
-        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-        .WithCleanUp(true)
-        .Build();
+    //If you want to connect to db, connectionString (change port): Server=localhost,52159;Database=master;User Id=sa;Password=localdevpassword#123;
+    private readonly MsSqlContainer _container =
+        new MsSqlBuilder()
+            .WithPassword("localdevpassword#123")
+            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithCleanUp(true)
+            .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            services.AddTestDbContext(_container.ConnectionString);
+            services.AddTestDbContext(_container.GetConnectionString());
 
             services.RemoveAll<IShowPublisher>();
             services.AddScoped<IShowPublisher, TestShowPublisher>();

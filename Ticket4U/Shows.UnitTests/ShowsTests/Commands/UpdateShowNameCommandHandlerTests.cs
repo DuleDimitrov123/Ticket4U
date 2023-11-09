@@ -1,7 +1,6 @@
 ﻿using Moq;
 using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Commands.UpdateShowName;
-using Shows.Domain.Performers;
 using Shows.Domain.Shows;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
@@ -15,7 +14,7 @@ public class UpdateShowNameCommandHandlerTests
         var initialShowName = "ShowName";
         var updatedShowName = "UpdatedShowName";
 
-        var show = Show.Create(initialShowName, "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create(initialShowName, "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), Guid.NewGuid(), Guid.NewGuid());
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());

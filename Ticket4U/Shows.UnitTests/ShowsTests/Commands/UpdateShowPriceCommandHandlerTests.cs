@@ -14,7 +14,7 @@ public class UpdateShowPriceCommandHandlerTests
         var initialShowPrice = 50;
         var updatedShowPrice = 150;
 
-        var show = Show.Create("ShowName", "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create("ShowName", "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", initialShowPrice), DateTime.Now.AddDays(10), Guid.NewGuid(), Guid.NewGuid());
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());

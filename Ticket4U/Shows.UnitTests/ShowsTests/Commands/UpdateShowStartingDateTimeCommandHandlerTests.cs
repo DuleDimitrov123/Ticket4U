@@ -15,7 +15,7 @@ public class UpdateShowStartingDateTimeCommandHandlerTests
         var initialShowStartingDateTime = DateTime.Now.AddDays(30);
         var updatedShowStartingDateTime = DateTime.Now.AddDays(60);
 
-        var show = Show.Create("ShowName", "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create("ShowName", "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 50), initialShowStartingDateTime, Guid.NewGuid(), Guid.NewGuid());
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());

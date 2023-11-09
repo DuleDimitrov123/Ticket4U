@@ -29,7 +29,10 @@ public class Utilities
         context.SaveChangesAsync();
 
         context.Shows.Add(
-            Show.Create("Test Show", "Test location", NumberOfPlaces.Create(100),
+            Show.Create("Test Show",
+            "ShowDescription",
+            "Test location",
+            NumberOfPlaces.Create(100),
             Money.Create("RSD", 100),
             DateTime.Now.AddDays(30),
             GetPerformerByName("Performer1", context)!.Id,

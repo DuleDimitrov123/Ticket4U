@@ -24,7 +24,7 @@ public class GetShowByIdQueryHandlerTests : QueryCommandHandlerTestBase
         var categoryPropertyInfo = typeof(Category).GetProperty("Id");
         categoryPropertyInfo!.SetValue(category, Guid.NewGuid());
 
-        var show = Show.Create("ShowName", "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create("ShowName", "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), performer.Id, category.Id);
 
         var showsMockRepository = new Mock<IRepository<Show>>();
@@ -34,7 +34,7 @@ public class GetShowByIdQueryHandlerTests : QueryCommandHandlerTestBase
         var handler = new GetShowByIdQueryHandler(_mapper, showsMockRepository.Object);
 
         //act
-        var result = await handler.Handle(new GetShowByIdQuery() { ShowId = Guid.NewGuid()}, CancellationToken.None);
+        var result = await handler.Handle(new GetShowByIdQuery() { ShowId = Guid.NewGuid() }, CancellationToken.None);
 
         //assert
         result.Name.ShouldBe(show.Name);

@@ -1,5 +1,4 @@
-﻿using Shared.Api.Cors;
-using Shared.Api.FluentValidation;
+﻿using Shared.Api.FluentValidation;
 using Users.Application;
 using Users.Infrastructure;
 
@@ -13,8 +12,6 @@ public static class IocApi
         services.AddApplication();
 
         services.AddCustomFluentValidation(typeof(IocApi).Assembly);
-
-        services.ConfigureCors();
 
         return services;
     }

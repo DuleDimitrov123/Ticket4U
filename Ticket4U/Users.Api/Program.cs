@@ -26,8 +26,6 @@ app.UseSwaggerUI();
 
 app.UseCustomExceptionHandler();
 
-app.UseCors("CORS");
-
 app.UseAuthentication();
 
 app.UseAuthorization();

@@ -8,21 +8,25 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Ticket4U.ApiGateway/Ticket4U.ApiGateway.csproj", "Ticket4U.ApiGateway/"]
+COPY ["Shows/Shows.Api/Shows.Api.csproj", "Shows/Shows.Api/"]
 COPY ["Shared/Shared.Api/Shared.Api.csproj", "Shared/Shared.Api/"]
 COPY ["Shared/Shared.Infrastructure/Shared.Infrastructure.csproj", "Shared/Shared.Infrastructure/"]
 COPY ["Shared/Shared.Application/Shared.Application.csproj", "Shared/Shared.Application/"]
 COPY ["Shared/Shared.Domain/Shared.Domain.csproj", "Shared/Shared.Domain/"]
-RUN dotnet restore "./Ticket4U.ApiGateway/./Ticket4U.ApiGateway.csproj"
+COPY ["Shows/Shows.Infrastructure/Shows.Infrastructure.csproj", "Shows/Shows.Infrastructure/"]
+COPY ["Shows/Shows.Application/Shows.Application.csproj", "Shows/Shows.Application/"]
+COPY ["Shows/Shows.Domain/Shows.Domain.csproj", "Shows/Shows.Domain/"]
+COPY ["Common/Shows.Common.csproj", "Common/"]
+RUN dotnet restore "./Shows/Shows.Api/./Shows.Api.csproj"
 COPY . .
-WORKDIR "/src/Ticket4U.ApiGateway"
-RUN dotnet build "./Ticket4U.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Shows/Shows.Api"
+RUN dotnet build "./Shows.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Ticket4U.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Shows.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Ticket4U.ApiGateway.dll"]
+ENTRYPOINT ["dotnet", "Shows.Api.dll"]

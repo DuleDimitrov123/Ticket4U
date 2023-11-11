@@ -4,7 +4,7 @@ services:
   reservations.api:
     build:
       context: .
-      dockerfile: Reservations.Api/Dockerfile
+      dockerfile: Reservations/Reservations.Api/Dockerfile
     ports:
       - "8080:80"
     environment:
@@ -16,7 +16,7 @@ services:
   shows.api:
     build:
       context: .
-      dockerfile: Shows.Api/Dockerfile
+      dockerfile: Shows/Shows.Api/Dockerfile
     ports:
       - "8081:80"
     environment:
@@ -28,7 +28,7 @@ services:
   users.api:
     build:
       context: .
-      dockerfile: Users.Api/Dockerfile
+      dockerfile: Users/Users.Api/Dockerfile
     ports:
       - "8082:80"
     environment:
@@ -50,6 +50,7 @@ services:
     depends_on:
       - reservations.api
       - shows.api
+      - users.api
 
   reservations.mssql.database:
     image: "mcr.microsoft.com/mssql/server"

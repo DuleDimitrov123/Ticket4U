@@ -25,6 +25,10 @@ public class CreateShowRequestValidator : AbstractValidator<CreateShowRequest>
             .MaximumLength(ShowConstants.ShowDescriptionMaxLenght)
             .WithMessage(DefaultErrorMessages.ShowDescriptionLength);
 
+        RuleFor(request => request.Picture)
+            .NotEmpty()
+            .WithMessage(DefaultErrorMessages.ShowPictureIsRequired);
+
         RuleFor(request => request.Location)
             .NotEmpty()
             .WithMessage(DefaultErrorMessages.ShowLocationIsRequired);

@@ -27,9 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared.IntegrationTests\Shared.IntegrationTests.csproj" />
     <ProjectReference Include="..\Reservations.Api\Reservations.Api.csproj" />
     <ProjectReference Include="..\Reservations.Infrastructure\Reservations.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared.IntegrationTests\Shared.IntegrationTests.csproj" />
   </ItemGroup>
 
 </Project>

@@ -175,6 +175,7 @@ public class BaseControllerTests : IClassFixture<CustomWebApplicationFactory<Pro
             Name = "Test show 2",
             Description = "ShowDescription",
             Location = "Test location",
+            Picture = "DefaultPictureBase64",
             NumberOfplaces = 100,
             TicketPriceCurrency = "RSD",
             TickerPriceAmount = 100,

@@ -51,6 +51,7 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
             Name = "ShowName",
             Location = "ShowLocation",
             Description = "ShowDescription",
+            Picture = "DefaultPictureBase64",
             NumberOfplaces = 100,
             TicketPriceCurrency = "rsd",
             TickerPriceAmount = 1000,

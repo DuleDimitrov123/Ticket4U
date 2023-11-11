@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared.Api\Shared.Api.csproj" />
     <ProjectReference Include="..\Reservations.Application\Reservations.Application.csproj" />
     <ProjectReference Include="..\Reservations.Infrastructure\Reservations.Infrastructure.csproj" />
+    <ProjectReference Include="..\Shared.Api\Shared.Api.csproj" />
   </ItemGroup>
 
 </Project>

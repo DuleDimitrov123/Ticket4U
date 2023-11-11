@@ -26,8 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ticket4U\Users.Application\Users.Application.csproj" />
-    <ProjectReference Include="..\Ticket4U\Users.Infrastructure\Users.Infrastructure.csproj" />
+    <ProjectReference Include="..\Users.Infrastructure\Users.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

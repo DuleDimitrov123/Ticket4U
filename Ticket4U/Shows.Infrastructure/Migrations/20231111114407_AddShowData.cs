@@ -82,33 +82,39 @@ namespace Shows.Infrastructure.Migrations
             var cirkusDeLaVega1Id = new Guid("219302f1-18f7-449f-84e2-6504cb96f805");
             var cirkusDeLaVega2Id = new Guid("ff0bac9e-e6b4-4b07-8d10-6d0afdad70bd");
 
+            //var basePath = AppDomain.CurrentDomain.BaseDirectory;
+            //var jsonPath = Path.Combine(basePath, "base64images.json");
+
+            //var jsonContent = File.ReadAllText(jsonPath);
+            //var imageData = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonContent);
+
             migrationBuilder.InsertData(
                 table: "Shows",
-                columns: new[] { "Id", "Name", "Description", "Location", "Status", "NumberOfPlaces", "TicketPrice_Currency", "TicketPrice_Amount", "PerformerId", "CategoryId", "StartingDateTime" },
+                columns: new[] { "Id", "Name", "Description", "Picture", "Location", "Status", "NumberOfPlaces", "TicketPrice_Currency", "TicketPrice_Amount", "PerformerId", "CategoryId", "StartingDateTime" },
                 values: new object[,]
                 {
                     //Zdravko Colic concerts
-                    { ZdravkoColicConcert1Id, "Zdravko Colic concert Belgrade", "This is first concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2023-02-18 20:00:00.0000" },
-                    { ZdravkoColicConcert2Id, "Zdravko Colic concert Belgrade", "This is second concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2023-09-18 20:00:00.0000" },
-                    { ZdravkoColicConcert3Id, "Zdravko Colic concert Belgrade", "This is third concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", "Belgrade Arena", "HasTickets", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2024-09-18 20:00:00.0000" },
-                    { ZdravkoColicConcert4Id, "Zdravko Colic concert Zagreb", "This is first concert of Zdravko Colic in Zagreb, Croatia in Zagreb Arena.", "Zagreb Arena", "HasTickets", "1000", "eur", "30", ZdravkoColicId, concertId, "2024-08-18 20:00:00.0000" },
-                    { ZdravkoColicConcert5Id, "Zdravko Colic concert Jahorina", "This is first concert of Zdravko Colic in Jahorina, BiH in one of the bes hotels: Jahorina hotel.", "Jahorina hotel", "HasTickets", "150", "eur", "60", ZdravkoColicId, concertId, "2023-12-12 20:00:00.0000" },
+                    { ZdravkoColicConcert1Id, "Zdravko Colic concert Belgrade", "This is first concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/ZdravkoColicConcert1.txt"), "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2023-02-18 20:00:00.0000" },
+                    { ZdravkoColicConcert2Id, "Zdravko Colic concert Belgrade", "This is second concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/ZdravkoColicConcert2.txt"), "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2023-09-18 20:00:00.0000" },
+                    { ZdravkoColicConcert3Id, "Zdravko Colic concert Belgrade", "This is third concert of Zdravko Colic in Belgrade, Serbia in Belgrade Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/ZdravkoColicConcert3.txt"),"Belgrade Arena", "HasTickets", "1000", "rsd", "2500", ZdravkoColicId, concertId, "2024-09-18 20:00:00.0000" },
+                    { ZdravkoColicConcert4Id, "Zdravko Colic concert Zagreb", "This is first concert of Zdravko Colic in Zagreb, Croatia in Zagreb Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/ZdravkoColicConcert4.txt"),"Zagreb Arena", "HasTickets", "1000", "eur", "30", ZdravkoColicId, concertId, "2024-08-18 20:00:00.0000" },
+                    { ZdravkoColicConcert5Id, "Zdravko Colic concert Jahorina", "This is first concert of Zdravko Colic in Jahorina, BiH in one of the bes hotels: Jahorina hotel.", Base64Pictures.ReadFromFile("Migrations/Pictures/ZdravkoColicConcert5.txt"), "Jahorina hotel", "HasTickets", "150", "eur", "60", ZdravkoColicId, concertId, "2023-12-12 20:00:00.0000" },
 
                     //Raf Camora concerts
-                    { RafCamoraConcert1Id, "Raf Camora concert Belgrade", "This is first concert of Raf Camora in Belgrade, Serbia in Belgrade Arena.", "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", RafCamoraId, concertId, "2023-05-18 20:00:00.0000" },
-                    { RafCamoraConcert2Id, "Raf Camora concert Vienna", "This is first concert of Raf Camora in Vienna, Austia in the biggest arena in Europe-Vienna Arena.", "Vienna Arena", "IsSoldOut", "2000", "eur", "80", RafCamoraId, concertId, "2020-09-18 20:00:00.0000" },
-                    { RafCamoraConcert3Id, "Raf Camora concert Paris", "This is first concert of Raf Camora in Paris, France in Paris Arena. This is the biggest concert in Paris in october 2024.","Paris Arena", "HasTickets", "2400", "eur", "100", RafCamoraId, concertId, "2024-10-16 20:00:00.0000" },
-                    { RafCamoraConcert4Id, "Raf Camora concert Belgrade", "This is second concert of Raf Camora in Belgrade, Serbia. It will be on Splav Tag.","Splav Tag", "HasTickets", "2400", "rsd", "3500", RafCamoraId, concertId, "2024-07-16 20:00:00.0000" },
+                    { RafCamoraConcert1Id, "Raf Camora concert Belgrade", "This is first concert of Raf Camora in Belgrade, Serbia in Belgrade Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/RafCamoraConcert1.txt"), "Belgrade Arena", "IsSoldOut", "1000", "rsd", "2500", RafCamoraId, concertId, "2023-05-18 20:00:00.0000" },
+                    { RafCamoraConcert2Id, "Raf Camora concert Vienna", "This is first concert of Raf Camora in Vienna, Austia in the biggest arena in Europe-Vienna Arena.", Base64Pictures.ReadFromFile("Migrations/Pictures/RafCamoraConcert2.txt"), "Vienna Arena", "IsSoldOut", "2000", "eur", "80", RafCamoraId, concertId, "2020-09-18 20:00:00.0000" },
+                    { RafCamoraConcert3Id, "Raf Camora concert Paris", "This is first concert of Raf Camora in Paris, France in Paris Arena. This is the biggest concert in Paris in october 2024.", Base64Pictures.ReadFromFile("Migrations/Pictures/RafCamoraConcert3.txt"),"Paris Arena", "HasTickets", "2400", "eur", "100", RafCamoraId, concertId, "2024-10-16 20:00:00.0000" },
+                    { RafCamoraConcert4Id, "Raf Camora concert Belgrade", "This is second concert of Raf Camora in Belgrade, Serbia. It will be on Splav Tag.", Base64Pictures.ReadFromFile("Migrations/Pictures/RafCamoraConcert4.txt"),"Splav Tag", "HasTickets", "2400", "rsd", "3500", RafCamoraId, concertId, "2024-07-16 20:00:00.0000" },
 
                     //Beogradsko dramsko pozoriste 
-                    { beogradskoDramskoPozoriste1Id, "Gospodja ministarka", "Gospodja ministarka is a theater play based on Branislav Nušić's comedy from 1929.", "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-16 20:00:00.0000" },
+                    { beogradskoDramskoPozoriste1Id, "Gospodja ministarka", "Gospodja ministarka is a theater play based on Branislav Nušić's comedy from 1929.", Base64Pictures.ReadFromFile("Migrations/Pictures/BeogradskoDramsko1.txt"), "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-16 20:00:00.0000" },
                     { beogradskoDramskoPozoriste2Id, "Pokondirena tikva", "Pokondirena tikva is a comedy by Jovan Sterija Popović from 1838. In this work, Jovan Sterija Popović made fun of the main character, Fema, who, crazy about nobleness, tries to escape from her craftsman's world and make her way into higher social circles.",
-                        "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-15 20:00:00.0000" },
-                    { beogradskoDramskoPozoriste3Id, "Neki to vole vruce", "This is one musical which is performed in Nis Serbia for couple of years. It is written by Aleksandar Marinkovic.", "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-14 20:00:00.0000" },
+                        Base64Pictures.ReadFromFile("Migrations/Pictures/BeogradskoDramsko2.txt"), "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-15 20:00:00.0000" },
+                    { beogradskoDramskoPozoriste3Id, "Neki to vole vruce", "This is one musical which is performed in Nis Serbia for couple of years. It is written by Aleksandar Marinkovic.", Base64Pictures.ReadFromFile("Migrations/Pictures/BeogradskoDramsko3.txt"), "Beogradsko dramsko pozoriste", "HasTickets", "400", "rsd", "2000", BeogradskoDramskoPozoristeId, theaterPerformaceId, "2024-10-14 20:00:00.0000" },
 
                     //Cirkus De La Vega
-                    { cirkusDeLaVega1Id, "Circus Performance Cair", "This is the first circus performance in Nis, Serbia which is performed by one of the best circus groups on Balkan.", "Park Cair Nis", "HasTickets", "50", "rsd", "350", CirkusDeLaVegaId, circusId, "2024-05-05 18:00:00.0000" },
-                    { cirkusDeLaVega2Id, "Circus Performance Pirot", "This is the first circus performance in Pirot, Serbia which is performed by one of the best circus groups on Balkan.", "Pirotska tvrdjava", "HasTickets", "50", "rsd", "350", CirkusDeLaVegaId, circusId, "2024-06-05 18:00:00.0000" },
+                    { cirkusDeLaVega1Id, "Circus Performance Cair", "This is the first circus performance in Nis, Serbia which is performed by one of the best circus groups on Balkan.", Base64Pictures.ReadFromFile("Migrations/Pictures/CirkusDeLaVega1.txt"), "Park Cair Nis", "HasTickets", "50", "rsd", "350", CirkusDeLaVegaId, circusId, "2024-05-05 18:00:00.0000" },
+                    { cirkusDeLaVega2Id, "Circus Performance Pirot", "This is the first circus performance in Pirot, Serbia which is performed by one of the best circus groups on Balkan.", Base64Pictures.ReadFromFile("Migrations/Pictures/CirkusDeLaVega2.txt"), "Pirotska tvrdjava", "HasTickets", "50", "rsd", "350", CirkusDeLaVegaId, circusId, "2024-06-05 18:00:00.0000" },
                 });
 
             //ShowMessage

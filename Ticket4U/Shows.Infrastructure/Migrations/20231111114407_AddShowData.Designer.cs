@@ -12,7 +12,7 @@ using Shows.Infrastructure.Persistance;
 namespace Shows.Infrastructure.Migrations
 {
     [DbContext(typeof(ShowsDbContext))]
-    [Migration("20231108150112_AddShowData")]
+    [Migration("20231111114407_AddShowData")]
     partial class AddShowData
     {
         /// <inheritdoc />
@@ -113,6 +113,10 @@ namespace Shows.Infrastructure.Migrations
 
                     b.Property<Guid>("PerformerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Picture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartingDateTime")
                         .HasColumnType("datetime2");

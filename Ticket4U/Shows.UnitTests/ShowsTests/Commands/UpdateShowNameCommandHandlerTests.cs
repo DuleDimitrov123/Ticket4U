@@ -14,7 +14,7 @@ public class UpdateShowNameCommandHandlerTests
         var initialShowName = "ShowName";
         var updatedShowName = "UpdatedShowName";
 
-        var show = Show.Create(initialShowName, "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create(initialShowName, "ShowDescription", "ShowPictureBase64", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), Guid.NewGuid(), Guid.NewGuid());
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());

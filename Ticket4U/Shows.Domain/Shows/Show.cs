@@ -22,6 +22,11 @@ public class Show : AggregateRoot
     public string Description { get; set; }
 
     /// <summary>
+    /// Show picture
+    /// </summary>
+    public string Picture { get; set; }
+
+    /// <summary>
     /// Show location
     /// </summary>
     public string Location { get; private set; }
@@ -72,13 +77,14 @@ public class Show : AggregateRoot
         ShowMessages = new List<ShowMessage>();
     }
 
-    private Show(string name, string description, string location, NumberOfPlaces numberOfPlaces,
+    private Show(string name, string description, string picture, string location, NumberOfPlaces numberOfPlaces,
         Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId)
     {
         ShowMessages = new List<ShowMessage>();
 
         Name = name;
         Description = description;
+        Picture = picture;
         Location = location;
         NumberOfPlaces = numberOfPlaces;
         TicketPrice = ticketPrice;
@@ -93,19 +99,19 @@ public class Show : AggregateRoot
 
     #region domain logic
 
-    public static Show Create(string name, string description, string location, NumberOfPlaces numberOfPlaces,
+    public static Show Create(string name, string description, string picture, string location, NumberOfPlaces numberOfPlaces,
         Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId)
     {
         IList<string> errorMessages = new List<string>();
 
-        ValidateShowCreate(name, description, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId, errorMessages);
+        ValidateShowCreate(name, description, picture, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId, errorMessages);
 
         if (errorMessages.Count > 0)
         {
             throw new DomainException(errorMessages);
         }
 
-        return new Show(name, description, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId);
+        return new Show(name, description, picture, location, numberOfPlaces, ticketPrice, startingDateTime, performerId, categoryId);
     }
 
     public void UpdateStartingDateTime(DateTime newStartingDateTime)
@@ -154,12 +160,14 @@ public class Show : AggregateRoot
         TicketPrice = Money.Create(TicketPrice.Currency, newAmount);
     }
 
-    public static void ValidateShowCreate(string name, string description, string location, NumberOfPlaces numberOfPlaces,
+    public static void ValidateShowCreate(string name, string description, string picture, string location, NumberOfPlaces numberOfPlaces,
         Money ticketPrice, DateTime startingDateTime, Guid performerId, Guid categoryId, IList<string> errorMessages)
     {
         ValidateShowName(name, errorMessages);
 
         ValidateShowDescription(description, errorMessages);
+
+        ValidateShowPicture(picture, errorMessages);
 
         ValidateShowLocation(location, errorMessages);
 
@@ -217,6 +225,14 @@ public class Show : AggregateRoot
         if (description.Length > ShowConstants.ShowDescriptionMaxLenght)
         {
             errorMessages.Add(DefaultErrorMessages.ShowDescriptionLength);
+        }
+    }
+
+    private static void ValidateShowPicture(string picture, IList<string> errorMessages)
+    {
+        if (string.IsNullOrEmpty(picture))
+        {
+            errorMessages.Add(DefaultErrorMessages.ShowPictureIsRequired);
         }
     }
 

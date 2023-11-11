@@ -23,4 +23,6 @@ public class ShowDetailResponse
     public Guid CategoryId { get; set; }
 
     public IList<ShowMessageResponse> ShowMessages { get; set; }
+
+    public string Picture { get; set; }
 }

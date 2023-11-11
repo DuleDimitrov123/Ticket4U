@@ -6,6 +6,8 @@ public record CreateShowRequest
 
     public string Description { get; set; }
 
+    public string Picture { get; set; }
+
     public string Location { get; set; }
 
     public int NumberOfplaces { get; set; }

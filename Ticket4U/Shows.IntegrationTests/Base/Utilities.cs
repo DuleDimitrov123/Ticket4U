@@ -31,6 +31,7 @@ public class Utilities
         context.Shows.Add(
             Show.Create("Test Show",
             "ShowDescription",
+            "ShowPictureBase64",
             "Test location",
             NumberOfPlaces.Create(100),
             Money.Create("RSD", 100),

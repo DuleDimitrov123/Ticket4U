@@ -24,7 +24,7 @@ public class GetShowByIdQueryHandlerTests : QueryCommandHandlerTestBase
         var categoryPropertyInfo = typeof(Category).GetProperty("Id");
         categoryPropertyInfo!.SetValue(category, Guid.NewGuid());
 
-        var show = Show.Create("ShowName", "ShowDescription", "ShowLocation", NumberOfPlaces.Create(100),
+        var show = Show.Create("ShowName", "ShowDescription", "ShowPictureBase64", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), performer.Id, category.Id);
 
         var showsMockRepository = new Mock<IRepository<Show>>();

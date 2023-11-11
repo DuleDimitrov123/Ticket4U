@@ -14,7 +14,7 @@ public class UpdateShowLocationCommandHandlerTests
         var initialShowLocation = "ShowLocation";
         var updatedShowLocation = "UpdatedShowLocation";
 
-        var show = Show.Create("ShowName", "ShowDescription", initialShowLocation, NumberOfPlaces.Create(100),
+        var show = Show.Create("ShowName", "ShowDescription", "ShowPictureBase64", initialShowLocation, NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), Guid.NewGuid(), Guid.NewGuid());
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());

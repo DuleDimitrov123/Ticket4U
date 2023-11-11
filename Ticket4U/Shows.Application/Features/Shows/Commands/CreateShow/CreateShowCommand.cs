@@ -9,6 +9,8 @@ public class CreateShowCommand : IRequest<Guid>
 
     public string Description { get; set; }
 
+    public string Picture { get; set; }
+
     public string Location { get; set; }
 
     public int NumberOfplaces { get; set; }
@@ -27,6 +29,7 @@ public class CreateShowCommand : IRequest<Guid>
     {
         return Show.Create(Name,
             Description,
+            Picture,
             Location,
             NumberOfPlaces.Create(NumberOfplaces),
             Money.Create(TicketPriceCurrency, TickerPriceAmount),

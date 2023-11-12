@@ -70,6 +70,8 @@ namespace Shows.Api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateShowRequest request)
         {
@@ -80,6 +82,7 @@ namespace Shows.Api.Controllers
 
         [HttpPut("{showId}/newName")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowName([FromRoute] Guid showId, [FromBody] UpdateShowNameRequest request)
@@ -95,6 +98,7 @@ namespace Shows.Api.Controllers
 
         [HttpPut("{showId}/newLocation")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowLocation([FromRoute] Guid showId, [FromBody] UpdateShowLocationRequest request)
@@ -110,6 +114,7 @@ namespace Shows.Api.Controllers
 
         [HttpPut("{showId}/newPrice")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowPrice([FromRoute] Guid showId, [FromBody] UpdateShowPriceRequest request)
@@ -125,6 +130,7 @@ namespace Shows.Api.Controllers
 
         [HttpPut("{showId}/newStartingDateTime")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdateShowStartingDateTime([FromRoute] Guid showId, [FromBody] UpdateShowStartingDateTimeRequest request)
@@ -140,6 +146,7 @@ namespace Shows.Api.Controllers
 
         [HttpDelete("{showId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> DeleteShow([FromRoute] Guid showId)
@@ -151,6 +158,7 @@ namespace Shows.Api.Controllers
 
         [HttpPost("{showId}/showMessages")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> AddShowMessage([FromRoute] Guid showId, [FromBody] AddShowMessageRequest request)

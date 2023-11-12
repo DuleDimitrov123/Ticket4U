@@ -58,6 +58,8 @@ public class ReservationsController : ControllerBase
     }
 
     [HttpGet("user/{userId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute] Guid userId)
     {
         var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });
@@ -66,6 +68,8 @@ public class ReservationsController : ControllerBase
     }
 
     [HttpPut("{reservationId}/newNumberOfResevations")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> UpdateNumberOfReservations([FromRoute] Guid reservationId, [FromBody] UpdateNumberOfReservationsRequest request)
     {
         await _mediator.Send(new UpdateNumberOfReservationsCommand()

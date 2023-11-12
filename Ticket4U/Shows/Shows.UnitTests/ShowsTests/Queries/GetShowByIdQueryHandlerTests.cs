@@ -1,17 +1,35 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using AutoMapper;
+using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shouldly;
-using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Queries.GetShowById;
+using Shows.Application.Profiles;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Queries;
 
-public class GetShowByIdQueryHandlerTests : QueryCommandHandlerTestBase
+public class GetShowByIdQueryHandlerTests
 {
-    [Fact]
-    public async Task GetShowById()
+    private readonly IMapper _mapper;
+
+    public GetShowByIdQueryHandlerTests()
+    {
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    public async Task GetShowById([Frozen] Mock<IQueryRepository<Show>> mockQueryRepository,
+        GetShowByIdQueryHandler handler)
     {
         //arrange
         var performer = Performer.Create("Performer1");
@@ -27,11 +45,10 @@ public class GetShowByIdQueryHandlerTests : QueryCommandHandlerTestBase
         var show = Show.Create("ShowName", "ShowDescription", "ShowPictureBase64", "ShowLocation", NumberOfPlaces.Create(100),
             Money.Create("rsd", 100), DateTime.Now.AddDays(10), performer.Id, category.Id);
 
-        var showsMockRepository = new Mock<IRepository<Show>>();
-        showsMockRepository.Setup(s => s.GetById(It.IsAny<Guid>()))
+        mockQueryRepository.Setup(s => s.GetById(It.IsAny<Guid>()))
             .ReturnsAsync(show);
 
-        var handler = new GetShowByIdQueryHandler(_mapper, showsMockRepository.Object);
+        handler = new GetShowByIdQueryHandler(_mapper, mockQueryRepository.Object);
 
         //act
         var result = await handler.Handle(new GetShowByIdQuery() { ShowId = Guid.NewGuid() }, CancellationToken.None);

@@ -1,22 +1,25 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
+using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Performers;
 
 namespace Shows.Application.Features.Performers.Commands.DeletePerformerInfo;
 
 public class DeletePerformerInfoCommandHandler : IRequestHandler<DeletePerformerInfoCommand, Unit>
 {
-    private readonly IPerformerRepository _repository;
+    private readonly IPerformerQueryRepository _queryRepository;
+    private readonly ICommandRepository<Performer> _commandRepository;
 
-    public DeletePerformerInfoCommandHandler(IPerformerRepository repository)
+    public DeletePerformerInfoCommandHandler(IPerformerQueryRepository repository, ICommandRepository<Performer> commandRepository)
     {
-        _repository = repository;
+        _queryRepository = repository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(DeletePerformerInfoCommand request, CancellationToken cancellationToken)
     {
-        var performer = await _repository.GetPerformerWithPerformerInfos(request.PerformerId);
+        var performer = await _queryRepository.GetPerformerWithPerformerInfos(request.PerformerId);
 
         if (performer == null)
         {
@@ -24,7 +27,7 @@ public class DeletePerformerInfoCommandHandler : IRequestHandler<DeletePerformer
         }
 
         performer.RemovePerformerInfo(request.PerformerInfoNamesToDelete);
-        await _repository.Update(performer);
+        await _commandRepository.Update(performer);
 
         return Unit.Value;
     }

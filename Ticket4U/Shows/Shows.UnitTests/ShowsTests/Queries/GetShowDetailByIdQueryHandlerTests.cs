@@ -1,17 +1,35 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using AutoMapper;
+using Moq;
 using Shouldly;
 using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Queries.GetShowDetailById;
+using Shows.Application.Profiles;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Queries;
 
-public class GetShowDetailByIdQueryHandlerTests : QueryCommandHandlerTestBase
+public class GetShowDetailByIdQueryHandlerTests
 {
-    [Fact]
-    public async Task GetShowDetailById()
+    private readonly IMapper _mapper;
+
+    public GetShowDetailByIdQueryHandlerTests()
+    {
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    public async Task GetShowDetailById([Frozen] Mock<IShowQueryRepository> mockShowQueryRepository,
+        GetShowDetailByIdQueryHandler handler)
     {
         //arrange
         var performer = Performer.Create("Performer1");
@@ -33,11 +51,10 @@ public class GetShowDetailByIdQueryHandlerTests : QueryCommandHandlerTestBase
 
         show.AddShowMessage("ShowMessage1Name", "ShowMessage1Value");
 
-        var showsMockRepository = new Mock<IShowRepository>();
-        showsMockRepository.Setup(s => s.GetShowWithShowMessages(It.IsAny<Guid>()))
+        mockShowQueryRepository.Setup(s => s.GetShowWithShowMessages(It.IsAny<Guid>()))
             .ReturnsAsync(show);
 
-        var handler = new GetShowDetailByIdQueryHandler(_mapper, showsMockRepository.Object);
+        handler = new GetShowDetailByIdQueryHandler(_mapper, mockShowQueryRepository.Object);
 
         //act
         var result = await handler.Handle(new GetShowDetailByIdQuery() { ShowId = Guid.NewGuid() }, CancellationToken.None);

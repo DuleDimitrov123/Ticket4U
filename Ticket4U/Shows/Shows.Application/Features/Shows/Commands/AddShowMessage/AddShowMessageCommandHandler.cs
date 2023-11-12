@@ -1,22 +1,25 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
+using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Shows;
 
 namespace Shows.Application.Features.Shows.Commands.AddShowMessage;
 
 public class AddShowMessageCommandHandler : IRequestHandler<AddShowMessageCommand, Unit>
 {
-    private readonly IShowRepository _repository;
+    private readonly IShowQueryRepository _showQueryRepository;
+    private readonly ICommandRepository<Show> _commandRepository;
 
-    public AddShowMessageCommandHandler(IShowRepository repository)
+    public AddShowMessageCommandHandler(IShowQueryRepository showRepository, ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
+        _showQueryRepository = showRepository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(AddShowMessageCommand request, CancellationToken cancellationToken)
     {
-        var show = await _repository.GetShowWithShowMessages(request.ShowId);
+        var show = await _showQueryRepository.GetShowWithShowMessages(request.ShowId);
 
         if (show == null)
         {
@@ -24,7 +27,7 @@ public class AddShowMessageCommandHandler : IRequestHandler<AddShowMessageComman
         }
 
         show.AddShowMessage(request.ShowMessageName, request.ShowMessageValue);
-        await _repository.Update(show);
+        await _commandRepository.Update(show);
 
         return Unit.Value;
     }

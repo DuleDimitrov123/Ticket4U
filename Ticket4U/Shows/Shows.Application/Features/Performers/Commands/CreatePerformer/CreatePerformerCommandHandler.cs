@@ -1,17 +1,16 @@
-﻿using AutoMapper;
-using MediatR;
-using Shows.Application.Contracts.Persistance;
+﻿using MediatR;
+using Shared.Application.Contracts.Persistence;
 using Shows.Domain.Performers;
 
 namespace Shows.Application.Features.Performers.Commands.CreatePerformer;
 
 public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerCommand, Guid>
 {
-    private readonly IRepository<Performer> _repository;
+    private readonly ICommandRepository<Performer> _commandRepository;
 
-    public CreatePerformerCommandHandler(IMapper mapper, IRepository<Performer> repository)
+    public CreatePerformerCommandHandler(ICommandRepository<Performer> commandRepository)
     {
-        _repository = repository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Guid> Handle(CreatePerformerCommand request, CancellationToken cancellationToken)
@@ -26,7 +25,7 @@ public class CreatePerformerCommandHandler : IRequestHandler<CreatePerformerComm
             }
         }
 
-        newPerformer = await _repository.Add(newPerformer);
+        newPerformer = await _commandRepository.Add(newPerformer);
 
         return newPerformer.Id;
     }

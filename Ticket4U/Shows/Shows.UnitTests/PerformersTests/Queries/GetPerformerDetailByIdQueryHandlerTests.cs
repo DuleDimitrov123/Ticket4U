@@ -1,26 +1,43 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using AutoMapper;
+using Moq;
 using Shouldly;
 using Shows.Application.Contracts.Persistance;
-using Shows.Application.Features.Performers.Queries.GetPerformerById;
 using Shows.Application.Features.Performers.Queries.GetPerformerDetailById;
-using Shows.UnitTests.Mocks;
+using Shows.Application.Profiles;
+using Shows.Domain.Performers;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.Performers.Queries;
 
-public class GetPerformerDetailByIdQueryHandlerTests : QueryCommandHandlerTestBase
+public class GetPerformerDetailByIdQueryHandlerTests
 {
-    private IMock<IPerformerRepository> _mockSpecificPerformerRepository;
+    private readonly IMapper _mapper;
 
     public GetPerformerDetailByIdQueryHandlerTests()
-        : base()
     {
-        _mockSpecificPerformerRepository = RepositoryMocks.InitSpecificMockPerformerRepository();
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
     }
 
-    [Fact]
-    public async Task GetPerformerDetailByIdTest()
+    [Theory]
+    [AutoMoqData]
+    public async Task GetPerformerDetailByIdTest([Frozen] Mock<IPerformerQueryRepository> mockPerformerQueryRepository,
+        GetPerformerDetailByIdQueryHandler handler)
     {
-        var handler = new GetPerformerDetailByIdQueryHandler(_mapper, _mockSpecificPerformerRepository.Object);
+        var performer = Performer.Create("Performer1",
+            new List<PerformerInfo>()
+            {
+                PerformerInfo.Create("PerformerInfoName1", "PerformerInfoValue1")
+            });
+
+        mockPerformerQueryRepository.Setup(repo => repo.GetPerformerWithPerformerInfos(It.IsAny<Guid>())).ReturnsAsync(performer);
+
+        handler = new GetPerformerDetailByIdQueryHandler(_mapper, mockPerformerQueryRepository.Object);
 
         var result = await handler.Handle(
             new GetPerformerDetailByIdQuery()
@@ -31,13 +48,12 @@ public class GetPerformerDetailByIdQueryHandlerTests : QueryCommandHandlerTestBa
 
         result.ShouldNotBeNull();
 
-        result.Name.ShouldBe(Shows.UnitTests.Dummies.Performers.Performer1.Name);
-
+        result.Name.ShouldBe(performer.Name);
 
         result.PerformerInfos.Select(pi => pi.Name)
-            .ShouldContain(Shows.UnitTests.Dummies.Performers.Performer1.PerformerInfos.Select(pi2 => pi2.Name).FirstOrDefault());
+            .ShouldContain(performer.PerformerInfos.Select(pi2 => pi2.Name).FirstOrDefault());
 
         result.PerformerInfos.Select(pi => pi.Value)
-            .ShouldContain(Shows.UnitTests.Dummies.Performers.Performer1.PerformerInfos.Select(pi2 => pi2.Value).FirstOrDefault());
+            .ShouldContain(performer.PerformerInfos.Select(pi2 => pi2.Value).FirstOrDefault());
     }
 }

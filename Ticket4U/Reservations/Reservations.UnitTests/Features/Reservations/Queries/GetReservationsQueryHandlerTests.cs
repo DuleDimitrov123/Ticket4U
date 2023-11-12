@@ -1,16 +1,19 @@
-﻿using Moq;
-using Reservations.Application.Contracts.Persistance;
-using Reservations.Application.Features.Reservations.Queries.GetReservationById;
+﻿using AutoFixture.Xunit2;
+using Moq;
 using Reservations.Application.Features.Reservations.Queries.GetReservations;
 using Reservations.Domain.Reservations;
+using Reservations.UnitTests.Helpers;
+using Shared.Application.Contracts.Persistence;
 using Shouldly;
 
 namespace Reservations.UnitTests.Features.Reservations.Queries;
 
 public class GetReservationsQueryHandlerTests : QueryCommandHandlerTestBase
 {
-    [Fact]
-    public async Task GetReservations()
+    [Theory]
+    [AutoMoqData]
+    public async Task GetReservations([Frozen] Mock<IQueryRepository<Reservation>> repositoryMock,
+        GetReservationsQueryHandler handler)
     {
         //arrange
         int numberOfReservationElements = 4;
@@ -21,10 +24,9 @@ public class GetReservationsQueryHandlerTests : QueryCommandHandlerTestBase
             reservations.Add(Reservation.Create(Guid.NewGuid(), Guid.NewGuid(), NumberOfReservations.Create(3)));
         }
 
-        var repositoryMock = new Mock<IRepository<Reservation>>();
         repositoryMock.Setup(r => r.GetAll()).ReturnsAsync(reservations);
 
-        var handler = new GetReservationsQueryHandler(_mapper, repositoryMock.Object);
+        handler = new GetReservationsQueryHandler(_mapper, repositoryMock.Object);
 
         //act
         var results = await handler.Handle(new GetReservationsQuery(), CancellationToken.None);

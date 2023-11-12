@@ -1,24 +1,54 @@
-﻿using Shouldly;
-using Shows.Application.Features.Categories.Commands.CreateCategory;
+﻿using AutoFixture.Xunit2;
+using Moq;
+using Shared.Application.Contracts.Persistence;
+using Shouldly;
 using Shows.Application.Features.Performers.Commands.CreatePerformer;
+using Shows.Domain.Performers;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.Performers.Commands;
 
-public class CreatePerformerCommandHandlerTests : PerformersQueryCommandHandlerTestBase
+public class CreatePerformerCommandHandlerTests
 {
-    [Fact]
-    public async Task CreatePerformerCommandHandlerTest()
+    [Theory]
+    [AutoMoqData]
+    public async Task CreatePerformerCommandHandlerTest([Frozen] Mock<ICommandRepository<Performer>> commandMockRepository,
+        CreatePerformerCommandHandler handler)
     {
-        var handler = new CreatePerformerCommandHandler(_mapper, _mockPerformerRepository.Object);
+        var performers = new List<Performer>()
+        {
+            Performer.Create("Performer1", new List<PerformerInfo>()
+            {
+                PerformerInfo.Create("PerformerInfoName1", "PerformerInfoValue1")
+            }),
+            Performer.Create("Performer2", new List<PerformerInfo>()
+            {
+                PerformerInfo.Create("PerformerInfoName2", "PerformerInfoValue2")
+            }),
+            Performer.Create("Performer3", new List<PerformerInfo>()
+            {
+                PerformerInfo.Create("PerformerInfoName3", "PerformerInfoValue3")
+            })
+        };
+
+        commandMockRepository.Setup(repo => repo.Add(It.IsAny<Performer>()))
+            .ReturnsAsync(
+                (Performer performer) =>
+                {
+                    performers.Add(performer);
+                    return performer;
+                });
+
+        var newPerformer = new CreatePerformerCommand()
+        {
+            Name = "NewPerformer"
+        };
 
         await handler.Handle(
-            new CreatePerformerCommand()
-            {
-                Name = "NewPerformer"
-            },
+            newPerformer,
             CancellationToken.None);
 
-        var allPerformers = await _mockPerformerRepository.Object.GetAll();
-        allPerformers.Count.ShouldBe(4);
+        performers.Count.ShouldBe(4);
+        performers.Select(p => p.Name).ShouldContain(newPerformer.Name);
     }
 }

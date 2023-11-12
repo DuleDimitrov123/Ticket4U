@@ -4,9 +4,9 @@ using Shows.Domain.Performers;
 
 namespace Shows.Infrastructure.Persistance.Repositories;
 
-public class PerformerRepository : Repository<Performer>, IPerformerRepository
+public class PerformerQueryRepository : QueryRepository<Performer>, IPerformerQueryRepository
 {
-    public PerformerRepository(ShowsDbContext dbContext) : base(dbContext)
+    public PerformerQueryRepository(ShowsDbContext dbContext) : base(dbContext)
     {
     }
 

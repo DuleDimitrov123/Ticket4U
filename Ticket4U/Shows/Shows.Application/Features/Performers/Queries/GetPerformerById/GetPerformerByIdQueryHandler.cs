@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Performers;
 
@@ -9,17 +9,17 @@ namespace Shows.Application.Features.Performers.Queries.GetPerformerById;
 public class GetPerformerByIdQueryHandler : IRequestHandler<GetPerformerByIdQuery, PerformerResponse>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Performer> _repository;
+    private readonly IQueryRepository<Performer> _queryRepository;
 
-    public GetPerformerByIdQueryHandler(IMapper mapper, IRepository<Performer> repository)
+    public GetPerformerByIdQueryHandler(IMapper mapper, IQueryRepository<Performer> queryRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<PerformerResponse> Handle(GetPerformerByIdQuery request, CancellationToken cancellationToken)
     {
-        var performer = await _repository.GetById(request.Id);
+        var performer = await _queryRepository.GetById(request.Id);
 
         if (performer == null)
         {

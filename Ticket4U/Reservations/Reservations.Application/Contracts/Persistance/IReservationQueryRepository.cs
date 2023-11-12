@@ -1,8 +1,9 @@
 ﻿using Reservations.Domain.Reservations;
+using Shared.Application.Contracts.Persistence;
 
 namespace Reservations.Application.Contracts.Persistance;
 
-public interface IReservationRepository : IRepository<Reservation>
+public interface IReservationQueryRepository : IQueryRepository<Reservation>
 {
     Task<IList<Reservation>> GetReservationsByUserId(Guid userId);
 

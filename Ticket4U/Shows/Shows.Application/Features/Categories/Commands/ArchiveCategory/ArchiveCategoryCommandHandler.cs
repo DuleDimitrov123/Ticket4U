@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Categories;
 
@@ -7,24 +7,26 @@ namespace Shows.Application.Features.Categories.Commands.ArchiveCategory;
 
 public class ArchiveCategoryCommandHandler : IRequestHandler<ArchiveCategoryCommand, Unit>
 {
-    private readonly IRepository<Category> _repository;
+    private readonly ICommandRepository<Category> _commandRepository;
+    private readonly IQueryRepository<Category> _queryRepository;
 
-    public ArchiveCategoryCommandHandler(IRepository<Category> repository)
+    public ArchiveCategoryCommandHandler(ICommandRepository<Category> commandRepository, IQueryRepository<Category> queryRepository)
     {
-        _repository= repository;
+        _commandRepository = commandRepository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<Unit> Handle(ArchiveCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetById(request.CategoryId);
+        var category = await _queryRepository.GetById(request.CategoryId);
 
-        if(category == null)
+        if (category == null)
         {
             throw new NotFoundException(nameof(Category), request.CategoryId);
         }
 
         category.ArchiveCategory();
-        await _repository.Update(category);
+        await _commandRepository.Update(category);
 
         return Unit.Value;
     }

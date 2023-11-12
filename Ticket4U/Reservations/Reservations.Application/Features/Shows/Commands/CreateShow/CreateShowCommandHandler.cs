@@ -1,23 +1,23 @@
 ﻿using MediatR;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Domain.Shows;
+using Shared.Application.Contracts.Persistence;
 
 namespace Reservations.Application.Features.Shows.Commands.CreateShow;
 
 public class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
 {
-    private readonly IRepository<Show> _repository;
+    private readonly ICommandRepository<Show> _commandRepository;
 
-    public CreateShowCommandHandler(IRepository<Show> repository)
+    public CreateShowCommandHandler(ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Guid> Handle(CreateShowCommand request, CancellationToken cancellationToken)
     {
         var show = Show.Create(request.Name, request.StartingDateTime, request.NumberOfPlaces, request.ExternalId);
 
-        show = await _repository.Add(show);
+        show = await _commandRepository.Add(show);
 
         return show.Id;
     }

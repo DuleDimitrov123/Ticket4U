@@ -4,9 +4,9 @@ using Reservations.Domain.Reservations;
 
 namespace Reservations.Infrastructure.Persistance.Repositories;
 
-public class ReservationRepository : Repository<Reservation>, IReservationRepository
+public class ReservationQueryRepository : QueryRepository<Reservation>, IReservationQueryRepository
 {
-    public ReservationRepository(ReservationsDbContext dbContext) : base(dbContext)
+    public ReservationQueryRepository(ReservationsDbContext dbContext) : base(dbContext)
     {
     }
 

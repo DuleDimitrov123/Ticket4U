@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Shows;
 
@@ -7,16 +7,18 @@ namespace Shows.Application.Features.Shows.Commands.UpdateShowLocation;
 
 public class UpdateShowLocationCommandHandler : IRequestHandler<UpdateShowLocationCommand, Unit>
 {
-    private readonly IRepository<Show> _repository;
+    private readonly IQueryRepository<Show> _queryRepository;
+    private readonly ICommandRepository<Show> _commandRepository;
 
-    public UpdateShowLocationCommandHandler(IRepository<Show> repository)
+    public UpdateShowLocationCommandHandler(IQueryRepository<Show> queryRepository, ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
+        _queryRepository = queryRepository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(UpdateShowLocationCommand request, CancellationToken cancellationToken)
     {
-        var show = await _repository.GetById(request.Id);
+        var show = await _queryRepository.GetById(request.Id);
 
         if (show == null)
         {
@@ -24,7 +26,7 @@ public class UpdateShowLocationCommandHandler : IRequestHandler<UpdateShowLocati
         }
 
         show.UpdateShowLocation(request.NewLocation);
-        await _repository.Update(show);
+        await _commandRepository.Update(show);
 
         return Unit.Value;
     }

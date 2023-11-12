@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Shows.Notifications.ChangedShowStatus;
 using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
 using Reservations.Domain.Users;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shared.Domain.Events;
 
@@ -12,36 +12,36 @@ namespace Reservations.Application.Features.Reservations.Commands.CreateReservat
 
 public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, Guid>
 {
-    private readonly IRepository<Reservation> _reservationRepository;
-    private readonly IRepository<Show> _showRepository;
-    private readonly IRepository<User> _userRepository;
+    private readonly ICommandRepository<Reservation> _reservationCommandRepository;
+    private readonly IQueryRepository<Show> _showQueryRepository;
+    private readonly IQueryRepository<User> _userQueryRepository;
     private readonly ICheckShowReservation _checkShowReservation;
     private readonly IMediator _mediator;
 
     public CreateReservationCommandHandler(
-        IRepository<Reservation> reservationRepository, 
-        IRepository<Show> showRepository,
-        IRepository<User> userRepository,
+        ICommandRepository<Reservation> reservationRepository,
+        IQueryRepository<Show> showRepository,
+        IQueryRepository<User> userRepository,
         ICheckShowReservation checkShowReservation,
         IMediator mediator)
     {
-        _reservationRepository = reservationRepository;
-        _showRepository = showRepository;
-        _userRepository = userRepository;
+        _reservationCommandRepository = reservationRepository;
+        _showQueryRepository = showRepository;
+        _userQueryRepository = userRepository;
         _checkShowReservation = checkShowReservation;
         _mediator = mediator;
     }
 
     public async Task<Guid> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
-        var show = await _showRepository.GetById(request.ShowId);
+        var show = await _showQueryRepository.GetById(request.ShowId);
 
         if (show == null)
         {
             throw new NotFoundException(nameof(Show), request.ShowId);
         }
 
-        var user = await _userRepository.GetById(request.UserId);
+        var user = await _userQueryRepository.GetById(request.UserId);
 
         if (user == null)
         {
@@ -55,7 +55,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             throw new Exception("Not enough space for this show to reserve!");
         }
 
-        if(availableReservations == request.NumberOfReservations)
+        if (availableReservations == request.NumberOfReservations)
         {
             show.SellOutTheShow();
 
@@ -70,7 +70,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
 
         var reservation = Reservation.Create(request.UserId, request.ShowId, NumberOfReservations.Create(request.NumberOfReservations));
 
-        reservation = await _reservationRepository.Add(reservation);
+        reservation = await _reservationCommandRepository.Add(reservation);
 
         return reservation.Id;
     }

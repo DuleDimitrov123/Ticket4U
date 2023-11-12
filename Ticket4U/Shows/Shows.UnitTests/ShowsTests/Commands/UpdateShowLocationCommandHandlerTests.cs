@@ -1,14 +1,19 @@
-﻿using Moq;
-using Shows.Application.Contracts.Persistance;
+﻿using AutoFixture.Xunit2;
+using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shows.Application.Features.Shows.Commands.UpdateShowLocation;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
 public class UpdateShowLocationCommandHandlerTests
 {
-    [Fact]
-    public async Task UpdateShowLocation()
+    [Theory]
+    [AutoMoqData]
+    public async Task UpdateShowLocation([Frozen] Mock<IQueryRepository<Show>> mockQueryRepository,
+        [Frozen] Mock<ICommandRepository<Show>> mockCommandRepository,
+        UpdateShowLocationCommandHandler handler)
     {
         //arrange
         var initialShowLocation = "ShowLocation";
@@ -19,10 +24,9 @@ public class UpdateShowLocationCommandHandlerTests
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());
 
-        var showsMockRepository = new Mock<IRepository<Show>>();
-        showsMockRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
+        mockQueryRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var handler = new UpdateShowLocationCommandHandler(showsMockRepository.Object);
+        handler = new UpdateShowLocationCommandHandler(mockQueryRepository.Object, mockCommandRepository.Object);
 
         var command = new UpdateShowLocationCommand() { Id = show.Id, NewLocation = updatedShowLocation };
 
@@ -30,6 +34,6 @@ public class UpdateShowLocationCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         //assert
-        showsMockRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
+        mockCommandRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
     }
 }

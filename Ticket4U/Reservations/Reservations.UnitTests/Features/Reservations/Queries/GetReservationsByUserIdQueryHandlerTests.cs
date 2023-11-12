@@ -1,16 +1,19 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using Moq;
 using Reservations.Application.Contracts.Persistance;
-using Reservations.Application.Features.Reservations.Queries.GetReservationById;
 using Reservations.Application.Features.Reservations.Queries.GetReservationsByUserId;
 using Reservations.Domain.Reservations;
+using Reservations.UnitTests.Helpers;
 using Shouldly;
 
 namespace Reservations.UnitTests.Features.Reservations.Queries;
 
 public class GetReservationsByUserIdQueryHandlerTests : QueryCommandHandlerTestBase
 {
-    [Fact]
-    public async Task GetReservationByUserId()
+    [Theory]
+    [AutoMoqData]
+    public async Task GetReservationByUserId([Frozen] Mock<IReservationQueryRepository> repositoryMock,
+        GetReservationsByUserIdQueryHandler handler)
     {
         //arrange
         int numberOfReservationElements = 4;
@@ -20,13 +23,13 @@ public class GetReservationsByUserIdQueryHandlerTests : QueryCommandHandlerTestB
         {
             reservations.Add(Reservation.Create(Guid.NewGuid(), Guid.NewGuid(), NumberOfReservations.Create(3)));
         }
-        var repositoryMock = new Mock<IReservationRepository>();
+
         repositoryMock.Setup(r => r.GetReservationsByUserId(It.IsAny<Guid>())).ReturnsAsync(reservations);
 
-        var handler = new GetReservationsByUserIdQueryHandler(_mapper, repositoryMock.Object);
+        handler = new GetReservationsByUserIdQueryHandler(_mapper, repositoryMock.Object);
 
         //act
-        var results = await handler.Handle(new GetReservationsByUserIdQuery() { UserId = Guid.NewGuid()}, CancellationToken.None);
+        var results = await handler.Handle(new GetReservationsByUserIdQuery() { UserId = Guid.NewGuid() }, CancellationToken.None);
 
         //assert
         results.Count.ShouldBe(numberOfReservationElements);

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Reservations.Responses;
 using Reservations.Domain.Reservations;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 
 namespace Reservations.Application.Features.Reservations.Queries.GetReservationById;
@@ -10,17 +10,17 @@ namespace Reservations.Application.Features.Reservations.Queries.GetReservationB
 public class GetReservationByIdQueryHandler : IRequestHandler<GetReservationByIdQuery, ReservationResponse>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Reservation> _repository;
+    private readonly IQueryRepository<Reservation> _queryRepository;
 
-    public GetReservationByIdQueryHandler(IMapper mapper, IRepository<Reservation> repository)
+    public GetReservationByIdQueryHandler(IMapper mapper, IQueryRepository<Reservation> queryRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<ReservationResponse> Handle(GetReservationByIdQuery request, CancellationToken cancellationToken)
     {
-        var reservation = await _repository.GetById(request.ReservationId);
+        var reservation = await _queryRepository.GetById(request.ReservationId);
 
         if (reservation == null)
         {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shows.Domain.Shows;
 
 namespace Shows.Application.Features.Shows.Queries.GetShows;
@@ -8,18 +8,18 @@ namespace Shows.Application.Features.Shows.Queries.GetShows;
 public class GetShowsQueryHandler : IRequestHandler<GetShowsQuery, IList<ShowResponse>>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Show> _repository;
+    private readonly IQueryRepository<Show> _queryRepository;
 
-    public GetShowsQueryHandler(IMapper mapper, IRepository<Show> repository)
+    public GetShowsQueryHandler(IMapper mapper, IQueryRepository<Show> queryRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<IList<ShowResponse>> Handle(GetShowsQuery request, CancellationToken cancellationToken)
     {
-        var shows = await _repository.GetAll();
-        
+        var shows = await _queryRepository.GetAll();
+
         return _mapper.Map<IList<ShowResponse>>(shows);
     }
 }

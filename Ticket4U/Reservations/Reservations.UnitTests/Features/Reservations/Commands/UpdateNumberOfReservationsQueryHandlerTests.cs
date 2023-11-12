@@ -1,17 +1,25 @@
-﻿using MediatR;
+﻿using AutoFixture.Xunit2;
+using MediatR;
 using Moq;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Reservations.Commands.UpdateNumberOfReservations;
 using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
+using Reservations.UnitTests.Helpers;
+using Shared.Application.Contracts.Persistence;
 
 namespace Reservations.UnitTests.Features.Reservations.Commands;
 
 public class UpdateNumberOfReservationsQueryHandlerTests
 {
-    [Fact]
-    public async Task UpdateNumberOfReservations()
+    [Theory]
+    [AutoMoqData]
+    public async Task UpdateNumberOfReservations([Frozen] Mock<ICommandRepository<Reservation>> reservationCommandRepositoryMock,
+        [Frozen] Mock<IQueryRepository<Reservation>> reservationQueryRepositoryMock,
+        [Frozen] Mock<IQueryRepository<Show>> showRepositoryMock,
+        [Frozen] Mock<ICheckShowReservation> checkShowReservationMock,
+        [Frozen] Mock<IMediator> mediatorMock,
+        UpdateNumberOfReservationsCommandHandler handler)
     {
         //arrange
         var numberOfPlacesForShow = 10;
@@ -23,22 +31,20 @@ public class UpdateNumberOfReservationsQueryHandlerTests
         var reservationPropertyInfo = typeof(Reservation).GetProperty("Id");
         reservationPropertyInfo!.SetValue(reservation, Guid.NewGuid());
 
-        var reservationRepositoryMock = new Mock<IRepository<Reservation>>();
-        reservationRepositoryMock.Setup(r => r.GetById(It.IsAny<Guid>())).ReturnsAsync(reservation);
+        reservationQueryRepositoryMock.Setup(r => r.GetById(It.IsAny<Guid>())).ReturnsAsync(reservation);
 
-        var showRepositoryMock = new Mock<IRepository<Show>>();
         showRepositoryMock.Setup(s => s.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var checkShowReservationMock = new Mock<ICheckShowReservation>();
         checkShowReservationMock
             .Setup(c => c.GetNumberOfAvailableReservations(It.IsAny<Show>()))
             .ReturnsAsync(show.NumberOfPlaces);
 
-        var handler = new UpdateNumberOfReservationsCommandHandler(
-            reservationRepositoryMock.Object,
+        handler = new UpdateNumberOfReservationsCommandHandler(
+            reservationCommandRepositoryMock.Object,
+            reservationQueryRepositoryMock.Object,
             showRepositoryMock.Object,
             checkShowReservationMock.Object,
-            new Mock<IMediator>().Object);
+            mediatorMock.Object);
 
         var command = new UpdateNumberOfReservationsCommand() { Id = reservation.Id, NewNumberOfReservations = newNumberOfReservations };
 
@@ -46,6 +52,6 @@ public class UpdateNumberOfReservationsQueryHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         //assert
-        reservationRepositoryMock.Verify(x => x.Update(It.Is<Reservation>(x => x.Id == reservation.Id)), Times.Once);
+        reservationCommandRepositoryMock.Verify(x => x.Update(It.Is<Reservation>(x => x.Id == reservation.Id)), Times.Once);
     }
 }

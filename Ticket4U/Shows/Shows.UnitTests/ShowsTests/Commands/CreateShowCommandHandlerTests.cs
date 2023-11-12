@@ -1,18 +1,39 @@
-﻿using MediatR;
+﻿using AutoFixture.Xunit2;
+using AutoMapper;
+using MediatR;
 using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shouldly;
-using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Commands.CreateShow;
+using Shows.Application.Profiles;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
-public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
+public class CreateShowCommandHandlerTests
 {
-    [Fact]
-    public async Task CreateNewShow()
+    private readonly IMapper _mapper;
+
+    public CreateShowCommandHandlerTests()
+    {
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    public async Task CreateNewShow([Frozen] Mock<ICommandRepository<Show>> mockShowCommandRepository,
+        [Frozen] Mock<IQueryRepository<Category>> mockCategoryQueryRepository,
+        [Frozen] Mock<IQueryRepository<Performer>> mockPerformerQueryRepository,
+        [Frozen] Mock<IMediator> mockMediator,
+        CreateShowCommandHandler handler)
     {
         //arrange
         var performer = Performer.Create("Performer1");
@@ -27,8 +48,7 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
 
         var shows = new List<Show>();
 
-        var showsMockRepository = new Mock<IRepository<Show>>();
-        showsMockRepository.Setup(repo => repo.Add(It.IsAny<Show>()))
+        mockShowCommandRepository.Setup(repo => repo.Add(It.IsAny<Show>()))
             .ReturnsAsync(
                 (Show show) =>
                 {
@@ -38,13 +58,9 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
                     return show;
                 });
 
-        var performerMockRepository = new Mock<IRepository<Performer>>();
-        performerMockRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(performer);
+        mockPerformerQueryRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(performer);
 
-        var categoryMockRepository = new Mock<IRepository<Category>>();
-        categoryMockRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(category);
-
-        var mediatorMock = new Mock<IMediator>();
+        mockCategoryQueryRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(category);
 
         var command = new CreateShowCommand()
         {
@@ -60,7 +76,7 @@ public class CreateShowCommandHandlerTests : QueryCommandHandlerTestBase
             CategoryId = category.Id
         };
 
-        var handler = new CreateShowCommandHandler(showsMockRepository.Object, categoryMockRepository.Object, performerMockRepository.Object, mediatorMock.Object);
+        handler = new CreateShowCommandHandler(mockShowCommandRepository.Object, mockCategoryQueryRepository.Object, mockPerformerQueryRepository.Object, mockMediator.Object);
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

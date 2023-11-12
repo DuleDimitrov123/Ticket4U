@@ -8,17 +8,17 @@ namespace Reservations.Application.Features.Reservations.Queries.GetReservations
 public class GetReservationsByUserIdQueryHandler : IRequestHandler<GetReservationsByUserIdQuery, IList<ReservationResponse>>
 {
     private readonly IMapper _mapper;
-    private readonly IReservationRepository _repository;
+    private readonly IReservationQueryRepository _reservationQueryRepository;
 
-    public GetReservationsByUserIdQueryHandler(IMapper mapper, IReservationRepository repository)
+    public GetReservationsByUserIdQueryHandler(IMapper mapper, IReservationQueryRepository reservationQueryRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _reservationQueryRepository = reservationQueryRepository;
     }
 
     public async Task<IList<ReservationResponse>> Handle(GetReservationsByUserIdQuery request, CancellationToken cancellationToken)
     {
-        var reservations = await _repository.GetReservationsByUserId(request.UserId);
+        var reservations = await _reservationQueryRepository.GetReservationsByUserId(request.UserId);
 
         return _mapper.Map<IList<ReservationResponse>>(reservations);
     }

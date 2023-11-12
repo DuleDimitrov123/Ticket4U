@@ -4,9 +4,9 @@ using Shows.Domain.Shows;
 
 namespace Shows.Infrastructure.Persistance.Repositories;
 
-public class ShowRepository : Repository<Show>, IShowRepository
+public class ShowQueryRepository : QueryRepository<Show>, IShowQueryRepository
 {
-    public ShowRepository(ShowsDbContext dbContext) : base(dbContext)
+    public ShowQueryRepository(ShowsDbContext dbContext) : base(dbContext)
     {
     }
 

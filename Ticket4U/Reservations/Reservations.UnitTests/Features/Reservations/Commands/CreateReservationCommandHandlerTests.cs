@@ -1,27 +1,34 @@
-﻿using MediatR;
+﻿using AutoFixture.Xunit2;
+using MediatR;
 using Moq;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Reservations.Commands.CreateReservation;
 using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
 using Reservations.Domain.Users;
+using Reservations.UnitTests.Helpers;
+using Shared.Application.Contracts.Persistence;
 using Shouldly;
 
 namespace Reservations.UnitTests.Features.Reservations.Commands;
 
-public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
+public class CreateReservationCommandHandlerTests
 {
-    [Fact]
-    public async Task CreateNewReservation()
+    [Theory]
+    [AutoMoqData]
+    public async Task CreateNewReservation([Frozen] Mock<ICommandRepository<Reservation>> mockReservationCommandRepository,
+        [Frozen] Mock<IQueryRepository<Show>> mockShowRepository,
+        [Frozen] Mock<IQueryRepository<User>> mockUserRepository,
+        [Frozen] Mock<ICheckShowReservation> mockCheckShowReservation,
+        [Frozen] Mock<IMediator> mockMediator,
+        CreateReservationCommandHandler handler)
     {
         //arrange
         var reservations = new List<Reservation>();
         var show = Show.Create("Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
         var user = User.Create("user1@gmail.com", "user1");
 
-        var mockReservationRepository = new Mock<IRepository<Reservation>>();
-        mockReservationRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
+        mockReservationCommandRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
             .ReturnsAsync(
                 (Reservation res) =>
                 {
@@ -33,10 +40,8 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
                     return res;
                 });
 
-        var mockShowRepository = new Mock<IRepository<Show>>();
         mockShowRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var mockUserRepository = new Mock<IRepository<User>>();
         mockUserRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(user);
 
         var command = new CreateReservationCommand()
@@ -46,17 +51,16 @@ public class CreateReservationCommandHandlerTests : QueryCommandHandlerTestBase
             NumberOfReservations = 3
         };
 
-        var mockCheckShowReservation = new Mock<ICheckShowReservation>();
         mockCheckShowReservation
             .Setup(c => c.GetNumberOfAvailableReservations(It.IsAny<Show>()))
             .ReturnsAsync(show.NumberOfPlaces);
 
-        var handler = new CreateReservationCommandHandler(
-            mockReservationRepository.Object,
+        handler = new CreateReservationCommandHandler(
+            mockReservationCommandRepository.Object,
             mockShowRepository.Object,
             mockUserRepository.Object,
             mockCheckShowReservation.Object,
-            new Mock<IMediator>().Object);
+            mockMediator.Object);
 
         //act
         var result = await handler.Handle(command, CancellationToken.None);

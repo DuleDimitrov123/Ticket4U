@@ -5,6 +5,7 @@ using Reservations.Application.Contracts.Outbox;
 using Reservations.Application.Contracts.Persistance;
 using Reservations.Infrastructure.Outbox;
 using Reservations.Infrastructure.Persistance.Repositories;
+using Shared.Application.Contracts.Persistence;
 using Shared.Infrastructure.Authentication;
 using Shared.Infrastructure.Outbox;
 
@@ -19,10 +20,11 @@ public static class IocInfrastructure
             options.UseSqlServer(configuration.GetConnectionString("ReservationsConnectionString"));
         });
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
+        services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
 
-        services.AddScoped<IShowRepository, ShowRepository>();
-        services.AddScoped<IReservationRepository, ReservationRepository>();
+        services.AddScoped<IShowQueryRepository, ShowQueryRepository>();
+        services.AddScoped<IReservationQueryRepository, ReservationQueryRepository>();
 
         var capOptionsConstants = new CapOptionsConstants();
         configuration.Bind("CapOptionsConstants", capOptionsConstants);

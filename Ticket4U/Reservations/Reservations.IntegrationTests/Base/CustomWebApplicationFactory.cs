@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
 using Reservations.Domain.Users;
 using Reservations.Infrastructure;
 using Reservations.IntegrationTests.Constants;
+using Shared.Application.Contracts.Persistence;
 using Testcontainers.MsSql;
 using Xunit.Abstractions;
 
@@ -55,9 +55,9 @@ public class CustomWebApplicationFactory<TStartup>
 
     private async Task InitializeDbForTestsAsync(IServiceProvider serviceProvider)
     {
-        var showRepository = serviceProvider.GetRequiredService<IRepository<Show>>();
-        var userRepository = serviceProvider.GetRequiredService<IRepository<User>>();
-        var reservationRepository = serviceProvider.GetRequiredService<IRepository<Reservation>>();
+        var showRepository = serviceProvider.GetRequiredService<ICommandRepository<Show>>();
+        var userRepository = serviceProvider.GetRequiredService<ICommandRepository<User>>();
+        var reservationRepository = serviceProvider.GetRequiredService<ICommandRepository<Reservation>>();
 
         var show1 = Show.Create(InstanceConstants.Show1Id, "Show1", DateTime.Now.AddDays(10), 100, InstanceConstants.ExternalShow1Id);
         var user1 = User.Create(InstanceConstants.User1Id, "user1@gmail.com", "user1");

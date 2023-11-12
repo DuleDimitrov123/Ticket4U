@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Shows.Notifications.ChangedShowStatus;
 using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Shows;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shared.Domain.Events;
 
@@ -11,33 +11,36 @@ namespace Reservations.Application.Features.Reservations.Commands.UpdateNumberOf
 
 public class UpdateNumberOfReservationsCommandHandler : IRequestHandler<UpdateNumberOfReservationsCommand, Unit>
 {
-    private readonly IRepository<Reservation> _reservationRepository;
+    private readonly ICommandRepository<Reservation> _reservationCommandRepository;
+    private readonly IQueryRepository<Reservation> _reservationQueryRepository;
     private readonly ICheckShowReservation _checkShowReservation;
-    private readonly IRepository<Show> _showRepository;
+    private readonly IQueryRepository<Show> _showQueryRepository;
     private readonly IMediator _mediator;
 
     public UpdateNumberOfReservationsCommandHandler(
-        IRepository<Reservation> reservationRepository,
-        IRepository<Show> showRepository,
+        ICommandRepository<Reservation> reservationRepository,
+        IQueryRepository<Reservation> reservationQueryRepository,
+        IQueryRepository<Show> showRepository,
         ICheckShowReservation checkShowReservation,
         IMediator mediator)
     {
-        _reservationRepository = reservationRepository;
+        _reservationCommandRepository = reservationRepository;
+        _reservationQueryRepository = reservationQueryRepository;
         _checkShowReservation = checkShowReservation;
-        _showRepository = showRepository;
+        _showQueryRepository = showRepository;
         _mediator = mediator;
     }
 
     public async Task<Unit> Handle(UpdateNumberOfReservationsCommand request, CancellationToken cancellationToken)
     {
-        var reservation = await _reservationRepository.GetById(request.Id);
+        var reservation = await _reservationQueryRepository.GetById(request.Id);
 
         if (reservation == null)
         {
             throw new NotFoundException(nameof(Reservation), request.Id);
         }
 
-        var show = await _showRepository.GetById(reservation.ShowId);
+        var show = await _showQueryRepository.GetById(reservation.ShowId);
 
         if (show == null)
         {
@@ -83,7 +86,7 @@ public class UpdateNumberOfReservationsCommandHandler : IRequestHandler<UpdateNu
         }
 
         reservation.UpdateNumberOfReservations(request.NewNumberOfReservations);
-        await _reservationRepository.Update(reservation);
+        await _reservationCommandRepository.Update(reservation);
 
         return Unit.Value;
     }

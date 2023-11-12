@@ -60,6 +60,7 @@ public class CategoriesController : ControllerBase
 
     [HttpPut("{categoryId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Authorize(Policy = "RequireAdmin")]
@@ -79,6 +80,7 @@ public class CategoriesController : ControllerBase
 
     [HttpPut("{categoryId}/archive")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [Authorize(Policy = "RequireAdmin")]
     public async Task<ActionResult> ArchiveCategory([FromRoute] Guid categoryId)

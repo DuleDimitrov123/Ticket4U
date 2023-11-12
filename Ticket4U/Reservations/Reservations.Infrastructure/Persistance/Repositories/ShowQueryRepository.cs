@@ -4,9 +4,9 @@ using Reservations.Domain.Shows;
 
 namespace Reservations.Infrastructure.Persistance.Repositories;
 
-public class ShowRepository : Repository<Show>, IShowRepository
+public class ShowQueryRepository : QueryRepository<Show>, IShowQueryRepository
 {
-    public ShowRepository(ReservationsDbContext dbContext) : base(dbContext)
+    public ShowQueryRepository(ReservationsDbContext dbContext) : base(dbContext)
     {
     }
 

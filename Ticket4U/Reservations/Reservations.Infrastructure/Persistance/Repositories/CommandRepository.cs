@@ -1,26 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Reservations.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Domain;
 
 namespace Reservations.Infrastructure.Persistance.Repositories;
 
-public class Repository<T> : IRepository<T> where T : AggregateRoot
+public class CommandRepository<T> : ICommandRepository<T> where T : AggregateRoot
 {
     protected readonly ReservationsDbContext _dbContext;
 
-    public Repository(ReservationsDbContext dbContext)
+    public CommandRepository(ReservationsDbContext dbContext)
     {
         _dbContext = dbContext;
-    }
-
-    public async Task<T> GetById(Guid id)
-    {
-        return await _dbContext.Set<T>().FindAsync(id);
-    }
-
-    public async Task<IList<T>> GetAll()
-    {
-        return await _dbContext.Set<T>().ToListAsync();
     }
 
     public async Task<T> Add(T entity)

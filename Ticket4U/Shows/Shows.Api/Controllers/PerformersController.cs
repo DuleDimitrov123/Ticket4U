@@ -71,6 +71,7 @@ namespace Shows.Api.Controllers
 
         [HttpPut("{performerId}/performer-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> UpdatePerformerInfo([FromRoute] Guid performerId, [FromBody] UpdatePerformerInfoRequest request)
@@ -88,6 +89,7 @@ namespace Shows.Api.Controllers
 
         [HttpDelete("{performerId}/performer-info")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = "RequireAdmin")]
         public async Task<ActionResult> DeletePerformerInfo([FromRoute] Guid performerId, [FromBody] DeletePerformerInfoRequest request)

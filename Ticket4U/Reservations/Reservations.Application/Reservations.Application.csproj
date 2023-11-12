@@ -13,11 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Shows\Queries\" />
-    <Folder Include="Features\Users\Queries\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Shared\Shared.Application\Shared.Application.csproj" />
     <ProjectReference Include="..\Reservations.Domain\Reservations.Domain.csproj" />
   </ItemGroup>

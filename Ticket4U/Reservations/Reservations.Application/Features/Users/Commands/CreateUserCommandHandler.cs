@@ -1,23 +1,23 @@
 ﻿using MediatR;
-using Reservations.Application.Contracts.Persistance;
 using Reservations.Domain.Users;
+using Shared.Application.Contracts.Persistence;
 
 namespace Reservations.Application.Features.Users.Commands;
 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
 {
-    private readonly IRepository<User> _repository;
+    private readonly ICommandRepository<User> _commandRepository;
 
-    public CreateUserCommandHandler(IRepository<User> repository)
+    public CreateUserCommandHandler(ICommandRepository<User> commandRepository)
     {
-        _repository = repository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Guid> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var user = User.Create(request.Email, request.UserName);
 
-        user = await _repository.Add(user);
+        user = await _commandRepository.Add(user);
 
         return user.Id;
     }

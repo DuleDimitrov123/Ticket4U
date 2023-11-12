@@ -11,9 +11,9 @@ public interface ICheckShowReservation
 
 public class CheckShowReservation : ICheckShowReservation
 {
-    private readonly IReservationRepository _repository;
+    private readonly IReservationQueryRepository _repository;
 
-    public CheckShowReservation(IReservationRepository repository)
+    public CheckShowReservation(IReservationQueryRepository repository)
     {
         _repository = repository;
     }

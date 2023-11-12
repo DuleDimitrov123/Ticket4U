@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Shows;
 
@@ -7,16 +7,18 @@ namespace Shows.Application.Features.Shows.Commands.UpdateShowName;
 
 public class UpdateShowNameCommandHandler : IRequestHandler<UpdateShowNameCommand, Unit>
 {
-    private readonly IRepository<Show> _repository;
+    private readonly IQueryRepository<Show> _queryRepository;
+    private readonly ICommandRepository<Show> _commandRepository;
 
-    public UpdateShowNameCommandHandler(IRepository<Show> repository)
+    public UpdateShowNameCommandHandler(IQueryRepository<Show> queryRepository, ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
+        _queryRepository = queryRepository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(UpdateShowNameCommand request, CancellationToken cancellationToken)
     {
-        var show = await _repository.GetById(request.Id);
+        var show = await _queryRepository.GetById(request.Id);
 
         if (show == null)
         {
@@ -24,7 +26,7 @@ public class UpdateShowNameCommandHandler : IRequestHandler<UpdateShowNameComman
         }
 
         show.UpdateShowName(request.NewName);
-        await _repository.Update(show);
+        await _commandRepository.Update(show);
 
         return Unit.Value;
     }

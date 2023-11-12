@@ -1,29 +1,31 @@
 ﻿using MediatR;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
-using Shows.Application.Contracts.Persistance;
 using Shows.Domain.Shows;
 
 namespace Shows.Application.Features.Shows.Commands.ChangeShowStatus;
 
 public class ChangeShowStatusCommandHandler : IRequestHandler<ChangeShowStatusCommand, Unit>
 {
-    private readonly IRepository<Show> _repository;
+    private readonly IQueryRepository<Show> _queryRepository;
+    private readonly ICommandRepository<Show> _commandRepository;
 
-    public ChangeShowStatusCommandHandler(IRepository<Show> repository)
+    public ChangeShowStatusCommandHandler(IQueryRepository<Show> queryRepository, ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
+        _queryRepository = queryRepository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(ChangeShowStatusCommand request, CancellationToken cancellationToken)
     {
-        var show = await _repository.GetById(request.ShowId);
+        var show = await _queryRepository.GetById(request.ShowId);
 
         if (show == null)
         {
             throw new NotFoundException(nameof(Show), request.ShowId);
         }
 
-        if(request.IsSoldOut)
+        if (request.IsSoldOut)
         {
             if (show.Status == ShowStatus.IsSoldOut)
             {
@@ -42,7 +44,7 @@ public class ChangeShowStatusCommandHandler : IRequestHandler<ChangeShowStatusCo
             show.UnSellOutTheShow();
         }
 
-        await _repository.Update(show);
+        await _commandRepository.Update(show);
 
         return Unit.Value;
     }

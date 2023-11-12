@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using Shared.Application.Contracts.Persistence;
+using Shared.Application.Exceptions;
 using Shared.Domain.Events;
 using Shows.Application.Contracts.Persistance;
-using Shared.Application.Exceptions;
 using Shows.Application.Features.Shows.Notifications.ShowStartingDateTimeUpdated;
 using Shows.Domain.Shows;
 
@@ -9,18 +10,20 @@ namespace Shows.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 
 public class UpdateShowStartingDateTimeCommandHandler : IRequestHandler<UpdateShowStartingDateTimeCommand, Unit>
 {
-    private readonly IShowRepository _repository;
+    private readonly IShowQueryRepository _showQueryRepository;
+    private readonly ICommandRepository<Show> _commandRepository;
     private readonly IMediator _mediator;
 
-    public UpdateShowStartingDateTimeCommandHandler(IShowRepository repository, IMediator mediator)
+    public UpdateShowStartingDateTimeCommandHandler(IMediator mediator, IShowQueryRepository showQueryRepository, ICommandRepository<Show> commandRepository)
     {
-        _repository = repository;
         _mediator = mediator;
+        _showQueryRepository = showQueryRepository;
+        _commandRepository = commandRepository;
     }
 
     public async Task<Unit> Handle(UpdateShowStartingDateTimeCommand request, CancellationToken cancellationToken)
     {
-        var show = await _repository.GetShowWithShowMessages(request.ShowId);
+        var show = await _showQueryRepository.GetShowWithShowMessages(request.ShowId);
 
         if (show == null)
         {
@@ -30,7 +33,7 @@ public class UpdateShowStartingDateTimeCommandHandler : IRequestHandler<UpdateSh
         var oldStartingDateTime = show.StartingDateTime;
 
         show.UpdateStartingDateTime(request.NewStartingDateTime);
-        await _repository.Update(show);
+        await _commandRepository.Update(show);
 
         await _mediator.Publish(
             new ShowStartingDateTimeUpdatedNotification(

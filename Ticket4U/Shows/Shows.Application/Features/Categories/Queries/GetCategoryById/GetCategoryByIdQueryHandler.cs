@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Categories;
 
@@ -9,17 +9,17 @@ namespace Shows.Application.Features.Categories.Queries.GetCategoryById;
 public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQuery, CategoryResponse>
 {
     private readonly IMapper _mapper;
-    private readonly IRepository<Category> _repository;
+    private readonly IQueryRepository<Category> _queryRepository;
 
-    public GetCategoryByIdQueryHandler(IMapper mapper, IRepository<Category> repository)
+    public GetCategoryByIdQueryHandler(IMapper mapper, IQueryRepository<Category> queryRepository)
     {
         _mapper = mapper;
-        _repository = repository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<CategoryResponse> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetById(request.CategoryId);
+        var category = await _queryRepository.GetById(request.CategoryId);
 
         if (category == null)
         {

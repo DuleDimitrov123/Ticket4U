@@ -1,17 +1,35 @@
-﻿using Moq;
+﻿using AutoFixture.Xunit2;
+using AutoMapper;
+using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shouldly;
-using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Queries.GetShows;
+using Shows.Application.Profiles;
 using Shows.Domain.Categories;
 using Shows.Domain.Performers;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Queries;
 
-public class GetShowsQueryHandlerTests : QueryCommandHandlerTestBase
+public class GetShowsQueryHandlerTests
 {
-    [Fact]
-    public async Task GetAllShows()
+    private readonly IMapper _mapper;
+
+    public GetShowsQueryHandlerTests()
+    {
+        var configurationProvider = new MapperConfiguration(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
+        _mapper = configurationProvider.CreateMapper();
+    }
+
+    [Theory]
+    [AutoMoqData]
+    public async Task GetAllShows([Frozen] Mock<IQueryRepository<Show>> mockQueryRepository,
+        GetShowsQueryHandler handler)
     {
         //arrange
         var performer = Performer.Create("Performer1");
@@ -29,10 +47,9 @@ public class GetShowsQueryHandlerTests : QueryCommandHandlerTestBase
             Show.Create("ShowName", "ShowDescription", "ShowPictureBase64", "ShowLocation", NumberOfPlaces.Create(100), Money.Create("rsd", 100), DateTime.Now.AddDays(10), performer.Id, category.Id)
         };
 
-        var showsMockRepository = new Mock<IRepository<Show>>();
-        showsMockRepository.Setup(repo => repo.GetAll()).ReturnsAsync(shows);
+        mockQueryRepository.Setup(repo => repo.GetAll()).ReturnsAsync(shows);
 
-        var handler = new GetShowsQueryHandler(_mapper, showsMockRepository.Object);
+        handler = new GetShowsQueryHandler(_mapper, mockQueryRepository.Object);
 
         //act
         var result = await handler.Handle(new GetShowsQuery(), CancellationToken.None);

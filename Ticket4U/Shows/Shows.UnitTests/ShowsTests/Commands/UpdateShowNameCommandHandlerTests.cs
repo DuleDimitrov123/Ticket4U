@@ -1,14 +1,19 @@
-﻿using Moq;
-using Shows.Application.Contracts.Persistance;
+﻿using AutoFixture.Xunit2;
+using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shows.Application.Features.Shows.Commands.UpdateShowName;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
 public class UpdateShowNameCommandHandlerTests
 {
-    [Fact]
-    public async Task UpdateShowName()
+    [Theory]
+    [AutoMoqData]
+    public async Task UpdateShowName([Frozen] Mock<IQueryRepository<Show>> mockQueryRepository,
+        [Frozen] Mock<ICommandRepository<Show>> mockCommandRepository,
+        UpdateShowNameCommandHandler handler)
     {
         //arrange
         var initialShowName = "ShowName";
@@ -19,10 +24,9 @@ public class UpdateShowNameCommandHandlerTests
         var showPropertyInfo = typeof(Show).GetProperty("Id");
         showPropertyInfo!.SetValue(show, Guid.NewGuid());
 
-        var showsMockRepository = new Mock<IRepository<Show>>();
-        showsMockRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
+        mockQueryRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var handler = new UpdateShowNameCommandHandler(showsMockRepository.Object);
+        handler = new UpdateShowNameCommandHandler(mockQueryRepository.Object, mockCommandRepository.Object);
 
         var command = new UpdateShowNameCommand() { Id = show.Id, NewName = updatedShowName };
 
@@ -30,6 +34,6 @@ public class UpdateShowNameCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         //assert
-        showsMockRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
+        mockCommandRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
     }
 }

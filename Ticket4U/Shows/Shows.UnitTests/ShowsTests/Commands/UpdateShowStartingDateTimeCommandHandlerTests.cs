@@ -1,15 +1,22 @@
-﻿using MediatR;
+﻿using AutoFixture.Xunit2;
+using MediatR;
 using Moq;
+using Shared.Application.Contracts.Persistence;
 using Shows.Application.Contracts.Persistance;
 using Shows.Application.Features.Shows.Commands.UpdateShowStartingDateTime;
 using Shows.Domain.Shows;
+using Shows.UnitTests.Helpers;
 
 namespace Shows.UnitTests.ShowsTests.Commands;
 
 public class UpdateShowStartingDateTimeCommandHandlerTests
 {
-    [Fact]
-    public async Task UpdateShowStartingDateTime()
+    [Theory]
+    [AutoMoqData]
+    public async Task UpdateShowStartingDateTime([Frozen] Mock<IMediator> mediator,
+        [Frozen] Mock<IShowQueryRepository> mockQueryRepository,
+        [Frozen] Mock<ICommandRepository<Show>> mockCommandRepository,
+        UpdateShowStartingDateTimeCommandHandler handler)
     {
         //arrange
         var initialShowStartingDateTime = DateTime.Now.AddDays(30);
@@ -22,10 +29,9 @@ public class UpdateShowStartingDateTimeCommandHandlerTests
 
         show.AddShowMessage("ShowMessage1Name", "ShowMessage1Value");
 
-        var showsMockRepository = new Mock<IShowRepository>();
-        showsMockRepository.Setup(x => x.GetShowWithShowMessages(It.IsAny<Guid>())).ReturnsAsync(show);
+        mockQueryRepository.Setup(x => x.GetShowWithShowMessages(It.IsAny<Guid>())).ReturnsAsync(show);
 
-        var handler = new UpdateShowStartingDateTimeCommandHandler(showsMockRepository.Object, new Mock<IMediator>().Object);
+        handler = new UpdateShowStartingDateTimeCommandHandler(mediator.Object, mockQueryRepository.Object, mockCommandRepository.Object);
 
         var command = new UpdateShowStartingDateTimeCommand() { ShowId = show.Id, NewStartingDateTime = updatedShowStartingDateTime };
 
@@ -33,6 +39,6 @@ public class UpdateShowStartingDateTimeCommandHandlerTests
         var result = await handler.Handle(command, CancellationToken.None);
 
         //assert
-        showsMockRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
+        mockCommandRepository.Verify(x => x.Update(It.Is<Show>(x => x.Id == show.Id)), Times.Once());
     }
 }

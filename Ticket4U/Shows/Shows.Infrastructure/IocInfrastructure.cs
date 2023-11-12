@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Application.Contracts.Persistence;
 using Shared.Infrastructure.Authentication;
 using Shared.Infrastructure.Outbox;
 using Shows.Application.Contracts.Outbox;
@@ -20,10 +21,11 @@ public static class IocInfrastructure
             options.UseSqlServer(configuration.GetConnectionString("ShowsConnectionString"));
         });
 
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+        services.AddScoped(typeof(IQueryRepository<>), typeof(QueryRepository<>));
+        services.AddScoped(typeof(ICommandRepository<>), typeof(CommandRepository<>));
 
-        services.AddScoped<IPerformerRepository, PerformerRepository>();
-        services.AddScoped<IShowRepository, ShowRepository>();
+        services.AddScoped<IPerformerQueryRepository, PerformerQueryRepository>();
+        services.AddScoped<IShowQueryRepository, ShowQueryRepository>();
 
         //CAP outbox
         var capOptionsConstants = new CapOptionsConstants();

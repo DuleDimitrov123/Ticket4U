@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Shows.Application.Contracts.Persistance;
+using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 using Shows.Domain.Categories;
 
@@ -7,16 +7,18 @@ namespace Shows.Application.Features.Categories.Commands.UpdateCategory;
 
 public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryCommand, Unit>
 {
-    private readonly IRepository<Category> _repository;
+    private readonly ICommandRepository<Category> _commandRepository;
+    private readonly IQueryRepository<Category> _queryRepository;
 
-    public UpdateCategoryCommandHandler(IRepository<Category> repository)
+    public UpdateCategoryCommandHandler(ICommandRepository<Category> commandRepository, IQueryRepository<Category> queryRepository)
     {
-        _repository = repository;
+        _commandRepository = commandRepository;
+        _queryRepository = queryRepository;
     }
 
     public async Task<Unit> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
     {
-        var category = await _repository.GetById(request.CategoryId);
+        var category = await _queryRepository.GetById(request.CategoryId);
 
         if (category == null)
         {
@@ -28,12 +30,12 @@ public class UpdateCategoryCommandHandler : IRequestHandler<UpdateCategoryComman
             category.UpdateCategoryName(request.NewName);
         }
 
-        if(!string.IsNullOrEmpty(request.NewDescription))
+        if (!string.IsNullOrEmpty(request.NewDescription))
         {
             category.UpdateCategoryDescription(request.NewDescription);
         }
 
-        await _repository.Update(category);
+        await _commandRepository.Update(category);
 
         return Unit.Value;
     }

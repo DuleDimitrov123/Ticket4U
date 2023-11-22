@@ -23,4 +23,6 @@ public class ShowResponse
     public Guid PerformerId { get; set; }
 
     public Guid CategoryId { get; set; }
+
+    public string Picture { get; set; }
 }

@@ -32,22 +32,22 @@ namespace Shows.Infrastructure.Migrations
                 values: new object[,]
                 {
                     //Zdravko Colic
-                    { new Guid("ef2577c3-4fca-4dbe-989c-12063141feda"), "DateOfBirth", "30.05.1951.", ZdravkoColicId},
-                    { new Guid("c4f27825-ec7c-408b-acb2-f7dc43e5baac"), "MaritalStatus", "Married", ZdravkoColicId},
+                    { new Guid("ef2577c3-4fca-4dbe-989c-12063141feda"), "Date of birth", "30.05.1951.", ZdravkoColicId},
+                    { new Guid("c4f27825-ec7c-408b-acb2-f7dc43e5baac"), "Marital status", "Married", ZdravkoColicId},
                     { new Guid("a5f29db8-3423-4dce-a2b0-beda784e93fa"), "Nationality", "Serbian", ZdravkoColicId},
-                    { new Guid("2fd0cb68-5a9b-485f-9bbc-1fc1ba2c1779"), "TypeOfPerformer", "Singer", ZdravkoColicId},
+                    { new Guid("2fd0cb68-5a9b-485f-9bbc-1fc1ba2c1779"), "Type of performer", "Singer", ZdravkoColicId},
 
                     //Raf Camora
-                    { new Guid("5e151324-6d92-454c-939b-863c2a6f29b5"), "DateOfBirth", "04.06.1984.", RafCamoraId},
-                    { new Guid("790e6839-45cc-4f3f-a3e2-c6543a5e1c3f"), "FullName", "Raphael Ragucci", RafCamoraId},
+                    { new Guid("5e151324-6d92-454c-939b-863c2a6f29b5"), "Date of birth", "04.06.1984.", RafCamoraId},
+                    { new Guid("790e6839-45cc-4f3f-a3e2-c6543a5e1c3f"), "Full name", "Raphael Ragucci", RafCamoraId},
                     { new Guid("c2bfcc29-d356-4da9-8413-03b348e256e2"), "Nationality", "Austrian", RafCamoraId},
-                    { new Guid("a8173f98-bdff-4552-a29c-83763f8588d9"), "TypeOfPerformer", "Singer", RafCamoraId},
+                    { new Guid("a8173f98-bdff-4552-a29c-83763f8588d9"), "Type of performer", "Singer", RafCamoraId},
 
                     //Beogradsko dramsko pozoriste
                     { new Guid("eacc5169-b2a7-41ad-92c3-dbb1a5e7af06"), "Description", "The Belgrade Drama Theatre is a theatre located in Belgrade, the capital of Serbia", BeogradskoDramskoPozoristeId},
 
                     { new Guid("01b72336-4da0-4d90-8dc2-4444f1822aed"), "Description", "Circus from Serbia that was formed by Sliva family", CirkusDeLaVegaId},
-                    { new Guid("41fc2693-3bb6-44c5-9b03-b10649a766f3"), "YearOfEstablishment", "1705", CirkusDeLaVegaId},
+                    { new Guid("41fc2693-3bb6-44c5-9b03-b10649a766f3"), "Year of establishment", "1705", CirkusDeLaVegaId},
                 });
 
             var concertId = new Guid("e8518239-ff9c-4f6c-aeba-443e94c6d670");
@@ -124,24 +124,24 @@ namespace Shows.Infrastructure.Migrations
                 values: new object[,]
                 {
                     //Zdravko Colic concerts
-                    { new Guid("e5ddf93a-6bfd-4b34-ac8b-573856989297"), "GuestPerformer", "This concert has secret guest performer", ZdravkoColicConcert1Id },
-                    { new Guid("57d40410-569f-4e2d-bfe7-fe7d1a1c5d0c"), "FanPit", "First 10 reservations get fan pit", ZdravkoColicConcert2Id },
-                    { new Guid("7fab9ccc-9b49-4e22-a500-dde1aeb098d8"), "FreeTickets", "By listening Play Radio, you can get 3 free tickets", ZdravkoColicConcert3Id },
-                    { new Guid("73083ee2-036d-466d-bec9-ec2721cc5441"), "GuestPerformer", "This concert has secret guest performer", ZdravkoColicConcert4Id },
+                    { new Guid("e5ddf93a-6bfd-4b34-ac8b-573856989297"), "Guest performer", "This concert has secret guest performer", ZdravkoColicConcert1Id },
+                    { new Guid("57d40410-569f-4e2d-bfe7-fe7d1a1c5d0c"), "Fan pit", "First 10 reservations get fan pit", ZdravkoColicConcert2Id },
+                    { new Guid("7fab9ccc-9b49-4e22-a500-dde1aeb098d8"), "Free tickets", "By listening Play Radio, you can get 3 free tickets", ZdravkoColicConcert3Id },
+                    { new Guid("73083ee2-036d-466d-bec9-ec2721cc5441"), "Guest performer", "This concert has secret guest performer", ZdravkoColicConcert4Id },
 
                     //Raf Camora concerts
-                    { new Guid("9debf467-0eeb-4641-a27a-ad0a611c8de5"), "GuestPerformer", "This concert has Senidah as guest performer", RafCamoraConcert1Id },
-                    { new Guid("3df6c48e-cfb0-4f16-a7de-6539ca980505"), "FreeGifts", "Raf Camora will give free gifts at this concert", RafCamoraConcert2Id },
-                    { new Guid("1de357d2-2dc7-49fe-9601-299e0fbf7b4e"), "ClothingDiscount", "By attending this concert, you will get 10% of for buying Nike clothing in all Nike stores in Paris", RafCamoraConcert3Id },
-                    { new Guid("c14ae7c8-9092-49f7-a6c3-a1b9cd9f1eed"), "GuestPerformer", "This concert has Senidah as guest performer", RafCamoraConcert4Id },
-                    { new Guid("d5843389-bfcf-40ee-8869-dd9a7eeebdcf"), "FreeGifts", "Raf Camora will give free gifts at this concert", RafCamoraConcert4Id },
+                    { new Guid("9debf467-0eeb-4641-a27a-ad0a611c8de5"), "Guest performer", "This concert has Senidah as guest performer", RafCamoraConcert1Id },
+                    { new Guid("3df6c48e-cfb0-4f16-a7de-6539ca980505"), "Free gifts", "Raf Camora will give free gifts at this concert", RafCamoraConcert2Id },
+                    { new Guid("1de357d2-2dc7-49fe-9601-299e0fbf7b4e"), "Clothing discount", "By attending this concert, you will get 10% of for buying Nike clothing in all Nike stores in Paris", RafCamoraConcert3Id },
+                    { new Guid("c14ae7c8-9092-49f7-a6c3-a1b9cd9f1eed"), "Guest performer", "This concert has Senidah as guest performer", RafCamoraConcert4Id },
+                    { new Guid("d5843389-bfcf-40ee-8869-dd9a7eeebdcf"), "Free gifts", "Raf Camora will give free gifts at this concert", RafCamoraConcert4Id },
 
                     //Beogradsko dramsko pozoriste
-                    { new Guid("2876bd8b-a9d7-40ee-9191-0fcce4d1522d"), "ConnectedSeats", "If you want multiple connected seats, please go to Beogradsko dramsko pozoriste as soon as possible", beogradskoDramskoPozoriste1Id },
-                    { new Guid("9aada4f9-5b96-4e89-8993-99ae9f67495b"), "ConnectedSeats", "If you want multiple connected seats, please go to Beogradsko dramsko pozoriste as soon as possible", beogradskoDramskoPozoriste2Id },
+                    { new Guid("2876bd8b-a9d7-40ee-9191-0fcce4d1522d"), "Connected seats", "If you want multiple connected seats, please go to Beogradsko dramsko pozoriste as soon as possible", beogradskoDramskoPozoriste1Id },
+                    { new Guid("9aada4f9-5b96-4e89-8993-99ae9f67495b"), "Connected seats", "If you want multiple connected seats, please go to Beogradsko dramsko pozoriste as soon as possible", beogradskoDramskoPozoriste2Id },
 
                     //Cirkus De La Vega
-                    { new Guid("7ed32673-cde0-48ba-84df-f252b31f93b0"), "BadWeatherLocation", "If it is raining, circus performance will be in Hala Cair.", cirkusDeLaVega1Id },
+                    { new Guid("7ed32673-cde0-48ba-84df-f252b31f93b0"), "Bad weather location", "If it is raining, circus performance will be in Hala Cair.", cirkusDeLaVega1Id },
                 });
         }
 

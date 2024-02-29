@@ -50,7 +50,7 @@ namespace Reservations.Infrastructure.Migrations
             var cirkusDeLaVega1ExternalId = new Guid("b13a3e09-f72d-4811-a963-6950758b4505");
 
             var cirkusDeLaVega2Id = new Guid("ff0bac9e-e6b4-4b07-8d10-6d0afdad70bd");
-            var cirkusDeLaVega2ExternalId = new Guid("cff04491-ca8c-4b8a-977c-82d366fe8594\"");
+            var cirkusDeLaVega2ExternalId = new Guid("cff04491-ca8c-4b8a-977c-82d366fe8594");
 
             migrationBuilder.InsertData(
                 table: "Shows",

@@ -25,7 +25,8 @@ public class UsersController : ControllerBase
         var command = new CreateUserCommand()
         {
             Email = request.Email,
-            UserName = request.UserName
+            UserName = request.UserName,
+            ExternalId = request.ExternalId
         };
 
         var response = await _mediator.Send(command);

@@ -23,7 +23,7 @@ public class RegistrateUserCommandHandler : IRequestHandler<RegistrateUserComman
 
         //publish event
         await _mediator.Publish(new UserCreatedNotification(
-                new CreatedUserEvent(command.Email, command.UserName)));
+                new CreatedUserEvent(command.Email, command.UserName, new Guid(registrationResponse.UserId))));
 
         return registrationResponse;
     }

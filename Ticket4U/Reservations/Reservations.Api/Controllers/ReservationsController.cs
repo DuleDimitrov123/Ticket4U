@@ -29,8 +29,8 @@ public class ReservationsController : ControllerBase
     {
         var command = new CreateReservationCommand()
         {
-            UserId = request.UserId,
-            ShowId = request.ShowId,
+            ExternalUserId = request.ExternalUserId,
+            ShowId = request.ExternalShowId,
             NumberOfReservations = request.NumberOfReservations
         };
 

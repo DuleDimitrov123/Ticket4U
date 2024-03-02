@@ -22,7 +22,7 @@ public class ReservationsControllerTests : ReservationsControllerHelper
     [Fact]
     public async Task CreateReservationSuccessfully()
     {
-        var request = new CreateReservationRequest(InstanceConstants.User1Id, InstanceConstants.Show1Id, 3);
+        var request = new CreateReservationRequest(InstanceConstants.ExternalUser1Id, InstanceConstants.Show1Id, 3);
 
         var (statusCode, result) = await CreateReservation<Guid>(request, false);
 
@@ -41,7 +41,7 @@ public class ReservationsControllerTests : ReservationsControllerHelper
         statusCode.ShouldBe(HttpStatusCode.NotFound);
 
         result.ShouldNotBeNull();
-        result.ExceptionMessages.ShouldContain($"{nameof(Show)} {request.ShowId} is not found");
+        result.ExceptionMessages.ShouldContain($"{nameof(Show)} {request.ExternalShowId} is not found");
     }
 
     [Fact]
@@ -54,7 +54,7 @@ public class ReservationsControllerTests : ReservationsControllerHelper
         statusCode.ShouldBe(HttpStatusCode.NotFound);
 
         result.ShouldNotBeNull();
-        result.ExceptionMessages.ShouldContain($"{nameof(User)} {request.UserId} is not found");
+        result.ExceptionMessages.ShouldContain($"{nameof(User)} {request.ExternalUserId} is not found");
     }
 
     [Fact]

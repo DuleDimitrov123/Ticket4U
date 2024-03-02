@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Reservations.Application.Contracts.Persistance;
 using Reservations.Application.Features.Shows.Notifications.ChangedShowStatus;
 using Reservations.Application.Services;
 using Reservations.Domain.Reservations;
@@ -14,14 +15,14 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
 {
     private readonly ICommandRepository<Reservation> _reservationCommandRepository;
     private readonly IQueryRepository<Show> _showQueryRepository;
-    private readonly IQueryRepository<User> _userQueryRepository;
+    private readonly IUserQueryRepository _userQueryRepository;
     private readonly ICheckShowReservation _checkShowReservation;
     private readonly IMediator _mediator;
 
     public CreateReservationCommandHandler(
         ICommandRepository<Reservation> reservationRepository,
         IQueryRepository<Show> showRepository,
-        IQueryRepository<User> userRepository,
+        IUserQueryRepository userRepository,
         ICheckShowReservation checkShowReservation,
         IMediator mediator)
     {
@@ -41,11 +42,11 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
             throw new NotFoundException(nameof(Show), request.ShowId);
         }
 
-        var user = await _userQueryRepository.GetById(request.UserId);
+        var user = await _userQueryRepository.GetUserByExternalId(request.ExternalUserId);
 
         if (user == null)
         {
-            throw new NotFoundException(nameof(User), request.UserId);
+            throw new NotFoundException(nameof(User), request.ExternalUserId);
         }
 
         var availableReservations = await _checkShowReservation.GetNumberOfAvailableReservations(show);
@@ -68,7 +69,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
                     }));
         }
 
-        var reservation = Reservation.Create(request.UserId, request.ShowId, NumberOfReservations.Create(request.NumberOfReservations));
+        var reservation = Reservation.Create(request.ExternalUserId, request.ShowId, NumberOfReservations.Create(request.NumberOfReservations));
 
         reservation = await _reservationCommandRepository.Add(reservation);
 

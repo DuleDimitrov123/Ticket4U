@@ -4,16 +4,16 @@ using Reservations.Common.Constants;
 
 namespace Reservations.Api.Requests.Reservations;
 
-public record CreateReservationRequest(Guid UserId, Guid ShowId, int NumberOfReservations);
+public record CreateReservationRequest(Guid ExternalUserId, Guid ExternalShowId, int NumberOfReservations);
 
 public class CreateReservationRequestValidator : AbstractValidator<CreateReservationRequest>
 {
     public CreateReservationRequestValidator()
     {
-        RuleFor(request => request.UserId)
+        RuleFor(request => request.ExternalUserId)
             .NotEmpty().WithMessage(DefaultErrorMessages.UserIdForReservationRequired);
 
-        RuleFor(request => request.ShowId)
+        RuleFor(request => request.ExternalShowId)
             .NotEmpty().WithMessage(DefaultErrorMessages.ShowIdForReservationRequired);
 
         RuleFor(request => request.NumberOfReservations)

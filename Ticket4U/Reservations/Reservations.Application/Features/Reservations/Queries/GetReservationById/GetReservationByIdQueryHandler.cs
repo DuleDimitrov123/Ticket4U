@@ -2,6 +2,7 @@
 using MediatR;
 using Reservations.Application.Features.Reservations.Responses;
 using Reservations.Domain.Reservations;
+using Reservations.Domain.Shows;
 using Shared.Application.Contracts.Persistence;
 using Shared.Application.Exceptions;
 
@@ -11,11 +12,15 @@ public class GetReservationByIdQueryHandler : IRequestHandler<GetReservationById
 {
     private readonly IMapper _mapper;
     private readonly IQueryRepository<Reservation> _queryRepository;
+    private readonly IQueryRepository<Show> _showQueryRepository;
 
-    public GetReservationByIdQueryHandler(IMapper mapper, IQueryRepository<Reservation> queryRepository)
+    public GetReservationByIdQueryHandler(IMapper mapper,
+        IQueryRepository<Reservation> queryRepository,
+        IQueryRepository<Show> showQueryRepository)
     {
         _mapper = mapper;
         _queryRepository = queryRepository;
+        _showQueryRepository = showQueryRepository;
     }
 
     public async Task<ReservationResponse> Handle(GetReservationByIdQuery request, CancellationToken cancellationToken)
@@ -27,6 +32,11 @@ public class GetReservationByIdQueryHandler : IRequestHandler<GetReservationById
             throw new NotFoundException(nameof(Reservation), request.ReservationId);
         }
 
-        return _mapper.Map<ReservationResponse>(reservation);
+        var reservationResponse = _mapper.Map<ReservationResponse>(reservation);
+        var show = await _showQueryRepository.GetById(reservation.ShowId);
+
+        reservationResponse.Show = _mapper.Map<ShowResponse>(show);
+
+        return reservationResponse;
     }
 }

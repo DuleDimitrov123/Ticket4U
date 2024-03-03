@@ -47,7 +47,7 @@ public class CreateReservationCommandHandlerTests
 
         var command = new CreateReservationCommand()
         {
-            ShowId = Guid.NewGuid(),
+            ExternalShowId = Guid.NewGuid(),
             ExternalUserId = Guid.NewGuid(),
             NumberOfReservations = 3
         };

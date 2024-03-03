@@ -14,14 +14,14 @@ namespace Reservations.Application.Features.Reservations.Commands.CreateReservat
 public class CreateReservationCommandHandler : IRequestHandler<CreateReservationCommand, Guid>
 {
     private readonly ICommandRepository<Reservation> _reservationCommandRepository;
-    private readonly IQueryRepository<Show> _showQueryRepository;
+    private readonly IShowQueryRepository _showQueryRepository;
     private readonly IUserQueryRepository _userQueryRepository;
     private readonly ICheckShowReservation _checkShowReservation;
     private readonly IMediator _mediator;
 
     public CreateReservationCommandHandler(
         ICommandRepository<Reservation> reservationRepository,
-        IQueryRepository<Show> showRepository,
+        IShowQueryRepository showRepository,
         IUserQueryRepository userRepository,
         ICheckShowReservation checkShowReservation,
         IMediator mediator)
@@ -35,11 +35,11 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
 
     public async Task<Guid> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
-        var show = await _showQueryRepository.GetById(request.ShowId);
+        var show = await _showQueryRepository.GetShowByExternalId(request.ExternalShowId);
 
         if (show == null)
         {
-            throw new NotFoundException(nameof(Show), request.ShowId);
+            throw new NotFoundException(nameof(Show), request.ExternalShowId);
         }
 
         var user = await _userQueryRepository.GetUserByExternalId(request.ExternalUserId);
@@ -69,7 +69,7 @@ public class CreateReservationCommandHandler : IRequestHandler<CreateReservation
                     }));
         }
 
-        var reservation = Reservation.Create(request.ExternalUserId, request.ShowId, NumberOfReservations.Create(request.NumberOfReservations));
+        var reservation = Reservation.Create(user.Id, show.Id, NumberOfReservations.Create(request.NumberOfReservations));
 
         reservation = await _reservationCommandRepository.Add(reservation);
 

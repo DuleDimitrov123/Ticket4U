@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Navigate } from "react-router-dom";
@@ -34,12 +34,14 @@ const Login = () => {
   const [loginSuccess, setLoginSuccess] = useState();
   const [loginError, setLoginError] = useState();
   const [redirectOnLogin, setRedirectOnLogin] = useState(false);
+  const { user } = useUser();
 
   const submitCredentials = async (credentials) => {
     try {
       await authenticate.mutateAsync(credentials);
       setLoginSuccess("Login successful!");
       setLoginError(null);
+
       setTimeout(() => {
         setRedirectOnLogin(true);
       }, 700);

@@ -5,12 +5,7 @@ import { FetchContext } from "../context/FetchContext";
 const usePerformers = (performerId) => {
   const { protectedFetch } = useContext(FetchContext);
 
-  const getPerformers = async () => {
-    const { data } = await protectedFetch.get("/performers");
-    return data;
-  };
-
-  const getPerformer = async () => {
+  const getPerformerCallback = async () => {
     if (!performerId) {
       throw new Error("PerformerId is required");
     }
@@ -21,26 +16,15 @@ const usePerformers = (performerId) => {
     return data;
   };
 
-  //   const {
-  //     data: performersData,
-  //     isLoading: performersLoading,
-  //     refetch: refetchPerformers,
-  //   } = useQuery(["performers"], getPerformers, {
-  //     enabled: !performerId, // Only enable if performerId is not provided
-  //   });
-
   const {
     data: performerData,
     isLoading: performerLoading,
     refetch: refetchPerformer,
-  } = useQuery(["performer", performerId], getPerformer, {
+  } = useQuery(["performer", performerId], getPerformerCallback, {
     enabled: !!performerId,
   });
 
   return {
-    // performersData,
-    // performersLoading,
-    // refetchPerformers,
     performerData,
     performerLoading,
     refetchPerformer,

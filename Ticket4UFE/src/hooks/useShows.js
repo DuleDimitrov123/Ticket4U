@@ -1,13 +1,16 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { publicFetch } from "../util/fetch";
+import { useContext } from "react";
+import { FetchContext } from "../context/FetchContext";
 
 const useShows = (showId) => {
-  const getShows = async () => {
+  const { protectedFetch } = useContext(FetchContext);
+  const getShowsCallback = async () => {
     const { data } = await publicFetch.get("/shows");
     return data;
   };
 
-  const getShow = async () => {
+  const getShowCallback = async () => {
     if (!showId) {
       throw new Error("showId is required");
     }
@@ -20,14 +23,26 @@ const useShows = (showId) => {
     data: showsData,
     isLoading: showsLoading,
     refetch: refetchShows,
-  } = useQuery(["shows"], getShows);
+  } = useQuery(["shows"], getShowsCallback);
 
   const {
     data: showData,
     isLoading: showLoading,
     refetch: refetchShow,
-  } = useQuery(["show", showId], getShow, {
+  } = useQuery(["show", showId], getShowCallback, {
     enabled: !!showId, // Enable the query only when showId is provided
+  });
+
+  const createShowCallback = async (data) => {
+    const response = await protectedFetch.post("shows", data);
+
+    return response.data;
+  };
+
+  const createShow = useMutation(createShowCallback, {
+    onError: (error) => {
+      return error.response?.data || "An unknown error occurred";
+    },
   });
 
   return {
@@ -37,6 +52,7 @@ const useShows = (showId) => {
     showData,
     showLoading,
     refetchShow,
+    createShow,
   };
 };
 

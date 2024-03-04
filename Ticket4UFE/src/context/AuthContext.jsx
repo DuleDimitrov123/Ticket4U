@@ -8,7 +8,8 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const startLocation = useLocation();
 
-  const userInfo = localStorage.getItem("userInfo");
+  const userInfoString = localStorage.getItem("userInfo");
+  const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
   const expiresAt = localStorage.getItem("expiresAt");
   const token = localStorage.getItem("token");
 
@@ -20,6 +21,7 @@ const AuthProvider = ({ children }) => {
     userInfo: userInfo || {},
   });
 
+  console.log("authState", authState);
   const setAuthInfo = ({ token }) => {
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -30,7 +32,7 @@ const AuthProvider = ({ children }) => {
     setAuthState((old) => ({
       ...old,
       token,
-      userInfo: JSON.stringify(decodedPayload),
+      userInfo: decodedPayload,
     }));
   };
 
@@ -65,7 +67,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return authState.userInfo.role === "admin";
+    return authState.userInfo.roles === "Admin";
   };
 
   return (

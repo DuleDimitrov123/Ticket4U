@@ -1,7 +1,7 @@
 const eventCard = {
   maxW: "sm",
   overflow: "hidden",
-  m: 4,
+  m: 2,
   backgroundColor: "white",
   flexDir: "column",
   borderRadius: "6px",

@@ -1,6 +1,7 @@
 const authenticatedBox = {
   flex: 1,
-  overflow: "auto",
+  overflow: "hidden",
+  p: "4",
   // height: "100%",
 };
 

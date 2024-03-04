@@ -18,7 +18,8 @@ import { BiChevronDown } from "react-icons/bi";
 
 const AuthenticatedNavbar = () => {
   const auth = useContext(AuthContext);
-  const { firstName, lastName, role } = JSON.parse(auth?.authState?.userInfo);
+  const { isAdmin } = auth;
+  const { firstName, lastName, role } = auth?.authState?.userInfo;
 
   return (
     <Box>
@@ -51,6 +52,7 @@ const AuthenticatedNavbar = () => {
                       <Text fontSize="sm" color="gray.700">
                         {firstName + " " + lastName}
                       </Text>
+                      {isAdmin() && <Text fontSize={"sm"}>Admin</Text>}
                       <Text
                         fontSize="xs"
                         color="gray.600"

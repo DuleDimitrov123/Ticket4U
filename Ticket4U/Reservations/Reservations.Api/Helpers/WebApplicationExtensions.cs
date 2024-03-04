@@ -12,7 +12,7 @@ public static class WebApplicationExtensions
             var context = serviceScope.ServiceProvider.GetService<ReservationsDbContext>();
             try
             {
-                context.Database.EnsureDeleted();//DELETE IN PROD!
+                //context.Database.EnsureDeleted();//DELETE IN PROD!
                 context.Database.Migrate();
             }
             catch (Exception ex)

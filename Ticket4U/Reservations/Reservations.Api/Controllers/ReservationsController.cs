@@ -6,6 +6,7 @@ using Reservations.Application.Features.Reservations.Commands.CreateReservation;
 using Reservations.Application.Features.Reservations.Commands.UpdateNumberOfReservations;
 using Reservations.Application.Features.Reservations.Queries.GetReservationById;
 using Reservations.Application.Features.Reservations.Queries.GetReservations;
+using Reservations.Application.Features.Reservations.Queries.GetReservationsByExternalUserId;
 using Reservations.Application.Features.Reservations.Queries.GetReservationsByUserId;
 using Reservations.Application.Features.Reservations.Responses;
 
@@ -63,6 +64,16 @@ public class ReservationsController : ControllerBase
     public async Task<ActionResult<IList<ReservationResponse>>> GetByUserId([FromRoute] Guid userId)
     {
         var response = await _mediator.Send(new GetReservationsByUserIdQuery() { UserId = userId });
+
+        return Ok(response);
+    }
+
+    [HttpGet("externalUser/{externalUserId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IList<ReservationResponse>>> GetByExternalUserId([FromRoute] Guid externalUserId)
+    {
+        var response = await _mediator.Send(new GetReservationsByExternalUserIdQuery() { ExternalUserId = externalUserId });
 
         return Ok(response);
     }

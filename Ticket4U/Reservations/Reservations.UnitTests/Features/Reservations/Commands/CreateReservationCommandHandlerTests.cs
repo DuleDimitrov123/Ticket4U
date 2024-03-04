@@ -18,7 +18,7 @@ public class CreateReservationCommandHandlerTests
     [Theory]
     [AutoMoqData]
     public async Task CreateNewReservation([Frozen] Mock<ICommandRepository<Reservation>> mockReservationCommandRepository,
-        [Frozen] Mock<IQueryRepository<Show>> mockShowRepository,
+        [Frozen] Mock<IShowQueryRepository> mockShowRepository,
         [Frozen] Mock<IUserQueryRepository> mockUserRepository,
         [Frozen] Mock<ICheckShowReservation> mockCheckShowReservation,
         [Frozen] Mock<IMediator> mockMediator,
@@ -26,8 +26,8 @@ public class CreateReservationCommandHandlerTests
     {
         //arrange
         var reservations = new List<Reservation>();
-        var show = Show.Create("Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
-        var user = User.Create("user1@gmail.com", "user1", Guid.NewGuid());
+        var show = Show.Create(Guid.NewGuid(), "Show1", DateTime.Now.AddDays(10), 100, Guid.NewGuid());
+        var user = User.Create(Guid.NewGuid(), "user1@gmail.com", "user1", Guid.NewGuid());
 
         mockReservationCommandRepository.Setup(repo => repo.Add(It.IsAny<Reservation>()))
             .ReturnsAsync(
@@ -41,7 +41,7 @@ public class CreateReservationCommandHandlerTests
                     return res;
                 });
 
-        mockShowRepository.Setup(repo => repo.GetById(It.IsAny<Guid>())).ReturnsAsync(show);
+        mockShowRepository.Setup(repo => repo.GetShowByExternalId(It.IsAny<Guid>())).ReturnsAsync(show);
 
         mockUserRepository.Setup(repo => repo.GetUserByExternalId(It.IsAny<Guid>())).ReturnsAsync(user);
 

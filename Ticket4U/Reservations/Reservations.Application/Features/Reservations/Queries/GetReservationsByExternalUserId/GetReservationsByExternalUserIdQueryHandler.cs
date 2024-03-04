@@ -44,6 +44,11 @@ public class GetReservationsByExternalUserIdQueryHandler : IRequestHandler<GetRe
             var reservationResponse = _mapper.Map<ReservationResponse>(reservation);
             var show = await _showQueryRepository.GetById(reservation.ShowId);
 
+            if (show == null)
+            {
+                throw new NotFoundException(nameof(Show), reservation.ShowId);
+            }
+
             reservationResponse.Show = _mapper.Map<ShowResponse>(show);
             reservationResponses.Add(reservationResponse);
         }

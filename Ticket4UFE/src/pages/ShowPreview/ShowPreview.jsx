@@ -25,17 +25,21 @@ import AboutShow from "../../components/AboutShow";
 import ShowMessages from "../../components/ShowMessages";
 import AboutPerformer from "../../components/AboutPerformer";
 import ReserveTicketModal from "../../components/ReserveTicketModal";
+import AddShowMessageModal from "../../components/AddShowMessageModal/AddShowMessageModal";
 
 const ShowPreview = () => {
   const { showId } = useParams();
   const { showData, showLoading, refetchShow } = useShows(showId);
-  const { performerData, performerLoading, refetchPerformer } = usePerformers(
+  const { performerData, performerLoading } = usePerformers(
     showData?.performerId
   );
-  const { categoryData, categoryLoading, refetchCategory } = useCategories(
-    showData?.categoryId
-  );
+  const { categoryData, categoryLoading } = useCategories(showData?.categoryId);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isAddMessageOpen,
+    onOpen: onAddMessageOpen,
+    onClose: onAddMessageClose,
+  } = useDisclosure();
   const base64Image = `data:image/jpeg;base64,${showData?.picture}`;
 
   return (
@@ -120,7 +124,10 @@ const ShowPreview = () => {
                   <TabPanel w="100%">
                     <AboutShow show={showData} openModal={onOpen} />
                     <Box mt="10" w="100%">
-                      <ShowMessages showMessages={showData?.showMessages} />
+                      <ShowMessages
+                        showMessages={showData?.showMessages}
+                        onAddMessageOpen={onAddMessageOpen}
+                      />
                     </Box>
                   </TabPanel>
                   <TabPanel w="100%">
@@ -133,6 +140,12 @@ const ShowPreview = () => {
         )}
       </Flex>
       <ReserveTicketModal isOpen={isOpen} onClose={onClose} show={showData} />
+      <AddShowMessageModal
+        isOpen={isAddMessageOpen}
+        onClose={onAddMessageClose}
+        refetchShow={refetchShow}
+        show={showData}
+      />
     </AuthenticatedLayout>
   );
 };

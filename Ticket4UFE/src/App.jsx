@@ -10,7 +10,13 @@ import theme from "./theme";
 import { AuthProvider } from "./context/AuthContext";
 import { FetchProvider } from "./context/FetchContext";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (

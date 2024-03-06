@@ -18,17 +18,58 @@ import styles from "./ShowsTable.styles";
 import moment from "moment";
 import { useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import DeleteShowModal from "../DeleteShowModal/DeleteShowModal";
+import ShowModal from "../ShowModal/ShowModal";
+import { useNavigate } from "react-router";
 
-const ShowsTable = ({ shows }) => {
+const ShowsTable = ({
+  shows,
+  refetchShows,
+  deleteShow,
+  createShow,
+  updateShowName,
+  updateShowLocation,
+  updateShowPrice,
+  updateShowDateTime,
+}) => {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedShow, setSelectedShow] = useState({});
+
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onDeleteModalOpen,
+    onClose: onDeleteModalClose,
+  } = useDisclosure();
 
   const editShow = (show) => {
     setSelectedShow(show);
     onOpen();
   };
-  const deleteShow = (show) => {
-    console.log("Delete");
+  const handleDelete = (show) => {
+    setSelectedShow(show);
+    onDeleteModalOpen();
+  };
+
+  const onDelete = async (show) => {
+    try {
+      await deleteShow.mutateAsync(
+        {
+          showId: show.id,
+        },
+        {
+          onSuccess: () => {
+            onDeleteModalClose();
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error creating reservation:", error);
+    }
+  };
+
+  const handleViewDetails = (id) => {
+    navigate(`/shows/${id}`);
   };
 
   return (
@@ -48,7 +89,7 @@ const ShowsTable = ({ shows }) => {
         <Tbody>
           {shows.map((show, index) => (
             <Tr key={index}>
-              <Td>
+              <Td cursor={"pointer"} onClick={() => handleViewDetails(show?.id)}>
                 {" "}
                 <Text fontWeight={"bold"}>{show.name}</Text>
                 <Image
@@ -74,16 +115,12 @@ const ShowsTable = ({ shows }) => {
                     <BsThreeDotsVertical />
                   </MenuButton>
                   <MenuList>
-                    <MenuItem>
+                    <MenuItem onClick={() => editShow(show)}>
                       {" "}
-                      <Text color={"gray.800"} onClick={() => editShow(show)}>
-                        Edit
-                      </Text>
+                      <Text color={"gray.800"}>Edit</Text>
                     </MenuItem>
-                    <MenuItem>
-                      <Text color={"gray.800"} onClick={() => deleteShow(show)}>
-                        Delete
-                      </Text>
+                    <MenuItem onClick={() => handleDelete(show)}>
+                      <Text color={"gray.800"}>Delete</Text>
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -92,6 +129,25 @@ const ShowsTable = ({ shows }) => {
           ))}
         </Tbody>
       </Table>
+      <DeleteShowModal
+        isOpen={isDeleteModalOpen}
+        onClose={onDeleteModalClose}
+        show={selectedShow}
+        onDelete={onDelete}
+      />
+
+      <ShowModal
+        isOpen={isOpen}
+        onClose={onClose}
+        show={selectedShow}
+        isEditFlow
+        refetchShows={refetchShows}
+        createShow={createShow}
+        updateShowName={updateShowName}
+        updateShowLocation={updateShowLocation}
+        updateShowPrice={updateShowPrice}
+        updateShowDateTime={updateShowDateTime}
+      />
     </TableContainer>
   );
 };

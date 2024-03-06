@@ -14,37 +14,47 @@ import {
   FormLabel,
   FormErrorMessage,
   Select,
+  Flex,
 } from "@chakra-ui/react";
-import useReservation from "../../hooks/useReservation";
-import { useNavigate } from "react-router";
 import { useRef } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import DateAndTimePicker from "../DateAndTimePicker/DateAndTimePicker";
-import useShows from "../../hooks/useShows";
+import useCategories from "../../hooks/useCategories";
+import usePerformers from "../../hooks/usePerformers";
 
-const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
-  const { createShow } = useShows();
+const ShowModal = ({
+  isOpen,
+  onClose,
+  isEditFlow,
+  show,
+  createShow,
+  updateShowName,
+  updateShowLocation,
+  updateShowPrice,
+  updateShowDateTime,
+}) => {
   const btnRef = useRef();
   const initialValues = {
-    name: "",
-    description: "",
-    picture: "",
-    location: "",
-    numOfPlaces: "",
-    ticketPriceCurrency: "",
-    tickerPriceAmount: "",
-    startingDateTime: "",
+    name: show?.name || "",
+    description: show?.description || "",
+    picture: show?.picture || "",
+    location: show?.location || "",
+    numberOfplaces: show?.numberOfplaces || "",
+    ticketPriceCurrency: show?.ticketPriceCurrency || "",
+    tickerPriceAmount: show?.tickerPriceAmount || "",
+    startingDateTime: show?.startingDateTime || "",
+    categoryId: show?.categoryId || "",
+    performerId: show?.performerId || "",
   };
-  const userInfo = localStorage.getItem("userInfo");
-  const userInfoJSON = JSON.parse(userInfo);
-  const navigate = useNavigate();
+  const { categories } = useCategories();
+  const { performers } = usePerformers();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("This field is required"),
     description: Yup.string().required("This field is required"),
     location: Yup.string().required("This filed is required"),
     picture: Yup.string().required("This filed is required"),
-    numOfPlaces: Yup.number()
+    numberOfplaces: Yup.number()
       .integer("Please enter a valid integer")
       .min(1, "Number of places must be greater than 0")
       .required("This field is required"),
@@ -63,17 +73,62 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
     };
     try {
       await createShow.mutateAsync(data, {
-        onSuccess: (data) => {
-          console.log("success");
+        onSuccess: () => {
+          onClose();
         },
       });
-
-      onClose();
     } catch (error) {
       console.error("Error creating reservation:", error);
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const onUpdateName = async (name) => {
+    try {
+      await updateShowName.mutateAsync({
+        showId: show.id,
+        newName: name,
+      });
+    } catch (error) {
+      console.error("Error updating name:", error);
+    }
+    return;
+  };
+  const onUpdateLocation = async (location) => {
+    try {
+      await updateShowLocation.mutateAsync({
+        showId: show.id,
+        newLocation: location,
+      });
+    } catch (error) {
+      console.error("Error updating location:", error);
+    }
+    return;
+  };
+
+  const onUpdatePrice = async (price) => {
+    try {
+      await updateShowPrice.mutateAsync({
+        showId: show.id,
+        newAmount: price,
+      });
+    } catch (error) {
+      console.error("Error updating price:", error);
+    }
+    return;
+  };
+
+  const onUpdateDateTime = async (dateTime) => {
+    try {
+      await updateShowDateTime.mutateAsync({
+        showId: show.id,
+        newStartingDateTime: dateTime,
+      });
+    } catch (error) {
+      console.error("Error updating price:", error);
+    }
+    return;
   };
 
   return (
@@ -86,7 +141,7 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
-        <DrawerHeader>Create show</DrawerHeader>
+        <DrawerHeader>{isEditFlow ? "Edit show" : "Create show"}</DrawerHeader>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -97,7 +152,20 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
               <DrawerBody maxH="80vh" overflowY="auto">
                 <FormControl isInvalid={Boolean(errors.name && touched.name)}>
                   <FormLabel htmlFor="name"> Name:</FormLabel>
-                  <Field as={Input} type="string" id="name" name="name" />
+                  {isEditFlow ? (
+                    <Flex flexDir={"column"} gap="1" alignItems={"end"}>
+                      <Field as={Input} type="string" id="name" name="name" />
+                      <Button
+                        colorScheme="purple"
+                        onClick={() => onUpdateName(values?.name)}
+                      >
+                        Update name
+                      </Button>
+                    </Flex>
+                  ) : (
+                    <Field as={Input} type="string" id="name" name="name" />
+                  )}
+
                   <FormErrorMessage>
                     <ErrorMessage name="name" />
                   </FormErrorMessage>
@@ -111,6 +179,7 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                     type="string"
                     id="description"
                     name="description"
+                    disabled={isEditFlow}
                   />
                   <FormErrorMessage>
                     <ErrorMessage name="description" />
@@ -120,7 +189,7 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                   isInvalid={Boolean(errors.picture && touched.picture)}
                 >
                   <FormLabel htmlFor="picture">Image:</FormLabel>
-                  <ImageUpload />
+                  <ImageUpload isEditFlow={isEditFlow} />
                   <FormErrorMessage>
                     <ErrorMessage name="picture" />
                   </FormErrorMessage>
@@ -129,28 +198,51 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                   isInvalid={Boolean(errors.location && touched.location)}
                 >
                   <FormLabel htmlFor="location">Location:</FormLabel>
-                  <Field
-                    as={Input}
-                    type="string"
-                    id="location"
-                    name="location"
-                  />
+                  {isEditFlow ? (
+                    <Flex flexDir={"column"} gap="1" alignItems={"end"}>
+                      <Field
+                        as={Input}
+                        type="string"
+                        id="location"
+                        name="location"
+                      />
+                      <Button
+                        colorScheme="purple"
+                        onClick={() => onUpdateLocation(values?.location)}
+                      >
+                        Update location
+                      </Button>
+                    </Flex>
+                  ) : (
+                    <Field
+                      as={Input}
+                      type="string"
+                      id="location"
+                      name="location"
+                    />
+                  )}
+
                   <FormErrorMessage>
                     <ErrorMessage name="location" />
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl
-                  isInvalid={Boolean(errors.location && touched.location)}
+                  isInvalid={Boolean(
+                    errors.numberOfplaces && touched.numberOfplaces
+                  )}
                 >
-                  <FormLabel htmlFor="numOfPlaces">Number of places:</FormLabel>
+                  <FormLabel htmlFor="numberOfplaces">
+                    Number of places:
+                  </FormLabel>
                   <Field
                     as={Input}
                     type="number"
-                    id="numOfPlaces"
-                    name="numOfPlaces"
+                    id="numberOfplaces"
+                    name="numberOfplaces"
+                    disabled={isEditFlow}
                   />
                   <FormErrorMessage>
-                    <ErrorMessage name="numOfPlaces" />
+                    <ErrorMessage name="numberOfplaces" />
                   </FormErrorMessage>
                 </FormControl>
                 <FormControl
@@ -159,16 +251,15 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                   )}
                 >
                   <FormLabel htmlFor="ticketPriceCurrency">Currency:</FormLabel>
-                  {/* Use the Chakra UI Select component for the currency selection */}
                   <Select
                     id="ticketPriceCurrency"
                     name="ticketPriceCurrency"
                     placeholder="Select currency"
-                    // Add the necessary Formik props to handle changes
                     value={values.ticketPriceCurrency}
                     onChange={(e) =>
                       setFieldValue("ticketPriceCurrency", e.target.value)
                     }
+                    disabled={isEditFlow}
                   >
                     <option value="RSD">RSD</option>
                     <option value="EUR">EUR</option>
@@ -183,12 +274,30 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                   <FormLabel htmlFor="tickerPriceAmount">
                     Ticket price:
                   </FormLabel>
-                  <Field
-                    as={Input}
-                    type="number"
-                    id="tickerPriceAmount"
-                    name="tickerPriceAmount"
-                  />
+                  {isEditFlow ? (
+                    <Flex flexDir={"column"} gap="1" alignItems={"end"}>
+                      <Field
+                        as={Input}
+                        type="number"
+                        id="tickerPriceAmount"
+                        name="tickerPriceAmount"
+                      />
+                      <Button
+                        colorScheme="purple"
+                        onClick={() => onUpdatePrice(values?.tickerPriceAmount)}
+                      >
+                        Update price
+                      </Button>
+                    </Flex>
+                  ) : (
+                    <Field
+                      as={Input}
+                      type="number"
+                      id="tickerPriceAmount"
+                      name="tickerPriceAmount"
+                    />
+                  )}
+
                   <FormErrorMessage>
                     <ErrorMessage name="tickerPriceAmount" />
                   </FormErrorMessage>
@@ -201,20 +310,86 @@ const ShowModal = ({ isOpen, onClose, isEditFlow }) => {
                   <FormLabel htmlFor="startingDateTime">
                     Date and time:
                   </FormLabel>
-                  <DateAndTimePicker />
+                  {isEditFlow ? (
+                    <Flex flexDir={"column"} gap="1" alignItems={"end"}>
+                      <DateAndTimePicker />
+                      <Button
+                        colorScheme="purple"
+                        onClick={() =>
+                          onUpdateDateTime(values?.startingDateTime)
+                        }
+                      >
+                        Update date and time
+                      </Button>
+                    </Flex>
+                  ) : (
+                    <DateAndTimePicker />
+                  )}
                   <FormErrorMessage>
                     <ErrorMessage name="tickerPriceAmount" />
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={Boolean(errors.categoryId && touched.categoryId)}
+                >
+                  <FormLabel htmlFor="categoryId">Category:</FormLabel>
+                  <Select
+                    id="categoryId"
+                    name="categoryId"
+                    placeholder="Select category"
+                    value={values.categoryId}
+                    onChange={(e) =>
+                      setFieldValue("categoryId", e.target.value)
+                    }
+                    disabled={isEditFlow}
+                  >
+                    {categories?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>
+                    <ErrorMessage name="categoryId" />
+                  </FormErrorMessage>
+                </FormControl>
+                <FormControl
+                  isInvalid={Boolean(errors.performerId && touched.performerId)}
+                >
+                  <FormLabel htmlFor="categoryId">Performer:</FormLabel>
+                  <Select
+                    id="performerId"
+                    name="performerId"
+                    placeholder="Select performer"
+                    value={values.performerId}
+                    onChange={(e) =>
+                      setFieldValue("performerId", e.target.value)
+                    }
+                    disabled={isEditFlow}
+                  >
+                    {performers?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </Select>
+                  <FormErrorMessage>
+                    <ErrorMessage name="eventType" />
                   </FormErrorMessage>
                 </FormControl>
               </DrawerBody>
 
               <DrawerFooter>
-                <Button variant="outline" mr={3} onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button colorScheme="purple" type="submit">
-                  Save
-                </Button>
+                {!isEditFlow && (
+                  <Button variant="outline" mr={3} onClick={onClose}>
+                    Cancel
+                  </Button>
+                )}
+                {!isEditFlow && (
+                  <Button colorScheme="purple" type="submit">
+                    Save
+                  </Button>
+                )}
               </DrawerFooter>
             </Form>
           )}

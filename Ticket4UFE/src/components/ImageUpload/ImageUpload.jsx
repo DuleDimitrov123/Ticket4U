@@ -3,10 +3,18 @@ import { useState, useRef } from "react";
 import { Box, Button, Flex, Image, Input, Text } from "@chakra-ui/react";
 import { useFormikContext } from "formik";
 
-const ImageUpload = () => {
+const ImageUpload = ({ isEditFlow }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-  const { setFieldValue } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
+
+  const formatLabel = (propValue, textLimit) => {
+    const length = propValue?.length;
+    if (length >= textLimit) {
+      return propValue?.substring(0, textLimit) + "...";
+    }
+    return propValue;
+  };
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -37,6 +45,25 @@ const ImageUpload = () => {
     setSelectedImage(null);
     setFieldValue("picture", null);
   };
+
+  if (isEditFlow && values?.picture) {
+    return (
+      <Box pb="3">
+        <Flex
+          w={"100%"}
+          justifyContent={"space-between"}
+          mb="2"
+          alignItems={"center"}
+        ></Flex>
+        <Image
+          src={`data:image/jpeg;base64,${values?.picture}`}
+          alt="Selected"
+          maxH="200px"
+          mx="auto"
+        />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -80,7 +107,7 @@ const ImageUpload = () => {
             mb="2"
             alignItems={"center"}
           >
-            <Text mb={4}>{selectedImage.name}</Text>
+            <Text mb={4}>{formatLabel(selectedImage.name, 15)}</Text>
             <Button colorScheme="red" onClick={handleClear} mt={2}>
               Clear
             </Button>

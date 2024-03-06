@@ -17,10 +17,19 @@ import ShowsTable from "../../components/ShowsTable/ShowsTable";
 import ShowModal from "../../components/ShowModal/ShowModal";
 
 const Shows = () => {
-  const { showsData, showsLoading } = useShows();
+  const {
+    showsData,
+    showsLoading,
+    refetchShows,
+    deleteShow,
+    createShow,
+    updateShowName,
+    updateShowLocation,
+    updateShowPrice,
+    updateShowDateTime,
+  } = useShows();
   const { isAdmin } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <AuthenticatedLayout>
       {isAdmin() ? (
@@ -52,8 +61,25 @@ const Shows = () => {
                   Add Show
                 </Button>
               </Flex>
-              {<ShowsTable shows={showsData} />}
-              <ShowModal isOpen={isOpen} onClose={onClose} />
+              {showsData?.length && (
+                <ShowsTable
+                  shows={showsData}
+                  refetchShows={refetchShows}
+                  createShow={createShow}
+                  deleteShow={deleteShow}
+                  updateShowName={updateShowName}
+                  updateShowLocation={updateShowLocation}
+                  updateShowPrice={updateShowPrice}
+                  updateShowDateTime={updateShowDateTime}
+                />
+              )}
+              {isOpen && (
+                <ShowModal
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  createShow={createShow}
+                />
+              )}
             </>
           )}
         </Flex>

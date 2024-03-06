@@ -16,6 +16,11 @@ const usePerformers = (performerId) => {
     return data;
   };
 
+  const getPerformersCallback = async () => {
+    const { data } = await protectedFetch.get(`/performers`);
+    return data;
+  };
+
   const {
     data: performerData,
     isLoading: performerLoading,
@@ -24,10 +29,19 @@ const usePerformers = (performerId) => {
     enabled: !!performerId,
   });
 
+  const {
+    data: performers,
+    isLoading: performersLoading,
+    refetch: refetchPerformers,
+  } = useQuery(["performers", performerId], getPerformersCallback);
+
   return {
     performerData,
     performerLoading,
     refetchPerformer,
+    performers,
+    performersLoading,
+    refetchPerformers,
   };
 };
 

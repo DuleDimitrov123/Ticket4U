@@ -43,6 +43,99 @@ const useShows = (showId) => {
     onError: (error) => {
       return error.response?.data || "An unknown error occurred";
     },
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const deleteShowCallback = async ({ showId }) => {
+    const response = await protectedFetch.delete(`/shows/${showId}`);
+    return response.data;
+  };
+
+  const deleteShow = useMutation(deleteShowCallback, {
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const updateShowNameCallback = async ({ showId, newName }) => {
+    const response = await protectedFetch.put(`/shows/${showId}/newName`, {
+      newName,
+    });
+    return response.data;
+  };
+
+  const updateShowName = useMutation(updateShowNameCallback, {
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const updateShowLocationCallback = async ({ showId, newLocation }) => {
+    const response = await protectedFetch.put(`/shows/${showId}/newLocation`, {
+      newLocation,
+    });
+    return response.data;
+  };
+
+  const updateShowLocation = useMutation(updateShowLocationCallback, {
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const updateShowPriceCallback = async ({ showId, newAmount }) => {
+    const response = await protectedFetch.put(`/shows/${showId}/newPrice`, {
+      newAmount,
+    });
+    return response.data;
+  };
+
+  const updateShowPrice = useMutation(updateShowPriceCallback, {
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const updateShowDateTimeCallback = async ({
+    showId,
+    newStartingDateTime,
+  }) => {
+    const response = await protectedFetch.put(
+      `/shows/${showId}/newStartingDateTime`,
+      {
+        newStartingDateTime,
+      }
+    );
+    return response.data;
+  };
+
+  const updateShowDateTime = useMutation(updateShowDateTimeCallback, {
+    onSettled: () => {
+      refetchShows();
+    },
+  });
+
+  const createShowMessageCallback = async ({
+    showId,
+    showMessageName,
+    showMessageValue,
+  }) => {
+    const response = await protectedFetch.post(
+      `/shows/${showId}/showMessages`,
+      {
+        showMessageName,
+        showMessageValue,
+      }
+    );
+    return response.data;
+  };
+
+  const createShowMessage = useMutation(createShowMessageCallback, {
+    onError: (error) => {
+      return error.response?.data || "An unknown error occurred";
+    },
   });
 
   return {
@@ -53,6 +146,12 @@ const useShows = (showId) => {
     showLoading,
     refetchShow,
     createShow,
+    deleteShow,
+    updateShowName,
+    updateShowLocation,
+    updateShowPrice,
+    updateShowDateTime,
+    createShowMessage,
   };
 };
 

@@ -5,8 +5,10 @@ import { useRef, useState } from "react";
 import { useFormikContext } from "formik";
 
 const DateAndTimePicker = () => {
-  const [value, setValue] = useState(new Date());
-  const { setFieldValue } = useFormikContext();
+  const { values, setFieldValue } = useFormikContext();
+  const [value, setValue] = useState(
+    new Date(values?.startingDateTime) || new Date()
+  );
   const datePickerRef = useRef();
   const changeValue = (value) => {
     setValue(new Date(value));

@@ -21,54 +21,56 @@ const useCategories = (categoryId) => {
 
   const createCategoryCallback = async ({
     categoryName,
-    categoryDescription
+    categoryDescription,
   }) => {
     const response = await protectedFetch.post("categories", {
       name: categoryName,
-      description: categoryDescription
+      description: categoryDescription,
     });
 
     return response.data;
-  }
+  };
 
   const updateCategoryCallback = async ({
     categoryId,
     newCategoryName,
-    newCategoryDescription
+    newCategoryDescription,
   }) => {
+    const response = await protectedFetch.put(`categories/${categoryId}`, {
+      newName: newCategoryName,
+      newDescription: newCategoryDescription,
+    });
+
+    return response.data;
+  };
+
+  const deleteCategoryCallback = async ({ categoryId }) => {
     const response = await protectedFetch.put(
-      `categories/${categoryId}`,
-      {
-        newName: newCategoryName,
-        newDescription: newCategoryDescription
-      }
+      `categories/${categoryId}/archive`
     );
-
     return response.data;
-  }
-
-  const deleteCategoryCallback = async ({categoryId}) => {
-    const response = await protectedFetch.put(`categories/${categoryId}/archive`);
-    return response.data;
-  }
+  };
 
   const createCategory = useMutation(createCategoryCallback, {
     onError: (error) => {
       return error.response?.data || "An unknown error occurred";
     },
-  })
+  });
 
   const updateCategory = useMutation(updateCategoryCallback, {
     onError: (error) => {
       return error.response?.data || "An unknown error occurred";
-    }
-  })
+    },
+  });
 
   const deleteCategory = useMutation(deleteCategoryCallback, {
     onError: (error) => {
       return error.response?.data || "An unknown error occurred";
-    }
-  })
+    },
+    onSettled: () => {
+      refetchCategories();
+    },
+  });
 
   const {
     data: categoryData,

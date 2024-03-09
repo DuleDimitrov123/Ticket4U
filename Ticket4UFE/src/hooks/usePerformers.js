@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useContext } from "react";
 import { FetchContext } from "../context/FetchContext";
 
@@ -35,6 +35,62 @@ const usePerformers = (performerId) => {
     refetch: refetchPerformers,
   } = useQuery(["performers", performerId], getPerformersCallback);
 
+  const createPerformerCallback = async (data) => {
+    const response = await protectedFetch.post("performers", data);
+
+    return response.data;
+  };
+
+  const createPerformer = useMutation(createPerformerCallback, {
+    onError: (error) => {
+      return error.response?.data || "An unknown error occurred";
+    },
+    onSettled: () => {
+      refetchPerformers();
+    },
+  });
+
+  const updatePerformerInfoCallback = async ({
+    performerId,
+    performerInfoRequests,
+  }) => {
+    const response = await protectedFetch.put(
+      `/performers/${performerId}/performer-info`,
+      { performerInfoRequests: performerInfoRequests }
+    );
+    return response.data;
+  };
+
+  const updatePerformerInfo = useMutation(updatePerformerInfoCallback, {
+    onSettled: () => {
+      refetchPerformer();
+    },
+  });
+
+  const deletePerformerInfoCallback = async ({
+    performerId,
+    performerInfoNamesToDelete,
+  }) => {
+    console.log("performerInfoNamesToDelete", performerInfoNamesToDelete);
+    const response = await protectedFetch.delete(
+      `/performers/${performerId}/performer-info`,
+      {
+        headers: {
+          "Content-Type": "application/json", // Set the Content-Type header
+        },
+        data: JSON.stringify({
+          performerInfoNamesToDelete,
+        }),
+      }
+    );
+    return response.data;
+  };
+
+  const deletePerformerInfo = useMutation(deletePerformerInfoCallback, {
+    onSettled: () => {
+      refetchPerformer();
+    },
+  });
   return {
     performerData,
     performerLoading,
@@ -42,6 +98,9 @@ const usePerformers = (performerId) => {
     performers,
     performersLoading,
     refetchPerformers,
+    createPerformer,
+    updatePerformerInfo,
+    deletePerformerInfo,
   };
 };
 

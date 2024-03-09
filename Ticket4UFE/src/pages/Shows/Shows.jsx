@@ -56,9 +56,9 @@ const Shows = () => {
                   className="view_details"
                   onClick={onOpen}
                   width={"100px"}
-                  leftIcon={BiPlus}
+                  leftIcon={<BiPlus />}
                 >
-                  Add Show
+                  Add
                 </Button>
               </Flex>
               {showsData?.length && (

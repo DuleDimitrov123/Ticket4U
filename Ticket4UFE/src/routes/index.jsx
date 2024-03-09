@@ -12,7 +12,7 @@ const AppRoutes = () => {
   const auth = useContext(AuthContext);
   return !auth?.authState.loading ? (
     <Routes>
-      {/* <Route element={<AdminRoutesHandler />}>{AdminRoutes}</Route> */}
+      <Route element={<AdminRoutesHandler />}>{AdminRoutes()}</Route>
 
       <Route element={<AuthenticatedRoutesHandler />}>
         {AuthenticatedRoutes()}

@@ -88,8 +88,11 @@ const ShowsTable = ({
         </Thead>
         <Tbody>
           {shows.map((show, index) => (
-            <Tr key={index} >
-              <Td cursor={"pointer"} onClick={() => handleViewDetails(show?.id)}>
+            <Tr key={index}>
+              <Td
+                cursor={"pointer"}
+                onClick={() => handleViewDetails(show?.id)}
+              >
                 {" "}
                 <Text fontWeight={"bold"}>{show.name}</Text>
                 <Image

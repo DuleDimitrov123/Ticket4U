@@ -64,7 +64,7 @@ const ShowsTable = ({
         }
       );
     } catch (error) {
-      console.error("Error creating reservation:", error);
+      console.error("Error deleting show:", error);
     }
   };
 
@@ -88,7 +88,7 @@ const ShowsTable = ({
         </Thead>
         <Tbody>
           {shows.map((show, index) => (
-            <Tr key={index}>
+            <Tr key={index} >
               <Td cursor={"pointer"} onClick={() => handleViewDetails(show?.id)}>
                 {" "}
                 <Text fontWeight={"bold"}>{show.name}</Text>

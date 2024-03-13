@@ -1,0 +1,5 @@
+version: "3"
+
+include:
+  - ../Ticket4U/Ticket4UFE/docker-compose.yml
+  - ../Ticket4U/Ticket4U/docker-compose.yml

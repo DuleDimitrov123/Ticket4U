@@ -16,7 +16,7 @@ import {
   Select,
   Flex,
 } from "@chakra-ui/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import DateAndTimePicker from "../DateAndTimePicker/DateAndTimePicker";
 import useCategories from "../../hooks/useCategories";
@@ -48,6 +48,10 @@ const ShowModal = ({
   };
   const { categories } = useCategories();
   const { performers } = usePerformers();
+  const [isSubmittingName, setIsSubmittingName] = useState(false);
+  const [isSubmittingLocation, setIsSubmittingLocation] = useState(false);
+  const [isSubmittingPrice, setIsSubmittingPrice] = useState(false);
+  const [isSubmittingDateTime, setIsSubmittingDateTime] = useState();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("This field is required"),
@@ -71,6 +75,7 @@ const ShowModal = ({
       ...values,
       startingDateTime: new Date(values.startingDateTime).toISOString(),
     };
+    setSubmitting(true);
     try {
       await createShow.mutateAsync(data, {
         onSuccess: () => {
@@ -86,47 +91,59 @@ const ShowModal = ({
 
   const onUpdateName = async (name) => {
     try {
+      setIsSubmittingName(true);
       await updateShowName.mutateAsync({
         showId: show.id,
         newName: name,
       });
     } catch (error) {
       console.error("Error updating name:", error);
+    } finally {
+      setIsSubmittingName(false);
     }
     return;
   };
   const onUpdateLocation = async (location) => {
     try {
+      setIsSubmittingLocation(true);
       await updateShowLocation.mutateAsync({
         showId: show.id,
         newLocation: location,
       });
     } catch (error) {
       console.error("Error updating location:", error);
+    } finally {
+      setIsSubmittingLocation(false);
     }
     return;
   };
 
   const onUpdatePrice = async (price) => {
     try {
+      setIsSubmittingPrice(true);
       await updateShowPrice.mutateAsync({
         showId: show.id,
         newAmount: price,
       });
     } catch (error) {
       console.error("Error updating price:", error);
+    } finally {
+      setIsSubmittingPrice(false);
     }
     return;
   };
 
   const onUpdateDateTime = async (dateTime) => {
     try {
+      setIsSubmittingDateTime(true);
       await updateShowDateTime.mutateAsync({
         showId: show.id,
         newStartingDateTime: dateTime,
       });
     } catch (error) {
       console.error("Error updating price:", error);
+    } finally {
+      setIsSubmittingDateTime(false);
     }
     return;
   };
@@ -158,6 +175,7 @@ const ShowModal = ({
                       <Button
                         colorScheme="purple"
                         onClick={() => onUpdateName(values?.name)}
+                        isLoading={isSubmittingName}
                       >
                         Update name
                       </Button>
@@ -209,6 +227,7 @@ const ShowModal = ({
                       <Button
                         colorScheme="purple"
                         onClick={() => onUpdateLocation(values?.location)}
+                        isLoading={isSubmittingLocation}
                       >
                         Update location
                       </Button>
@@ -285,6 +304,7 @@ const ShowModal = ({
                       <Button
                         colorScheme="purple"
                         onClick={() => onUpdatePrice(values?.tickerPriceAmount)}
+                        isLoading={isSubmittingPrice}
                       >
                         Update price
                       </Button>
@@ -318,6 +338,7 @@ const ShowModal = ({
                         onClick={() =>
                           onUpdateDateTime(values?.startingDateTime)
                         }
+                        isLoading={isSubmittingDateTime}
                       >
                         Update date and time
                       </Button>

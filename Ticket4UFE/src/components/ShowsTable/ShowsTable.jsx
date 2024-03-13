@@ -31,6 +31,7 @@ const ShowsTable = ({
   updateShowLocation,
   updateShowPrice,
   updateShowDateTime,
+  setIsLoading,
 }) => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -53,6 +54,8 @@ const ShowsTable = ({
 
   const onDelete = async (show) => {
     try {
+      setIsLoading(true);
+
       await deleteShow.mutateAsync(
         {
           showId: show.id,

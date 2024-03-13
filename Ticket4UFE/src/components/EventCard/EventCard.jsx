@@ -64,7 +64,7 @@ const EventCard = ({ event }) => {
           </Flex>
         </Stack>
         <Stack mt="2" spacing="1" align="start">
-          <Text color="blue.600" fontSize="2xl">
+          <Text color="purple.600" fontSize="2xl">
             {tickerPriceAmount} {ticketPriceCurrency}
           </Text>
         </Stack>

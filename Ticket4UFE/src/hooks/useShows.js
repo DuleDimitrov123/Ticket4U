@@ -3,7 +3,7 @@ import { publicFetch } from "../util/fetch";
 import { useContext } from "react";
 import { FetchContext } from "../context/FetchContext";
 
-const useShows = (showId) => {
+const useShows = (showId, setIsLoading) => {
   const { protectedFetch } = useContext(FetchContext);
   const getShowsCallback = async () => {
     const { data } = await publicFetch.get("/shows");
@@ -56,6 +56,7 @@ const useShows = (showId) => {
   const deleteShow = useMutation(deleteShowCallback, {
     onSettled: () => {
       refetchShows();
+      setIsLoading(false);
     },
   });
 

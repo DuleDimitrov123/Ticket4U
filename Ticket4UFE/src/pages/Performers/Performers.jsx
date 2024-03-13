@@ -19,7 +19,7 @@ import PerformerModal from "../../components/PerformerModal/PerformerModal";
 const Performers = () => {
   const userInfo = localStorage.getItem("userInfo");
   const userInfoJSON = JSON.parse(userInfo);
-  const { performers, performersLoading, refetchPerformers } = usePerformers();
+  const { performers, performersLoading } = usePerformers();
   const [selectedPerformerId, setSelectedPerformerId] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

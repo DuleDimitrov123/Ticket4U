@@ -12,7 +12,7 @@ import { BiEdit } from "react-icons/bi";
 import PerformerModal from "../PerformerModal/PerformerModal";
 
 const PerformerInfo = ({ selectedPerformerId }) => {
-  const { performerData, performerLoading } =
+  const { performerData, performerLoading, performerFetching } =
     usePerformers(selectedPerformerId);
   const { isOpen, onOpen, onClose } = useDisclosure();
 

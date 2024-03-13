@@ -26,7 +26,11 @@ const DeletePerformerModal = ({ isOpen, onClose, performer, onDelete }) => {
           </Text>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={() => onDelete(performer)}>
+          <Button
+            colorScheme="purple"
+            mr={3}
+            onClick={() => onDelete(performer)}
+          >
             Delete
           </Button>
           <Button variant="ghost" type="button" onClick={onClose}>

@@ -30,7 +30,7 @@ const title = {
 
 const button = {
   px: 8,
-  colorScheme: "blue",
+  colorScheme: "purple",
   rounded: "full",
   color: "white",
 };

@@ -105,7 +105,7 @@ const AddShowMessageModal = ({ isOpen, onClose, show, refetchShow }) => {
                 </FormControl>
                 <ModalFooter>
                   <Button
-                    colorScheme="blue"
+                    colorScheme="purple"
                     mr={3}
                     type="submit"
                     isLoading={isSubmitting}

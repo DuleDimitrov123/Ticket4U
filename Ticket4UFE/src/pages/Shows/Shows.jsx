@@ -11,12 +11,13 @@ import {
 import EventCard from "../../components/EventCard";
 import { BiLoader, BiPlus } from "react-icons/bi";
 import styles from "./Shows.styles";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import ShowsTable from "../../components/ShowsTable/ShowsTable";
 import ShowModal from "../../components/ShowModal/ShowModal";
 
 const Shows = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     showsData,
     showsLoading,
@@ -27,14 +28,14 @@ const Shows = () => {
     updateShowLocation,
     updateShowPrice,
     updateShowDateTime,
-  } = useShows();
+  } = useShows("", setIsLoading);
   const { isAdmin } = useContext(AuthContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <AuthenticatedLayout>
       {isAdmin() ? (
         <Flex flexWrap="wrap" h="100%" overflow={"auto"}>
-          {showsLoading ? (
+          {showsLoading || isLoading ? (
             <Flex
               w="100%"
               alignItems={"center"}
@@ -71,6 +72,8 @@ const Shows = () => {
                   updateShowLocation={updateShowLocation}
                   updateShowPrice={updateShowPrice}
                   updateShowDateTime={updateShowDateTime}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
                 />
               )}
               {isOpen && (

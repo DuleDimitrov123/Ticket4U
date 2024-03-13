@@ -31,7 +31,7 @@ const PerformersTable = ({
   };
 
   return (
-    <TableContainer w="100%">
+    <TableContainer w="100%" maxH="300px" overflowY="auto">
       <Table {...styles.table}>
         <Thead>
           <Tr>

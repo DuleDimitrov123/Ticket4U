@@ -24,7 +24,7 @@ const DeleteShowModal = ({ isOpen, onClose, show, onDelete }) => {
           <Text>Are you sure you want to delete show {show?.name}</Text>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={() => onDelete(show)}>
+          <Button colorScheme="purple" mr={3} onClick={() => onDelete(show)}>
             Delete
           </Button>
           <Button variant="ghost" type="button" onClick={onClose}>

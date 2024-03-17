@@ -55,7 +55,7 @@ const ShowPreview = () => {
             <Icon as={BiLoader} boxSize={"20"} color={"purple.500"} />
           </Flex>
         ) : (
-          <Flex flexDirection={"column"}>
+          <Flex flexDirection={"column"} w="100%">
             <Flex
               justifyContent={"start"}
               alignItems={"center"}

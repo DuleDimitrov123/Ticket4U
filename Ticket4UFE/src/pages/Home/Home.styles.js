@@ -6,6 +6,7 @@ const wrapper = {
   backgroundSize: "cover",
   backgroundPosition: "center center",
   alignItems: "flex-end",
+  flexDirection: "column",
 };
 
 const vStack = {
@@ -19,6 +20,9 @@ const content = {
   maxW: "2xl",
   align: "flex-start",
   spacing: 2,
+  w: "full",
+  display: "no-wrap",
+  textAlign: "center",
 };
 
 const title = {
@@ -26,6 +30,7 @@ const title = {
   fontWeight: 700,
   lineHeight: 1.2,
   fontSize: { base: "3xl", md: "4xl" },
+  textAlign: "center",
 };
 
 const button = {

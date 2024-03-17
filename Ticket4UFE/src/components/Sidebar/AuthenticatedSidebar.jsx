@@ -18,17 +18,17 @@ const AuthenticatedSidebar = () => {
               Ticket4U
             </Text>
           </Box>
-          <Flex {...styles.sideBarButton} as={NavLink} to="/shows">
-            <GiTheater size={20} />
-            <Text>Shows</Text>
+          <Flex {...styles.sideBarButton} as={NavLink} to="/categories">
+            <BiSolidCategory size={20} />
+            <Text>Categories</Text>
           </Flex>
           <Flex {...styles.sideBarButton} as={NavLink} to="/performers">
             <GiDramaMasks size={20} />
             <Text>Performers</Text>
           </Flex>
-          <Flex {...styles.sideBarButton} as={NavLink} to="/categories">
-            <BiSolidCategory size={20} />
-            <Text>Categories</Text>
+          <Flex {...styles.sideBarButton} as={NavLink} to="/shows">
+            <GiTheater size={20} />
+            <Text>Shows</Text>
           </Flex>
           <Flex {...styles.sideBarButton} as={NavLink} to="/reservations">
             <BsTicketPerforated size={20} />

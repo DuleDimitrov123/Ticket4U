@@ -1,4 +1,4 @@
-import React from "react";
+import { useContext } from "react";
 import {
   Card,
   Heading,
@@ -12,11 +12,14 @@ import {
   Button,
   Flex,
   Icon,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { BsCalendar } from "react-icons/bs";
 import moment from "moment";
 import styles from "./EventCard.styles";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import NotSignInModal from "../NotSignInModal/NotSignInModal";
 
 const EventCard = ({ event }) => {
   const navigate = useNavigate();
@@ -32,12 +35,18 @@ const EventCard = ({ event }) => {
   const base64Image = `data:image/jpeg;base64,${picture}`;
   const formattedDateTime =
     moment(startingDateTime).format("DD/MM/YYYY, h:mm A");
+  const { isAuthenticated } = useContext(AuthContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const handleViewDetails = () => {
+    if (!isAuthenticated()) {
+      onOpen();
+      return;
+    }
     navigate(`/shows/${id}`);
   };
 
   return (
-    <Card {...styles.eventCard} className="event-card">
+    <Card {...styles.eventCard} maxW={isAuthenticated() ? "sm" : "md"}>
       <CardBody>
         <Flex
           justifyContent="center"
@@ -82,6 +91,7 @@ const EventCard = ({ event }) => {
           </Button>
         </ButtonGroup>
       </CardFooter>
+      {isOpen && <NotSignInModal isOpen={isOpen} onClose={onClose} />}
     </Card>
   );
 };

@@ -54,8 +54,6 @@ const ShowsTable = ({
 
   const onDelete = async (show) => {
     try {
-      setIsLoading(true);
-
       await deleteShow.mutateAsync(
         {
           showId: show.id,

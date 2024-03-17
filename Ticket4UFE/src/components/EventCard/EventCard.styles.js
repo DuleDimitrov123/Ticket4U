@@ -1,5 +1,4 @@
 const eventCard = {
-  maxW: "sm",
   overflow: "hidden",
   m: 2,
   backgroundColor: "white",

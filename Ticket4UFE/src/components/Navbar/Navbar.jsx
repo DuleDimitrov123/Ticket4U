@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <Box w="100vw">
       <Flex {...styles.wrapper} justifyContent={"space-between"}>
-        <Flex {...styles.logo} as={Link} to={"/"}>
+        <Flex {...styles.logo} as={Link} to={"/shows"}>
           <Icon as={BsTicket}></Icon>
         </Flex>
         <Stack {...styles.buttonWrapper}>

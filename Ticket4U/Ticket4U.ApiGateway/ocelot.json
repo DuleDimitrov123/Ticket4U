@@ -244,6 +244,18 @@
       ]
     },
     {
+      "UpstreamPathTemplate": "/reservations/externalUser/{externalUserId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "DownstreamPathTemplate": "/api/reservations/externalUser/{externalUserId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "reservations.api",
+          "Port": 80
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/reservations/{reservationId}/newNumberOfResevations",
       "UpstreamHttpMethod": [ "PUT" ],
       "DownstreamPathTemplate": "/api/reservations/{reservationId}/newNumberOfResevations",

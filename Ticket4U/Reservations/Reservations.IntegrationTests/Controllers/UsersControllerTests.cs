@@ -16,7 +16,7 @@ public class UsersControllerTests : UsersControllerHelper
     [Fact]
     public async Task CreateUserSuccessfully()
     {
-        var createUserRequest = new CreatedUserEvent("testuser@gmail.com", "testuser");
+        var createUserRequest = new CreatedUserEvent("testuser@gmail.com", "testuser", Guid.NewGuid());
         var (statusCode, result) = await CreateUser<Guid>(createUserRequest, false);
 
         statusCode.ShouldBe(HttpStatusCode.OK);

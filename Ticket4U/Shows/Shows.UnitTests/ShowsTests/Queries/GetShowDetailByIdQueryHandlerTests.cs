@@ -62,6 +62,7 @@ public class GetShowDetailByIdQueryHandlerTests
         //assert
         result.Name.ShouldBe(show.Name);
         result.Location.ShouldBe(show.Location);
+        result.StartingDateTime.ShouldBe(show.StartingDateTime);
         result.NumberOfplaces.ShouldBe(show.NumberOfPlaces.Value);
         result.TicketPriceCurrency.ShouldBe(show.TicketPrice.Currency);
         result.TickerPriceAmount.ShouldBe(show.TicketPrice.Amount);

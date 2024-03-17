@@ -25,6 +25,7 @@ public static class IocInfrastructure
 
         services.AddScoped<IShowQueryRepository, ShowQueryRepository>();
         services.AddScoped<IReservationQueryRepository, ReservationQueryRepository>();
+        services.AddScoped<IUserQueryRepository, UserQueryRepository>();
 
         var capOptionsConstants = new CapOptionsConstants();
         configuration.Bind("CapOptionsConstants", capOptionsConstants);

@@ -22,7 +22,7 @@ public class ReservationsControllerTests : ReservationsControllerHelper
     [Fact]
     public async Task CreateReservationSuccessfully()
     {
-        var request = new CreateReservationRequest(InstanceConstants.User1Id, InstanceConstants.Show1Id, 3);
+        var request = new CreateReservationRequest(InstanceConstants.ExternalUser1Id, InstanceConstants.ExternalShow1Id, 3);
 
         var (statusCode, result) = await CreateReservation<Guid>(request, false);
 
@@ -41,20 +41,20 @@ public class ReservationsControllerTests : ReservationsControllerHelper
         statusCode.ShouldBe(HttpStatusCode.NotFound);
 
         result.ShouldNotBeNull();
-        result.ExceptionMessages.ShouldContain($"{nameof(Show)} {request.ShowId} is not found");
+        result.ExceptionMessages.ShouldContain($"{nameof(Show)} {request.ExternalShowId} is not found");
     }
 
     [Fact]
     public async Task CreateReservationWithNotExistingUser()
     {
-        var request = new CreateReservationRequest(Guid.NewGuid(), InstanceConstants.Show1Id, 3);
+        var request = new CreateReservationRequest(Guid.NewGuid(), InstanceConstants.ExternalShow1Id, 3);
 
         var (statusCode, result) = await CreateReservation<ErrorResponse>(request, false);
 
         statusCode.ShouldBe(HttpStatusCode.NotFound);
 
         result.ShouldNotBeNull();
-        result.ExceptionMessages.ShouldContain($"{nameof(User)} {request.UserId} is not found");
+        result.ExceptionMessages.ShouldContain($"{nameof(User)} {request.ExternalUserId} is not found");
     }
 
     [Fact]
@@ -66,8 +66,8 @@ public class ReservationsControllerTests : ReservationsControllerHelper
 
         result.ShouldNotBeNull();
 
-        result.UserId.ShouldBe(InstanceConstants.User1Id);
-        result.ShowId.ShouldBe(InstanceConstants.Show1Id);
+        result.UserId.ShouldBe(InstanceConstants.ExternalUser1Id);
+        result.Show.ShowId.ShouldBe(InstanceConstants.ExternalShow1Id);
         result.NumberOfReservations.ShouldNotBe(0);
     }
 
@@ -97,8 +97,8 @@ public class ReservationsControllerTests : ReservationsControllerHelper
 
         var r = result[0];
 
-        r.UserId.ShouldBe(InstanceConstants.User1Id);
-        r.ShowId.ShouldBe(InstanceConstants.Show1Id);
+        r.UserId.ShouldBe(InstanceConstants.ExternalUser1Id);
+        r.Show.ShowId.ShouldBe(InstanceConstants.ExternalShow1Id);
         r.NumberOfReservations.ShouldNotBe(0);
     }
 
@@ -115,8 +115,8 @@ public class ReservationsControllerTests : ReservationsControllerHelper
 
         var r = result[0];
 
-        r.UserId.ShouldBe(InstanceConstants.User1Id);
-        r.ShowId.ShouldBe(InstanceConstants.Show1Id);
+        r.UserId.ShouldBe(InstanceConstants.ExternalUser1Id);
+        r.Show.ShowId.ShouldBe(InstanceConstants.ExternalShow1Id);
         r.NumberOfReservations.ShouldNotBe(0);
     }
 

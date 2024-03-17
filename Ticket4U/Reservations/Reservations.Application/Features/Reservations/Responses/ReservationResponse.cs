@@ -6,7 +6,18 @@ public class ReservationResponse
 
     public Guid UserId { get; set; }
 
-    public Guid ShowId { get; set; }
+    public ShowResponse Show { get; set; }
 
     public int NumberOfReservations { get; set; }
+}
+
+public class ShowResponse
+{
+    public Guid ShowId { get; set; }
+
+    public string ShowName { get; set; }
+
+    public DateTime ShowStartingDateTime { get; set; }
+
+    public bool IsSoldOut { get; set; }
 }

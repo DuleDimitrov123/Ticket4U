@@ -4,9 +4,9 @@ namespace Reservations.Application.Features.Reservations.Commands.CreateReservat
 
 public class CreateReservationCommand : IRequest<Guid>
 {
-    public Guid UserId { get; set; }
+    public Guid ExternalUserId { get; set; }
 
-    public Guid ShowId { get; set; }
+    public Guid ExternalShowId { get; set; }
 
     public int NumberOfReservations { get; set; }
 }
